@@ -117,6 +117,7 @@ def process_and_plot(df):
     y = df['Complexity_Score'].values
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    r2_scores = {}
     best_degree = 1
     best_r2_val = -np.inf
     best_model = None
@@ -131,6 +132,7 @@ def process_and_plot(df):
         model.fit(X_train_poly, y_train)
         y_val_pred = model.predict(X_test_poly)
         r2_val = r2_score(y_test, y_val_pred)
+        r2_scores[degree] = r2_val
 
         if r2_val > best_r2_val:
             best_degree = degree
@@ -138,8 +140,28 @@ def process_and_plot(df):
             best_model = model
             best_poly = poly
 
-    st.write(f"**Best Polynomial Degree:** {best_degree}")
-    st.write(f"**Validation R²:** {best_r2_val:.4f}")
+    st.markdown(f"### Total Observations: {df.shape[0]}")
+
+    # Top 5 by Complexity_Score
+    st.markdown("### Most difficult models:")
+    st.dataframe(
+        df.sort_values('Complexity_Score', ascending=False)
+          .head(5)[['Name', 'Difficulty', 'Complexity_Score']],
+        use_container_width=True
+    )
+
+    # Top 5 most recent models (original order in CSV)
+    st.markdown("### Most recent models:")
+    st.dataframe(
+        df.head(5)[['Name', 'Difficulty', 'Complexity_Score']],
+        use_container_width=True
+    )
+
+    st.markdown("### Validation R² Scores for Polynomial Degrees 1 to 6:")
+    for degree, r2 in r2_scores.items():
+        st.write(f"Degree {degree}: R² = {r2:.4f}")
+
+    st.markdown(f"### Best Polynomial Degree: {best_degree} with Validation R²: {best_r2_val:.4f}")
 
     X_full_sorted = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
     X_full_poly = best_poly.transform(X_full_sorted)
@@ -157,6 +179,15 @@ def process_and_plot(df):
             'Name_Score': ':.2f',
             'Description_Score': ':.2f'
         }
+    )
+
+    # Update hover label style: light blue background
+    fig.update_traces(
+        hoverlabel=dict(
+            bgcolor="lightblue",
+            font_size=13,
+            font_family="Arial"
+        )
     )
 
     fig.add_trace(go.Scatter(
@@ -204,9 +235,3 @@ else:
     # Just load and plot existing data
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
-
-# --- Auto-refresh every 24 hours (86400000 milliseconds) ---
-# OR simple button to manually refresh if you prefer (Streamlit doesn't natively support precise schedulers)
-
-# For scheduled runs outside Streamlit, you can set a cron job or Windows Task Scheduler to run
-# the scraping script, then users reload this app to see updates.
