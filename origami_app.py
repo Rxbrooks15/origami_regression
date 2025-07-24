@@ -166,12 +166,12 @@ def process_and_plot(df):
         🧑‍🎨 <b>%{customdata[2]}</b><br>
         ⏱️ <b>%{customdata[3]:.1f}</b> minutes<br>
         📊 <b>Complexity:</b> %{customdata[4]:.2f}<br>
-        🧠 <b>Topic Group:</b> %{customdata[6]}<br>
-        🎯 <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
-        ✏️ <b>Name Score:</b> %{customdata[8]:.2f}<br>
-        📃 <b>Description Score:</b> %{customdata[9]:.2f}<br>
+         <b>Topic Group:</b> %{customdata[6]}<br>
+         <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
+         <b>Topic Name Score:</b> %{customdata[8]:.2f}<br>
+         <b>Topic Description Score:</b> %{customdata[9]:.2f}<br>
         🖼️ <b>Image:</b><br><img src='%{customdata[0]}' width='120'><br>
-        📝 <b>Description:</b> %{customdata[5]}<br>
+        📃<b>Description:</b> %{customdata[5]}<br>
         <extra></extra>
         """,
         marker=dict(size=9, opacity=0.8),
