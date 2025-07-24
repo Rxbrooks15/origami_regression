@@ -13,6 +13,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import plotly.express as px
 import plotly.graph_objects as go
 from urllib.parse import urljoin
+import time
 
 CSV_PATH = "origami_scrape_final.csv"
 
@@ -243,8 +244,6 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
 else:
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
-
-import time
 
 # --- Streamlit Sidebar for Preview ---
 st.sidebar.header("🔍 Origami Preview Image")
