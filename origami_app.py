@@ -224,7 +224,7 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
         else:
             st.info(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
     else:
-            st.info(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
+            st.error(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
 
    
 
