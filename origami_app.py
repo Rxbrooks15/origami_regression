@@ -176,7 +176,6 @@ def process_and_plot(df):
     Topic: %{customdata[6]} | Weight: %{customdata[7]:.2f}<br>
     Name Score: %{customdata[8]:.2f} | Desc Score: %{customdata[9]:.2f}<br>
     <br>
-    <img src="%{customdata[0]}" style="width:140px;height:auto;"><br>
     <i>Description:</i> %{customdata[5]}<br>
     <extra></extra>
     """,
@@ -245,10 +244,18 @@ else:
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
 
+import time
 
 # --- Streamlit Sidebar for Preview ---
 st.sidebar.header("🔍 Origami Preview Image")
 
+# Get current time (rounded to 3 seconds)
+time_now = int(time.time())
+seconds_interval = 3
+seed = time_now - (time_now % seconds_interval)
+
+# Use time-based seed to get a new random sample every 3 seconds
+np.random.seed(seed)
 try:
     sample_row = df.sample(1).iloc[0]
     sample_image = sample_row["Image_github"] if "Image_github" in df.columns else sample_row.get("Image", None)
@@ -271,3 +278,8 @@ if sample_row is not None:
     st.sidebar.write(f"**Description:** {sample_row.get('Description', 'N/A')[:150]}...")
 else:
     st.sidebar.write("No data available.")
+
+# Auto-refresh every 3 seconds
+st.sidebar.markdown(f"⏳ Refreshing in {seconds_interval} sec...")
+time.sleep(seconds_interval)
+st.experimental_rerun()
