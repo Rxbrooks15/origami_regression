@@ -175,8 +175,7 @@ def process_and_plot(df):
     Complexity Score: %{customdata[4]:.2f}<br>
     Topic: %{customdata[6]} | Weight: %{customdata[7]:.2f}<br>
     Name Score: %{customdata[8]:.2f} | Desc Score: %{customdata[9]:.2f}<br>
-    <br>
-    <img src="%{customdata[0]}" style="width:140px;height:auto;"><br>
+    <br><br>
     <i>Description:</i> %{customdata[5]}<br>
     <extra></extra>
     """,
