@@ -147,36 +147,37 @@ def process_and_plot(df):
     X_full_poly = best_poly.transform(X_full_sorted)
     y_full_pred = best_model.predict(X_full_poly)
 
-    fig = px.scatter(
-        df,
-        x='time_minutes',
-        y='Complexity_Score',
-        color='Topic_Weighted_Difficulty',
-        custom_data=[
-            'Image', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
-            'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
-            'Name_Score', 'Description_Score'
-        ],
-        title=f'Polynomial Fit (Degree {best_degree}) | Validation R²: {best_r2_val:.3f}'
-    )
+ df["Image_github"] = df["Image"].apply(lambda url: "https://raw.githubusercontent.com/rxbrooks15/origami_regression/main/folder/" + os.path.basename(url))
 
-    fig.update_traces(
-        hovertemplate="""
-        🏷️ <b>%{customdata[1]}</b><br>
-        🧑‍🎨 <b>%{customdata[2]}</b><br>
-        ⏱️ <b>%{customdata[3]:.1f}</b> minutes<br>
-        📊 <b>Complexity:</b> %{customdata[4]:.2f}<br>
-         <b>Topic Group:</b> %{customdata[6]}<br>
-         <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
-         <b>Topic Name Score:</b> %{customdata[8]:.2f}<br>
-         <b>Topic Description Score:</b> %{customdata[9]:.2f}<br>
-        🖼️ <b>Image:</b><br><img src='%{customdata[0]}' width='120'><br>
-        📃<b>Description:</b> %{customdata[5]}<br>
-        <extra></extra>
-        """,
-        marker=dict(size=9, opacity=0.8),
-        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Arial")
-    )
+fig = px.scatter(
+    df,
+    x='time_minutes',
+    y='Complexity_Score',
+    color='Topic_Weighted_Difficulty',
+    custom_data=[
+        'Image_github', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
+        'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
+        'Name_Score', 'Description_Score'
+    ],
+    title=f'Polynomial Fit (Degree {best_degree}) | Validation R²: {best_r2_val:.3f}'
+)
+
+fig.update_traces(
+    hovertemplate="""
+    🏷️ <b>%{customdata[1]}</b><br>
+    🧑‍🎨 <b>%{customdata[2]}</b><br>
+    ⏱️ <b>%{customdata[3]:.1f}</b> minutes<br>
+    📊 <b>Complexity:</b> %{customdata[4]:.2f}<br>
+    <b>Topic Group:</b> %{customdata[6]}<br>
+    <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
+    <b>Name Score:</b> %{customdata[8]:.2f}<br>
+    <b>Description Score:</b> %{customdata[9]:.2f}<br>
+    🖼️ <b>Image:</b><br><img src='%{customdata[0]}' width='120'><br>
+    📃<b>Description:</b> %{customdata[5]}<br>
+    <extra></extra>
+    """
+)
+
 
     fig.add_trace(go.Scatter(
         x=X_full_sorted.flatten(),
