@@ -230,7 +230,7 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
 if st.button("🔀 Randomize"):
     sample = df.sample(1).iloc[0]
     highlight_name = sample["Name"]
-    st.experimental_rerun()
+    st.rerun()
 
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
