@@ -168,7 +168,7 @@ def process_and_plot(df, highlight_name=None):
             ))
 
     st.plotly_chart(fig, use_container_width=True)
-        st.markdown(f"### Total Observations: {df.shape[0]-1}")
+    st.markdown(f"### Total Observations: {df.shape[0]-1}")
     st.markdown("### Most difficult models:")
     st.dataframe(
         df.sort_values('Complexity_Score', ascending=False)
