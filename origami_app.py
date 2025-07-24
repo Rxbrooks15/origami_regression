@@ -26,8 +26,8 @@ def scrape_model_detail(url):
         name = soup.select_one("h1").text.strip()
         image_tag = soup.select_one(".single-model__image img")
         image = urljoin(url, image_tag["src"].strip()) if image_tag else ""
-        desc_tag = soup.select_one(".single-model__content p")
-        description = desc_tag.text.strip() if desc_tag else "No description available"
+        description_tag = soup.select_one(".single-model__content p")
+        description = description_tag.text.strip() if description_tag else "No description available"
 
         creator_tag = soup.select_one(".single-model__content__creator a")
         creator = creator_tag.text.strip() if creator_tag else "Unknown"
@@ -153,7 +153,7 @@ def process_and_plot(df):
         y='Complexity_Score',
         color='Topic_Weighted_Difficulty',
         custom_data=[
-            'Image', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
+            'Image_Github', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
             'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
             'Name_Score', 'Description_Score'
         ],
@@ -168,8 +168,8 @@ def process_and_plot(df):
         📊 <b>Complexity:</b> %{customdata[4]:.2f}<br>
          <b>Topic Group:</b> %{customdata[6]}<br>
          <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
-         <b>Topic Name Score:</b> %{customdata[8]:.2f}<br>
-         <b>Topic Description Score:</b> %{customdata[9]:.2f}<br>
+         <b>Name Score:</b> %{customdata[8]:.2f}<br>
+         <b>Description Score:</b> %{customdata[9]:.2f}<br>
         🖼️ <b>Image:</b><br><img src='%{customdata[0]}' width='120'><br>
         📃<b>Description:</b> %{customdata[5]}<br>
         <extra></extra>
