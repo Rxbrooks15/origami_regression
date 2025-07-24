@@ -1,4 +1,5 @@
 Image,Name,Description,Difficulty,Time
+,Martian,"Abstract humanoid figure with large, wide head.",Intermediate,20 minutes
 ,Phoenix,"Mythical bird with long neck, large feather on its head and fanned tail.",Intermediate,38 minutes
 ,Ogre,"Humanoid figure with large head, chest and arms.",Intermediate,29 minutes
 ,Winged Wolf,Standing wolf with large wings.,Intermediate,27 minutes
@@ -485,4 +486,3 @@ Image,Name,Description,Difficulty,Time
 ,Triceratops,Dinosaur model that features a three-horned head.,Moderate,20 minutes
 ,Rabbit,"With fluffy ears, breast and tail, this model has interesting color changes when folded with two-colored paper.",Moderate,24 minutes
 ,Swan,A simple swan model with a long neck.,Easy,4 minutes
-,Martian,"Abstract humanoid figure with large, wide head.",Intermediate,20 minutes
