@@ -9,4 +9,3 @@ seaborn
 plotly               
 numpy               
 streamlit-plotly-events
-time
