@@ -227,19 +227,15 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
             st.error("❌Recent models have already been added ")
         
     if st.button("🔀 Randomize"):
-    url = get_first_model_url()
-    if url:
-        new_model = scrape_model_detail(url)
-        if new_model and new_model['Name'].lower() not in set(df['Name'].dropna().str.lower()):
-            st.success(f"🆕 Adding new model: {new_model['Name']}")
-            df = pd.concat([pd.DataFrame([new_model]), df], ignore_index=True)
-            df.to_csv(CSV_PATH, index=False)
-            highlight_name = new_model["Name"]
-        
-
-
-
-   
+        url = get_first_model_url()
+        if url:
+            new_model = scrape_model_detail(url)
+            if new_model and new_model['Name'].lower() not in set(df['Name'].dropna().str.lower()):
+                st.success(f"🆕 Adding new model: {new_model['Name']}")
+                df = pd.concat([pd.DataFrame([new_model]), df], ignore_index=True)
+                df.to_csv(CSV_PATH, index=False)
+                highlight_name = new_model["Name"]
+       
 
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
