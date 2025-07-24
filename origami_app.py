@@ -184,7 +184,7 @@ def process_and_plot(df):
 
     # Then show info and tables below plot
 
-    st.markdown(f"### Total Observations: {df.shape[0]}")
+    st.markdown(f"### Total Observations: {df.shape[0]-1}")
 
     st.markdown("### Most difficult models:")
     st.dataframe(
