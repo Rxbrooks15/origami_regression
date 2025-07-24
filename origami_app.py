@@ -162,11 +162,6 @@ def process_and_plot(df, highlight_name=None):
         line=dict(color='black')
     ))
 
-    fig.update_layout(
-        xaxis_title='⏱️ Time (minutes)',
-        yaxis_title='📊 Complexity Score'
-    )
-
 
     if highlight_name:
         match = df[df["Name"].str.lower() == highlight_name.lower()]
