@@ -244,3 +244,30 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
 else:
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
+
+
+# --- Streamlit Sidebar for Preview ---
+st.sidebar.header("🔍 Preview Image Test")
+
+try:
+    sample_row = df.sample(1).iloc[0]
+    sample_image = sample_row["Image_github"] if "Image_github" in df.columns else sample_row.get("Image", None)
+except Exception as e:
+    sample_row = None
+    sample_image = None
+    st.sidebar.error(f"Sidebar error: {e}")
+
+if sample_image:
+    st.sidebar.image(sample_image, caption="Sample Origami Image", width=220)
+else:
+    st.sidebar.write("No image found to preview.")
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("Random model info:")
+if sample_row is not None:
+    st.sidebar.write(f"**Name:** {sample_row.get('Name', 'N/A')}")
+    st.sidebar.write(f"**Creator:** {sample_row.get('Creator', 'N/A')}")
+    st.sidebar.write(f"**Difficulty:** {sample_row.get('Difficulty', 'N/A')}")
+    st.sidebar.write(f"**Description:** {sample_row.get('Description', 'N/A')[:150]}...")
+else:
+    st.sidebar.write("No data available.")
