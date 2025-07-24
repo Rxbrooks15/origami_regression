@@ -252,12 +252,12 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
     else:
         st.error("❌ Failed to find new model URL.")
     df = pd.read_csv(CSV_PATH)
-    process_and_plot(df, highlight_name=search_query if search_query else None)
+    process_and_plot(df)
 
 
 else:
     df = pd.read_csv(CSV_PATH)
-    process_and_plot(df, highlight_name=search_query if search_query else None)
+    process_and_plot(df)
 
 
 
