@@ -168,9 +168,23 @@ def process_and_plot(df, highlight_name=None):
             ))
 
     st.plotly_chart(fig, use_container_width=True)
-    st.markdown(f"### Total Observations: {df.shape[0]}")
-    st.dataframe(df.sort_values('Complexity_Score', ascending=False).head(5)[['Name', 'Difficulty', 'Complexity_Score']], use_container_width=True)
-    st.dataframe(df.head(5)[['Name', 'Difficulty', 'Complexity_Score']], use_container_width=True)
+        st.markdown(f"### Total Observations: {df.shape[0]-1}")
+    st.markdown("### Most difficult models:")
+    st.dataframe(
+        df.sort_values('Complexity_Score', ascending=False)
+          .head(5)[['Name', 'Difficulty', 'Complexity_Score']],
+        use_container_width=True
+    )
+    st.markdown("### Most recent models:")
+    st.dataframe(
+        df.head(5)[['Name', 'Difficulty', 'Complexity_Score']],
+        use_container_width=True
+    )
+    st.markdown("### Validation R² Scores for Polynomial Degrees 1 to 6:")
+    for degree, r2 in r2_scores.items():
+        st.write(f"Degree {degree}: R² = {r2:.4f}")
+    st.markdown(f"### Best Polynomial Degree: {best_degree} with Validation R²: {best_r2_val:.4f}")
+
 
 # --- Streamlit UI ---
 st.title("📐 Origami Model Complexity Tracker")
