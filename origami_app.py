@@ -180,10 +180,6 @@ def process_and_plot(df, highlight_name=None):
         df.head(5)[['Name', 'Difficulty', 'Complexity_Score']],
         use_container_width=True
     )
-    st.markdown("### Validation R² Scores for Polynomial Degrees 1 to 6:")
-    for degree, r2 in r2_scores.items():
-        st.write(f"Degree {degree}: R² = {r2:.4f}")
-    st.markdown(f"### Best Polynomial Degree: {best_degree} with Validation R²: {best_r2_val:.4f}")
 
 
 # --- Streamlit UI ---
