@@ -13,6 +13,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import plotly.express as px
 import plotly.graph_objects as go
 from urllib.parse import urljoin
+import os
 
 CSV_PATH = "origami_scrape_final.csv"
 
@@ -73,7 +74,7 @@ def get_first_model_url():
         model_url = "https://origami-database.com" + model_url
     return model_url
 
-# --- Data processing functions ---
+# --- Utility function ---
 def convert_to_minutes(time_str):
     if pd.isna(time_str): return 0
     time_str = time_str.lower().replace("hours", "hr").replace("hour", "hr")
@@ -85,9 +86,8 @@ def convert_to_minutes(time_str):
     m = int(minutes.group(1)) if minutes else 0
     return h * 60 + m
 
+# --- Main processing and plot ---
 def process_and_plot(df):
-    import os
-
     df['time_minutes'] = df['Time'].apply(convert_to_minutes)
     df['Difficulty'] = df['Difficulty'].str.strip().str.lower()
     difficulty_map = {'easy': 1, 'moderate': 2, 'intermediate': 3, 'hard': 4, 'complex': 5}
@@ -118,7 +118,7 @@ def process_and_plot(df):
         df['Description_Score']
     ) / 4
 
-    # Add GitHub-hosted image path
+    # 🟢 GitHub Image URL for hover previews
     df["Image_github"] = df["Image"].apply(
         lambda url: "https://raw.githubusercontent.com/rxbrooks15/origami_regression/main/folder/" + os.path.basename(str(url))
     )
@@ -154,6 +154,7 @@ def process_and_plot(df):
     X_full_poly = best_poly.transform(X_full_sorted)
     y_full_pred = best_model.predict(X_full_poly)
 
+    # 🔍 Plotly chart with image only shown on hover
     fig = px.scatter(
         df,
         x='time_minutes',
@@ -168,21 +169,21 @@ def process_and_plot(df):
     )
 
     fig.update_traces(
-    hovertemplate="""
-    <b>%{customdata[1]}</b><br>
-    Creator: %{customdata[2]}<br>
-    Time: %{customdata[3]:.1f} min<br>
-    Complexity Score: %{customdata[4]:.2f}<br>
-    Topic: %{customdata[6]} | Weight: %{customdata[7]:.2f}<br>
-    Name Score: %{customdata[8]:.2f} | Desc Score: %{customdata[9]:.2f}<br>
-    <br>
-    <img src="%{customdata[0]}" style="width:140px;height:auto;"><br>
-    <i>Description:</i> %{customdata[5]}<br>
-    <extra></extra>
-    """,
-    marker=dict(size=9, opacity=0.85),
-    hoverlabel=dict(bgcolor="white", font_size=12, font_family="Arial")
-)
+        hovertemplate="""
+        <b>%{customdata[1]}</b><br>
+        Creator: %{customdata[2]}<br>
+        Time: %{customdata[3]:.1f} min<br>
+        Complexity Score: %{customdata[4]:.2f}<br>
+        Topic: %{customdata[6]} | Weight: %{customdata[7]:.2f}<br>
+        Name Score: %{customdata[8]:.2f} | Desc Score: %{customdata[9]:.2f}<br>
+        <br>
+        <img src="%{customdata[0]}" style="width:120px;"><br>
+        <i>Description:</i> %{customdata[5]}<br>
+        <extra></extra>
+        """,
+        marker=dict(size=9, opacity=0.85),
+        hoverlabel=dict(bgcolor="white", font_size=12)
+    )
 
     fig.add_trace(go.Scatter(
         x=X_full_sorted.flatten(),
@@ -199,6 +200,7 @@ def process_and_plot(df):
 
     st.plotly_chart(fig, use_container_width=True)
 
+    # Optional: Summary tables
     st.markdown(f"### Total Observations: {df.shape[0]}")
     st.markdown("### Most difficult models:")
     st.dataframe(
@@ -206,21 +208,17 @@ def process_and_plot(df):
           .head(5)[['Name', 'Difficulty', 'Complexity_Score']],
         use_container_width=True
     )
-    st.markdown("### Most recent models:")
-    st.dataframe(
-        df.head(5)[['Name', 'Difficulty', 'Complexity_Score']],
-        use_container_width=True
-    )
-    st.markdown("### Validation R² Scores for Polynomial Degrees 1 to 6:")
+
+    st.markdown("### Validation R² Scores by Polynomial Degree:")
     for degree, r2 in r2_scores.items():
         st.write(f"Degree {degree}: R² = {r2:.4f}")
-    st.markdown(f"### Best Polynomial Degree: {best_degree} with Validation R²: {best_r2_val:.4f}")
 
+    st.markdown(f"### Best Fit: Degree {best_degree} with R² = {best_r2_val:.4f}")
 
-# --- Streamlit UI ---
-st.title("📐 Origami Model Complexity Tracker")
+# --- Streamlit App UI ---
+st.title("🧠 Origami Complexity Explorer")
 
-if st.button("📥 Scrape Latest Model & Update Dataset"):
+if st.button("🔁 Scrape New Model"):
     df = pd.read_csv(CSV_PATH)
     existing_names = set(df['Name'].dropna().str.lower())
     url = get_first_model_url()
@@ -228,46 +226,17 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
         new_model = scrape_model_detail(url)
         if new_model:
             if new_model['Name'].lower() not in existing_names:
-                st.success(f"🆕 Adding new model: {new_model['Name']}")
+                st.success(f"🆕 Added: {new_model['Name']}")
                 df_new = pd.DataFrame([new_model])
                 df = pd.concat([df_new, df], ignore_index=True)
                 df.to_csv(CSV_PATH, index=False)
             else:
-                st.info(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
+                st.info(f"✔️ Latest model '{new_model['Name']}' already included.")
         else:
-            st.error("❌ Failed to scrape the new model details.")
+            st.error("❌ Could not retrieve model details.")
     else:
-        st.error("❌ Failed to find new model URL.")
+        st.error("❌ Could not find first model URL.")
+    process_and_plot(df)
+else:
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
-
-else:
-    df = pd.read_csv(CSV_PATH)
-    process_and_plot(df)
-
-
-# --- Streamlit Sidebar for Preview ---
-st.sidebar.header("🔍 Preview Image Test")
-
-try:
-    sample_row = df.sample(1).iloc[0]
-    sample_image = sample_row["Image_github"] if "Image_github" in df.columns else sample_row.get("Image", None)
-except Exception as e:
-    sample_row = None
-    sample_image = None
-    st.sidebar.error(f"Sidebar error: {e}")
-
-if sample_image:
-    st.sidebar.image(sample_image, caption="Sample Origami Image", width=220)
-else:
-    st.sidebar.write("No image found to preview.")
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("Random model info:")
-if sample_row is not None:
-    st.sidebar.write(f"**Name:** {sample_row.get('Name', 'N/A')}")
-    st.sidebar.write(f"**Creator:** {sample_row.get('Creator', 'N/A')}")
-    st.sidebar.write(f"**Difficulty:** {sample_row.get('Difficulty', 'N/A')}")
-    st.sidebar.write(f"**Description:** {sample_row.get('Description', 'N/A')[:150]}...")
-else:
-    st.sidebar.write("No data available.")
