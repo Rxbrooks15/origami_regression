@@ -168,22 +168,21 @@ def process_and_plot(df):
     )
 
     fig.update_traces(
-        hovertemplate="""
-        🏷️ <b>%{customdata[1]}</b><br>
-        🧑‍🎨 <b>%{customdata[2]}</b><br>
-        ⏱️ <b>%{customdata[3]:.1f}</b> minutes<br>
-        📊 <b>Complexity:</b> %{customdata[4]:.2f}<br>
-         <b>Topic Group:</b> %{customdata[6]}<br>
-         <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
-         <b>Topic Name Score:</b> %{customdata[8]:.2f}<br>
-         <b>Topic Description Score:</b> %{customdata[9]:.2f}<br>
-        🖼️ <b>Image:</b><br><img src='%{customdata[0]}' width='120'><br>
-        📃<b>Description:</b> %{customdata[5]}<br>
-        <extra></extra>
-        """,
-        marker=dict(size=9, opacity=0.8),
-        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Arial")
-    )
+    hovertemplate="""
+    <b>%{customdata[1]}</b><br>
+    Creator: %{customdata[2]}<br>
+    Time: %{customdata[3]:.1f} min<br>
+    Complexity Score: %{customdata[4]:.2f}<br>
+    Topic: %{customdata[6]} | Weight: %{customdata[7]:.2f}<br>
+    Name Score: %{customdata[8]:.2f} | Desc Score: %{customdata[9]:.2f}<br>
+    <br>
+    <img src="%{customdata[0]}" style="width:140px;height:auto;"><br>
+    <i>Description:</i> %{customdata[5]}<br>
+    <extra></extra>
+    """,
+    marker=dict(size=9, opacity=0.85),
+    hoverlabel=dict(bgcolor="white", font_size=12, font_family="Arial")
+)
 
     fig.add_trace(go.Scatter(
         x=X_full_sorted.flatten(),
