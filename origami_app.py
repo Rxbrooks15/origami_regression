@@ -245,28 +245,46 @@ else:
     process_and_plot(df)
 
 
-# --- Streamlit Sidebar for Preview ---
-st.sidebar.header("🔍 Preview Image Test")
+# --- Streamlit Sidebar for Preview with Search ---
+st.sidebar.header("🔍 Search or Preview Random Origami")
 
-try:
-    sample_row = df.sample(1).iloc[0]
-    sample_image = sample_row["Image_github"] if "Image_github" in df.columns else sample_row.get("Image", None)
-except Exception as e:
-    sample_row = None
-    sample_image = None
-    st.sidebar.error(f"Sidebar error: {e}")
+# Text input for model search
+search_query = st.sidebar.text_input("🔎 Search Model Name (case-insensitive)")
 
-if sample_image:
-    st.sidebar.image(sample_image, caption="Sample Origami Image", width=220)
+if search_query:
+    match = df[df["Name"].str.contains(search_query, case=False, na=False)]
+    if not match.empty:
+        selected_row = match.iloc[0]
+        image_url = selected_row.get("Image_github") or selected_row.get("Image")
+        st.sidebar.image(image_url, caption=f"{selected_row['Name']}", width=220)
+        st.sidebar.write(f"**Name:** {selected_row.get('Name', 'N/A')}")
+        st.sidebar.write(f"**Creator:** {selected_row.get('Creator', 'N/A')}")
+        st.sidebar.write(f"**Difficulty:** {selected_row.get('Difficulty', 'N/A')}")
+        st.sidebar.write(f"**Description:** {selected_row.get('Description', 'N/A')[:150]}...")
+    else:
+        st.sidebar.warning("⚠️ No model found with that name.")
 else:
-    st.sidebar.write("No image found to preview.")
+    # Fallback to random image preview
+    try:
+        sample_row = df.sample(1).iloc[0]
+        sample_image = sample_row.get("Image_github") or sample_row.get("Image")
+    except Exception as e:
+        sample_row = None
+        sample_image = None
+        st.sidebar.error(f"Sidebar error: {e}")
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("Random model info:")
-if sample_row is not None:
-    st.sidebar.write(f"**Name:** {sample_row.get('Name', 'N/A')}")
-    st.sidebar.write(f"**Creator:** {sample_row.get('Creator', 'N/A')}")
-    st.sidebar.write(f"**Difficulty:** {sample_row.get('Difficulty', 'N/A')}")
-    st.sidebar.write(f"**Description:** {sample_row.get('Description', 'N/A')[:150]}...")
-else:
-    st.sidebar.write("No data available.")
+    if sample_image:
+        st.sidebar.image(sample_image, caption="Random Origami Model", width=220)
+    else:
+        st.sidebar.write("No image found to preview.")
+
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("Random model info:")
+    if sample_row is not None:
+        st.sidebar.write(f"**Name:** {sample_row.get('Name', 'N/A')}")
+        st.sidebar.write(f"**Creator:** {sample_row.get('Creator', 'N/A')}")
+        st.sidebar.write(f"**Difficulty:** {sample_row.get('Difficulty', 'N/A')}")
+        st.sidebar.write(f"**Description:** {sample_row.get('Description', 'N/A')[:150]}...")
+    else:
+        st.sidebar.write("No data available.")
+
