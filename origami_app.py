@@ -161,10 +161,10 @@ def process_and_plot(df, highlight_name=None):
                 x=match["time_minutes"],
                 y=match["Complexity_Score"],
                 mode='markers+text',
-                name='🟢 Highlighted',
+                name='🔴Highlighted',
                 text=match["Name"],
                 textposition="top center",
-                marker=dict(color='green', size=12, symbol='circle-open-dot')
+                marker=dict(color='red', size=15, symbol='circle-open-dot')
             ))
 
     st.plotly_chart(fig, use_container_width=True)
