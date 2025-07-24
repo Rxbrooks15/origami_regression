@@ -14,12 +14,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import os
 
-CSV_PATH = r"C:\Users\ML BROOKSHIRE\Documents\origami_scrape_final.csv"
-st.write("Current working directory:", os.getcwd())
-st.write("Expected file path:", CSV_PATH)
-st.write("File exists:", os.path.exists(CSV_PATH))
-
-
+CSV_PATH = "origami_scrape_final.csv"
 
 # --- Scraping functions ---
 def scrape_model_detail(url):
