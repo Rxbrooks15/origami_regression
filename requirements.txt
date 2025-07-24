@@ -8,3 +8,4 @@ lxml
 seaborn              
 plotly               
 numpy               
+streamlit-plotly-events
