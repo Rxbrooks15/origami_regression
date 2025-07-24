@@ -223,8 +223,7 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
             highlight_name = new_model["Name"]
         else:
             st.info(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
-    else:
-        st.error("❌ Could not find latest model.")
+   
 
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
