@@ -140,29 +140,7 @@ def process_and_plot(df):
             best_model = model
             best_poly = poly
 
-    st.markdown(f"### Total Observations: {df.shape[0]}")
-
-    # Top 5 by Complexity_Score
-    st.markdown("### Most difficult models:")
-    st.dataframe(
-        df.sort_values('Complexity_Score', ascending=False)
-          .head(5)[['Name', 'Difficulty', 'Complexity_Score']],
-        use_container_width=True
-    )
-
-    # Top 5 most recent models (original order in CSV)
-    st.markdown("### Most recent models:")
-    st.dataframe(
-        df.head(5)[['Name', 'Difficulty', 'Complexity_Score']],
-        use_container_width=True
-    )
-
-    st.markdown("### Validation R² Scores for Polynomial Degrees 1 to 6:")
-    for degree, r2 in r2_scores.items():
-        st.write(f"Degree {degree}: R² = {r2:.4f}")
-
-    st.markdown(f"### Best Polynomial Degree: {best_degree} with Validation R²: {best_r2_val:.4f}")
-
+    # Plot first — regression scatter + line
     X_full_sorted = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
     X_full_poly = best_poly.transform(X_full_sorted)
     y_full_pred = best_model.predict(X_full_poly)
@@ -181,7 +159,6 @@ def process_and_plot(df):
         }
     )
 
-    # Update hover label style: light blue background
     fig.update_traces(
         hoverlabel=dict(
             bgcolor="lightblue",
@@ -205,6 +182,29 @@ def process_and_plot(df):
 
     st.plotly_chart(fig, use_container_width=True)
 
+    # Then show info and tables below plot
+
+    st.markdown(f"### Total Observations: {df.shape[0]}")
+
+    st.markdown("### Most difficult models:")
+    st.dataframe(
+        df.sort_values('Complexity_Score', ascending=False)
+          .head(5)[['Name', 'Difficulty', 'Complexity_Score']],
+        use_container_width=True
+    )
+
+    st.markdown("### Most recent models:")
+    st.dataframe(
+        df.head(5)[['Name', 'Difficulty', 'Complexity_Score']],
+        use_container_width=True
+    )
+
+    st.markdown("### Validation R² Scores for Polynomial Degrees 1 to 6:")
+    for degree, r2 in r2_scores.items():
+        st.write(f"Degree {degree}: R² = {r2:.4f}")
+
+    st.markdown(f"### Best Polynomial Degree: {best_degree} with Validation R²: {best_r2_val:.4f}")
+
 # --- Streamlit UI ---
 st.title("Origami Model Complexity Tracker")
 
@@ -227,11 +227,9 @@ if st.button("Scrape Latest Model & Update Dataset"):
     else:
         st.error("Failed to find new model URL.")
 
-    # Re-load dataset after update
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
 
 else:
-    # Just load and plot existing data
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
