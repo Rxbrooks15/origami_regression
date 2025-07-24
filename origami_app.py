@@ -13,6 +13,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import plotly.express as px
 import plotly.graph_objects as go
 from urllib.parse import urljoin
+from streamlit_plotly_events import plotly_events
 
 CSV_PATH = "origami_scrape_final.csv"
 
@@ -73,7 +74,7 @@ def get_first_model_url():
         model_url = "https://origami-database.com" + model_url
     return model_url
 
-# --- Data processing functions ---
+# --- Time Conversion ---
 def convert_to_minutes(time_str):
     if pd.isna(time_str): return 0
     time_str = time_str.lower().replace("hours", "hr").replace("hour", "hr")
@@ -85,6 +86,7 @@ def convert_to_minutes(time_str):
     m = int(minutes.group(1)) if minutes else 0
     return h * 60 + m
 
+# --- Main Plotting Function ---
 def process_and_plot(df):
     df['time_minutes'] = df['Time'].apply(convert_to_minutes)
     df['Difficulty'] = df['Difficulty'].str.strip().str.lower()
@@ -120,70 +122,42 @@ def process_and_plot(df):
     y = df['Complexity_Score'].values
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    # Polynomial Fit
     r2_scores = {}
-    best_degree = 1
     best_r2_val = -np.inf
-    best_model = None
-    best_poly = None
-
     for degree in range(1, 7):
         poly = PolynomialFeatures(degree=degree, include_bias=False)
         X_train_poly = poly.fit_transform(X_train)
         X_test_poly = poly.transform(X_test)
-
-        model = LinearRegression()
-        model.fit(X_train_poly, y_train)
-        y_val_pred = model.predict(X_test_poly)
-        r2_val = r2_score(y_test, y_val_pred)
+        model = LinearRegression().fit(X_train_poly, y_train)
+        r2_val = r2_score(y_test, model.predict(X_test_poly))
         r2_scores[degree] = r2_val
-
         if r2_val > best_r2_val:
-            best_degree = degree
-            best_r2_val = r2_val
-            best_model = model
-            best_poly = poly
+            best_poly, best_model = poly, model
+            best_degree, best_r2_val = degree, r2_val
 
     X_full_sorted = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
-    X_full_poly = best_poly.transform(X_full_sorted)
-    y_full_pred = best_model.predict(X_full_poly)
+    y_full_pred = best_model.predict(best_poly.transform(X_full_sorted))
 
+    # --- Hover Image Preview ---
+    if "hover_image_url" in st.session_state:
+        st.image(st.session_state["hover_image_url"], width=300, caption=st.session_state.get("hover_name", ""))
+        st.markdown(f"**🧑‍🎨 Creator:** {st.session_state.get('hover_creator', '')}")
+        st.markdown(f"**📊 Complexity Score:** {st.session_state.get('hover_score', 0):.2f}")
+        st.markdown(f"**📃 Description:** {st.session_state.get('hover_desc', '')}")
+
+    # --- Plotly Chart ---
     fig = px.scatter(
         df,
         x='time_minutes',
         y='Complexity_Score',
         color='Topic_Weighted_Difficulty',
-        custom_data=[
-            'Image', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
-            'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
-            'Name_Score', 'Description_Score'
-        ],
-        title=f'Polynomial Fit (Degree {best_degree}) | Validation R²: {best_r2_val:.3f}'
-    )
-
-    fig.update_traces(
-        hovertemplate="""
-        🏷️ <b>%{customdata[1]}</b><br>
-        🧑‍🎨 <b>%{customdata[2]}</b><br>
-        ⏱️ <b>%{customdata[3]:.1f}</b> minutes<br>
-        📊 <b>Complexity:</b> %{customdata[4]:.2f}<br>
-         <b>Topic Group:</b> %{customdata[6]}<br>
-         <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
-         <b>Topic Name Score:</b> %{customdata[8]:.2f}<br>
-         <b>Topic Description Score:</b> %{customdata[9]:.2f}<br>
-        🖼️ <b>Image:</b><br><img src='%{customdata[0]}' width='120'><br>
-        📃<b>Description:</b> %{customdata[5]}<br>
-        <extra></extra>
-        """,
-        marker=dict(size=9, opacity=0.8),
-        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Arial")
+        custom_data=['Image', 'Name', 'Creator', 'Complexity_Score', 'Description']
     )
 
     fig.add_trace(go.Scatter(
-        x=X_full_sorted.flatten(),
-        y=y_full_pred,
-        mode='lines',
-        name='Best Fit Curve',
-        line=dict(color='black')
+        x=X_full_sorted.flatten(), y=y_full_pred,
+        mode='lines', name='Best Fit Curve', line=dict(color='black')
     ))
 
     fig.update_layout(
@@ -191,8 +165,22 @@ def process_and_plot(df):
         yaxis_title='📊 Complexity Score'
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    # --- Use plotly_events to detect hover ---
+    hover_result = plotly_events(
+        fig, click_event=False, hover_event=True, override_height=600, override_width="100%"
+    )
 
+    if hover_result:
+        idx = hover_result[0]["pointIndex"]
+        row = df.iloc[idx]
+        st.session_state["hover_image_url"] = row["Image"]
+        st.session_state["hover_name"] = row["Name"]
+        st.session_state["hover_creator"] = row["Creator"]
+        st.session_state["hover_score"] = row["Complexity_Score"]
+        st.session_state["hover_desc"] = row["Description"]
+        st.experimental_rerun()
+
+    # --- Other Info ---
     st.markdown(f"### Total Observations: {df.shape[0]-1}")
     st.markdown("### Most difficult models:")
     st.dataframe(
@@ -233,7 +221,6 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
         st.error("❌ Failed to find new model URL.")
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
-
 else:
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
