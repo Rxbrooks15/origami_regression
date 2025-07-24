@@ -221,7 +221,7 @@ if st.button("Scrape Latest Model & Update Dataset"):
                 df = pd.concat([df_new, df], ignore_index=True)
                 df.to_csv(CSV_PATH, index=False)
             else:
-                st.info(f"Model '{new_model['Name']}' already exists.")
+                st.info(f"Model '{new_model['Name']}' is the most recent model.")
         else:
             st.error("Failed to scrape the new model details.")
     else:
