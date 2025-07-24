@@ -206,7 +206,6 @@ else:
     process_and_plot(df)
 
 # --- Auto-refresh every 24 hours (86400000 milliseconds) ---
-st_autorefresh = st.experimental_rerun
 # OR simple button to manually refresh if you prefer (Streamlit doesn't natively support precise schedulers)
 
 # For scheduled runs outside Streamlit, you can set a cron job or Windows Task Scheduler to run
