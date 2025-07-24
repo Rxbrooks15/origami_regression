@@ -18,7 +18,7 @@ from urllib.parse import urljoin
 CSV_PATH = "origami_scrape_final.csv"
 
 # --- Sidebar and Search Query ---
-st.sidebar.header("🔍 Search or Preview Origami Models")
+st.sidebar.header("Preview Origami Models")
 search_query = st.sidebar.text_input("🔎 Search Model Name")
 
 # --- Scraping functions ---
