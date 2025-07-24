@@ -251,13 +251,42 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
             st.error("❌ Failed to scrape the new model details.")
     else:
         st.error("❌ Failed to find new model URL.")
+    else:
     df = pd.read_csv(CSV_PATH)
-    process_and_plot(df)
+
+    highlight_name = None
+    if search_query:
+        match = df[df["Name"].str.contains(search_query, case=False, na=False)]
+        if not match.empty:
+            highlight_name = match.iloc[0]["Name"]
+    else:
+        try:
+            sample_row = df.sample(1).iloc[0]
+            highlight_name = sample_row["Name"]
+        except Exception:
+            pass
+
+    process_and_plot(df, highlight_name=highlight_name)
+
 
 
 else:
+    else:
     df = pd.read_csv(CSV_PATH)
-    process_and_plot(df)
+
+    highlight_name = None
+    if search_query:
+        match = df[df["Name"].str.contains(search_query, case=False, na=False)]
+        if not match.empty:
+            highlight_name = match.iloc[0]["Name"]
+    else:
+        try:
+            sample_row = df.sample(1).iloc[0]
+            highlight_name = sample_row["Name"]
+        except Exception:
+            pass
+
+    process_and_plot(df, highlight_name=highlight_name)
 
 
 
