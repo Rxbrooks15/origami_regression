@@ -85,7 +85,7 @@ def convert_to_minutes(time_str):
     m = int(minutes.group(1)) if minutes else 0
     return h * 60 + m
 
-def process_and_plot(df):
+def process_and_plot(df, highlight_name=None):
     import os
 
     df['time_minutes'] = df['Time'].apply(convert_to_minutes)
@@ -195,6 +195,20 @@ def process_and_plot(df):
         xaxis_title='⏱️ Time (minutes)',
         yaxis_title='📊 Complexity Score'
     )
+        # Add a green marker for the searched model
+    if highlight_name:
+        matched_row = df[df["Name"].str.lower() == highlight_name.lower()]
+        if not matched_row.empty:
+            fig.add_trace(go.Scatter(
+                x=matched_row["time_minutes"],
+                y=matched_row["Complexity_Score"],
+                mode='markers+text',
+                name='🔍 Searched Model',
+                text=matched_row["Name"],
+                textposition="top center",
+                marker=dict(color='green', size=12, symbol='circle-open-dot')
+            ))
+
 
     st.plotly_chart(fig, use_container_width=True)
 
@@ -238,11 +252,13 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
     else:
         st.error("❌ Failed to find new model URL.")
     df = pd.read_csv(CSV_PATH)
-    process_and_plot(df)
+    process_and_plot(df, highlight_name=search_query if search_query else None)
+
 
 else:
     df = pd.read_csv(CSV_PATH)
-    process_and_plot(df)
+    process_and_plot(df, highlight_name=search_query if search_query else None)
+
 
 
 # --- Streamlit Sidebar for Preview with Search ---
