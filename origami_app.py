@@ -12,7 +12,7 @@ from sklearn.decomposition import NMF
 from sklearn.feature_extraction.text import TfidfVectorizer
 import plotly.express as px
 import plotly.graph_objects as go
-import os
+from urllib.parse import urljoin
 
 CSV_PATH = "origami_scrape_final.csv"
 
@@ -25,9 +25,12 @@ def scrape_model_detail(url):
 
         name = soup.select_one("h1").text.strip()
         image_tag = soup.select_one(".single-model__image img")
-        image = image_tag["src"].strip() if image_tag else ""
+        image = urljoin(url, image_tag["src"].strip()) if image_tag else ""
         desc_tag = soup.select_one(".single-model__content p")
         description = desc_tag.text.strip() if desc_tag else "No description available"
+
+        creator_tag = soup.select_one(".single-model__content__creator a")
+        creator = creator_tag.text.strip() if creator_tag else "Unknown"
 
         difficulty = ""
         meta_items = soup.select(".single-model__content__meta__item")
@@ -46,6 +49,7 @@ def scrape_model_detail(url):
         return {
             "Image": image,
             "Name": name,
+            "Creator": creator,
             "Description": description,
             "Difficulty": difficulty,
             "Time": time_str
@@ -72,8 +76,7 @@ def get_first_model_url():
 # --- Data processing functions ---
 def convert_to_minutes(time_str):
     if pd.isna(time_str): return 0
-    time_str = time_str.lower()
-    time_str = time_str.replace("hours", "hr").replace("hour", "hr")
+    time_str = time_str.lower().replace("hours", "hr").replace("hour", "hr")
     time_str = time_str.replace("minutes", "min").replace("minute", "min")
     time_str = time_str.replace(".", "").strip()
     hours = re.search(r'(\d+)\s*hr', time_str)
@@ -140,31 +143,39 @@ def process_and_plot(df):
             best_model = model
             best_poly = poly
 
-    # Plot first — regression scatter + line
     X_full_sorted = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
     X_full_poly = best_poly.transform(X_full_sorted)
     y_full_pred = best_model.predict(X_full_poly)
 
     fig = px.scatter(
-        df, x='time_minutes', y='Complexity_Score',
+        df,
+        x='time_minutes',
+        y='Complexity_Score',
         color='Topic_Weighted_Difficulty',
-        title=f'Polynomial Fit (Degree {best_degree}) | Validation R²: {best_r2_val:.3f}',
-        hover_data={
-            'Name': True,
-            'Description': True,
-            'Dominant_Topic': True,
-            'Topic_Weighted_Difficulty': ':.2f',
-            'Name_Score': ':.2f',
-            'Description_Score': ':.2f'
-        }
+        custom_data=[
+            'Image', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
+            'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
+            'Name_Score', 'Description_Score'
+        ],
+        title=f'Polynomial Fit (Degree {best_degree}) | Validation R²: {best_r2_val:.3f}'
     )
 
     fig.update_traces(
-        hoverlabel=dict(
-            bgcolor="lightblue",
-            font_size=13,
-            font_family="Arial"
-        )
+        hovertemplate="""
+        🏷️ <b>%{customdata[1]}</b><br>
+        🧑‍🎨 <b>%{customdata[2]}</b><br>
+        ⏱️ <b>%{customdata[3]:.1f}</b> minutes<br>
+        📊 <b>Complexity:</b> %{customdata[4]:.2f}<br>
+        🧠 <b>Topic Group:</b> %{customdata[6]}<br>
+        🎯 <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
+        ✏️ <b>Name Score:</b> %{customdata[8]:.2f}<br>
+        📃 <b>Description Score:</b> %{customdata[9]:.2f}<br>
+        🖼️ <b>Image:</b><br><img src='%{customdata[0]}' width='120'><br>
+        📝 <b>Description:</b> %{customdata[5]}<br>
+        <extra></extra>
+        """,
+        marker=dict(size=9, opacity=0.8),
+        hoverlabel=dict(bgcolor="white", font_size=13, font_family="Arial")
     )
 
     fig.add_trace(go.Scatter(
@@ -176,39 +187,33 @@ def process_and_plot(df):
     ))
 
     fig.update_layout(
-        xaxis_title='Time (minutes)',
-        yaxis_title='Complexity Score'
+        xaxis_title='⏱️ Time (minutes)',
+        yaxis_title='📊 Complexity Score'
     )
 
     st.plotly_chart(fig, use_container_width=True)
 
-    # Then show info and tables below plot
-
     st.markdown(f"### Total Observations: {df.shape[0]-1}")
-
     st.markdown("### Most difficult models:")
     st.dataframe(
         df.sort_values('Complexity_Score', ascending=False)
           .head(5)[['Name', 'Difficulty', 'Complexity_Score']],
         use_container_width=True
     )
-
     st.markdown("### Most recent models:")
     st.dataframe(
         df.head(5)[['Name', 'Difficulty', 'Complexity_Score']],
         use_container_width=True
     )
-
     st.markdown("### Validation R² Scores for Polynomial Degrees 1 to 6:")
     for degree, r2 in r2_scores.items():
         st.write(f"Degree {degree}: R² = {r2:.4f}")
-
     st.markdown(f"### Best Polynomial Degree: {best_degree} with Validation R²: {best_r2_val:.4f}")
 
 # --- Streamlit UI ---
-st.title("Origami Model Complexity Tracker")
+st.title("📐 Origami Model Complexity Tracker")
 
-if st.button("Scrape Latest Model & Update Dataset"):
+if st.button("📥 Scrape Latest Model & Update Dataset"):
     df = pd.read_csv(CSV_PATH)
     existing_names = set(df['Name'].dropna().str.lower())
     url = get_first_model_url()
@@ -216,17 +221,16 @@ if st.button("Scrape Latest Model & Update Dataset"):
         new_model = scrape_model_detail(url)
         if new_model:
             if new_model['Name'].lower() not in existing_names:
-                st.success(f"Adding new model: {new_model['Name']}")
+                st.success(f"🆕 Adding new model: {new_model['Name']}")
                 df_new = pd.DataFrame([new_model])
                 df = pd.concat([df_new, df], ignore_index=True)
                 df.to_csv(CSV_PATH, index=False)
             else:
-                st.info(f"Model '{new_model['Name']}' is the most recent model.")
+                st.info(f"ℹ️ Model '{new_model['Name']}' is the most recent.")
         else:
-            st.error("Failed to scrape the new model details.")
+            st.error("❌ Failed to scrape the new model details.")
     else:
-        st.error("Failed to find new model URL.")
-
+        st.error("❌ Failed to find new model URL.")
     df = pd.read_csv(CSV_PATH)
     process_and_plot(df)
 
