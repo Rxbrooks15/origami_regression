@@ -1,0 +1,488 @@
+Image,Name,Description,Difficulty,Time
+,Phoenix,"Mythical bird with long neck, large feather on its head and fanned tail.",Intermediate,38 minutes
+,Ogre,"Humanoid figure with large head, chest and arms.",Intermediate,29 minutes
+,Winged Wolf,Standing wolf with large wings.,Intermediate,27 minutes
+,Cube,Cube with one fully open edge.,Moderate,19 minutes
+,Lady Godiva,Three-dimentional reverse-colored woman atop a horse.,Hard,2 hours
+,Fivefold Rose,Five-sided flower.,Intermediate,1 hour
+,Grim Reaper,"Humanoid skeleton in tattered robes carrying a large scythe, with reverse-colored skull face, hands and feet.",Complex,7 hours 34 minutes
+,Spinosaurus,Standing dinosaur with small reverse-colored sail on its back and dewclaws on its legs.,Hard,1 hour 33 minutes
+,Samurai Helmet Beetle,Distinctively shaped beetle with reverse-colored wings posed as if in flight.,Hard,2 hours 25 minutes
+,Slowpoke,"Three-dimentional Pokémon with reverse-colored eyes, toes and mouth, featuring two large incisors.",Moderate,50 minutes
+,Giant Panda,Standing panda bear with distinctive color changes.,Intermediate,45 minutes
+,Winged Unicorn,"Winged unicorn with a large, reverse-colored horn.",Intermediate,53 minutes
+,Biplane,Three-dimentional airplane with stacked wings and two wheels.,Hard,2 hours
+,Dragon with Wizard,"Quadruped dragon breathing reverse-colored flames, with a humanoid figure on its back.",Hard,3 hours 23 minutes
+,Dragon with Warrior,"Flying dragon with horned head, carrying a humanoid figure.",Hard,3 hours 16 minutes
+,Sea serpent,Sea serpent with dragon-like head and long tail.,Moderate,21 minutes
+,Crayfish,Lobster-like creature with two large claws and four legs.,Moderate,35 minutes
+,Dragon Hatchling,"Egg with reverse-colored head, tail and wings of a baby dragon peeking out.",Intermediate,35 minutes
+,Snake,"Abstract snake coiled around itself, neck and head raised, with a reverse-colored open mouth.",Easy,7 minutes
+,Rocket,Abstract and boxy rocket with four fins.,Moderate,12 minutes
+,Witch,Robed woman with pointy hat on a flying broom.,Hard,1 hour 53 minutes
+,King Tut,Mask of the Egyptian pharaoh Tutankhamun.,Intermediate,32 minutes
+,Cuckoo Clock,Three-dimentional cuckoo clock with long pendulum and bird popping out.,Hard,2 hours 34 minutes
+,Hummingbird,Flying bird with long beak and reverse-colored body.,Intermediate,41 minutes
+,One-Headed Dragon,Standing dragon with long neck.,Moderate,23 minutes
+,Nun,Standing robed figure with reverse-colored wimple.,Moderate,14 minutes
+,Pigeon,Three-dimentional bird with distinctive plumage and body shape.,Intermediate,1 hour 5 minutes
+,Vulture,Abstract bird with distinctive silhouette.,Moderate,13 minutes
+,White-faced Mouse,Abstract mouse with reverse-colored face.,Easy,3 minutes
+,Swan,Sitting or swimming bird with long neck and separate wings and plumage.,Moderate,8 minutes
+,Fish,Abstract fish with pelvic and tail fin.,Easy,5 minutes
+,2 Fold Santa,Abstract Santa Claus model.,Easy,1 minute
+,One Fold Stegosaurus,"Flat, abstract dinosaur.",Easy,1 minute
+,Pigeon,Abstract flying bird with reverse-colored beak and underside.,Easy,2 minutes
+,Candy Box,Open tapered box with reverse-colored underside.,Easy,5 minutes
+,Fancy Box,Box with pointed sides and reverse-colored triangle decorations on the edge.,Easy,6 minutes
+,Pig,Abstract standing pig.,Easy,4 minutes
+,Star,Five-pointed star with visible flaps.,Easy,4 minutes
+,Pelican,Abstract swimming or sitting bird.,Easy,3 minutes
+,House,Abstract symbol of two adjoined houses.,Easy,2 minutes
+,Jumping frog,"Three-dimentional frog with four fingers and five toes, open mouth and eyes that jumps when tapped.",Moderate,50 minutes
+,Jumping frog,Abstract frog that jumps when tapped.,Easy,4 minutes
+,Jumping frog,Abstract frog that jumps when tapped.,Easy,4 minutes
+,Oblong Box,Long rectangular box with two attached open lids.,Easy,4 minutes
+,Tall Cap,High cone-shaped hat.,Easy,2 minutes
+,Boat,Simple open boat.,Moderate,3 minutes
+,Piano,Abstract three-dimentional piano.,Easy,3 minutes
+,Jumping frog,Abstract frog that jumps when tapped.,Easy,3 minutes
+,Three-Headed Dragon,Bipedal three-headed creature with small wings and horned heads featuring open mouths.,Intermediate,2 hours 22 minutes
+,Charizard,Standing three-dimentional dragon from Pokémon with reverse-colored wings and flame on the tip of its tail.,Hard,2 hours 55 minutes
+,Lapras,Three-dimentional plesiosaur-like creature with reverse-colored shell on its back.,Intermediate,48 minutes
+,Bulbasaur,Quadruped creature with large plant bulb on its back.,Intermediate,30 minutes
+,Pegasus,Horse with medium-sized wings.,Hard,1 hour 50 minutes
+,Tulip and Stem,Red abstract flower with three petals on a stem with a single leaf.,Easy,4 minutes
+,Atlantic Puffin,Standing bulky bird with reverse-colored elements.,Intermediate,52 minutes
+,Rabbit,Simple abstract rabbit face.,Easy,2 minutes
+,Horse,Simple abstract horse head.,Easy,3 minutes
+,Cat,Simple abstract cat face.,Easy,2 minutes
+,Tarrasque,"Quadruped armored beast with long tail, scales on its back and a horned head.",Complex,3 hours 45 minutes
+,Dog,Simple abstract dog face.,Easy,2 minutes
+,Fish,"Simple generic fish with dorsal, pelvic and caudal fins.",Easy,6 minutes
+,Fish,Simple abstract fish,Easy,2 minutes
+,Penguin,Simple abstract penguin,Easy,2 minutes
+,Lily Pad,Flat water lily leaf.,Moderate,8 minutes
+,Lotus Flower,Water lily flower.,Moderate,20 minutes
+,Greater Death’s Head Hawkmoth,"Flying insect with reverse-colored wings, striped abdomen and skull-like symbol on its back.",Complex,4 hours 10 minutes
+,Prehistoric Man,Male humanoid shape with visible genitals.,Moderate,14 minutes
+,Otyugh,Three-legged monster with two large tentacles and an open mouth.,Intermediate,1 hour 18 minutes
+,Bulette,Armored quadruped creature with large maw.,Hard,1 hour 58 minutes
+,Fly,Abstract three-dimentional flying insect with reverse-colored wings.,Easy,6 minutes
+,Question Mark,Question mark symbol on a reverse-colored background.,Intermediate,22 minutes
+,Tulip,Flat duo-colored flower on reverse-colored background.,Intermediate,38 minutes
+,Owlbear,Abstract bear-like creature with large beak and talons.,Moderate,37 minutes
+,Intellect Devourer,"Brain on four legs, each having three digits.",Intermediate,1 hour 11 minutes
+,Displacer beast,Six-legged catlike creature with two large tentacles sprouting from its back.,Hard,2 hours 40 minutes
+,Heart with bow,Heart symbol with reverse-colored bow on top.,Easy,9 minutes
+,Staff,Abstract staff topped with a reverse-colored tip.,Moderate,13 minutes
+,The Flying Carpet,Airplane that can be thrown.,Easy,4 minutes
+,Carp banner,Abstract fish with open mouth and two pectoral fins.,Easy,7 minutes
+,The Glider,Airplane that can be thrown.,Easy,4 minutes
+,Sword,Abstract sword with reverse-colored blade and upward crossguard.,Moderate,11 minutes
+,Tiger,Abstract tiger with reverse-colored stripes and nose.,Intermediate,51 minutes
+,Mammoth,Abstract mammoth model with large reverse-colored thusks.,Intermediate,38 minutes
+,Rhinoceros,Abstract rhino with distinctive head and large horn.,Moderate,27 minutes
+,Merino Sheep,Sheep with horns and reverse-colored head.,Moderate,22 minutes
+,Baby Gorilla,Standing ape model with distinctive head and pose.,Moderate,22 minutes
+,Phantom,Large conch shell with reverse-colored wave coming out of it featuring a small boat.,Complex,4 hours 35 minutes
+,Tonosama grasshopper,"Grasshopper with six independent legs, two antennae and distinctive shape.",Intermediate,1 hour 5 minutes
+,Ax,Simple axe with reverse-colored blade.,Moderate,9 minutes
+,Giant Tortoise,Standing tortoise with large shield and raised head.,Intermediate,44 minutes
+,Sea Turtle,Three-dimentional turtle with distinctive flippers.,Moderate,18 minutes
+,Singer,Cowled humanoid figure with a book in one hand.,Moderate,40 minutes
+,Velociraptor,"Bipedal dinosaur model with reverse-colored head, feet and arm feathers.",Intermediate,1 hour 3 minutes
+,Skull Coin,Octogonal flat model with a reverse-colored skull symbol.,Intermediate,24 minutes
+,Deer,Standing deer featuring antlers with six points.,Intermediate,55 minutes
+,Lady,Winged female figure with long skirt.,Hard,2 hours 24 minutes
+,Fish,"Abstract fish model with open mouth and large, reverse-colored eye.",Intermediate,29 minutes
+,Ammonite,Segmented shell with four reverse-colored tentacles.,Moderate,29 minutes
+,Dandelion,Flower on stem with reverse-colored petals.,Moderate,25 minutes
+,Raccoon,"Sitting racoon with distinctive reverse-colored snout, ears and bands on its tail.",Intermediate,41 minutes
+,Velociraptor,Standing bipedal dinosaur with long tail and open mouth.,Moderate,27 minutes
+,Hedgehog,"Standing hedgehog with reverse-colored head and feet, including a segmented back featuring quill-like motif.",Intermediate,50 minutes
+,Crab,Eight-legged crab with two large claws.,Intermediate,35 minutes
+,Zebra,"Standing zebra with reverse-colored nose, mane, tail and three stripes on its back.",Intermediate,40 minutes
+,Clownfish,Fish with reverse-colored stripes.,Intermediate,38 minutes
+,Toad/frog,"Sitting frog (or toad) model with reverse-colored eyes and jaw, featuring three digits on its front toes.",Intermediate,54 minutes
+,Unicorn,Standing unicorn with large head and twisted horn.,Intermediate,57 minutes
+,Satyr,Standing goat-like humanoid with reverse-colored horns.,Hard,1 hour 18 minutes
+,Ancient Dragon,"Dragon with eight large spikes on its head, large wings, segmented tail and four talons with four digits each.",Complex,9 hours 50 minutes
+,Bear with salmon,Abstract sitting bear holding a reverse-colored fish in its arms.,Moderate,33 minutes
+,Lantern,Traditional lantern with octagonal-shaped inside.,Easy,3 minutes
+,Lantern,Traditional lantern with pointed sides.,Easy,3 minutes
+,Giant Squid,Cephalopod with two large and eight smaller tentacles and distinctive fin.,Intermediate,1 hour 38 minutes
+,Cuttlefish,"Three-dimentional cuttlefish with reverse-colored eye and underside, featuring eight tentacles.",Intermediate,40 minutes
+,Axolotl,Amphibian with reverse-colored external gills.,Moderate,25 minutes
+,Sphinx,Sitting lion-like creature with abstract face.,Intermediate,1 hour 28 minutes
+,Yin Yang Crane,"Traditional crane with one side of the model reverse-colored, with a dot on each wing in the inverted color.",Moderate,18 minutes
+,Rowlet,Sitting owl-like Pokémon with round body.,Moderate,27 minutes
+,Lambeosaurus,Quadrupedal dinosaur with distinctive cranial crest.,Intermediate,30 minutes
+,Dog,"Sitting dog with reverse-colored front paws, breast and cheeks.",Moderate,22 minutes
+,Tree Sunset,"Silhouette of tree trunk and branches, against a reverse-colored background with radial lines.",Moderate,28 minutes
+,Mephistopheles,"Standing humanoid devil with horned head, large wings and forked tail.",Hard,3 hours 29 minutes
+,Frog,Amphibian with distinctive legs and hands and feet ending in three digits.,Intermediate,1 hour 14 minutes
+,Centaur,"Creature with muscled, reverse-colored upper body of a humanoid and lower body of a horse.",Intermediate,1 hour 30 minutes
+,Butterfly,Winged insect with six legs and short antennae.,Hard,45 minutes
+,Wizard,"Humanoid figure with arms stretched, wearing a robe and pointy hat.",Hard,1 hour 33 minutes
+,Lean-To,Shelter with sloped roof and single opening.,Intermediate,26 minutes
+,Narwhal,"Whale with long, curved reverse-colored thusk.",Moderate,26 minutes
+,Lizard,Lizard with arms and legs with three digits.,Hard,1 hour 24 minutes
+,Cerberus,Three-headed dog with curved tail and thin legs.,Intermediate,43 minutes
+,Piranha Fish,"Stylized, flat piranha fish.",Intermediate,17 minutes
+,Fire breathing dragon,"Standing, bulky dragon with small wings that breaths fire from its maw.",Moderate,50 minutes
+,You Are Always In My Heart,Hearth symbol within a reverse-colored heart symbol.,Moderate,14 minutes
+,Scarecrow (Edward Bird-hands),Standing humanoid with birds for hands.,Intermediate,1 hour 2 minutes
+,Kitty,Sitting abstract cat model.,Moderate,11 minutes
+,Crocodile,Reptile with reverse-colored teeth and eyes.,Intermediate,28 minutes
+,Sailfish,"Model with long bill, large dorsal fin and reverse-colored underside.",Moderate,28 minutes
+,Long Legged Crane,"Bird on spindly, reverse-colored legs.",Intermediate,24 minutes
+,Tetrahedron,Triangular pyramid composed of four faces.,Moderate,7 minutes
+,Diamond,Radial-shaped diamond with eight sides.,Moderate,14 minutes
+,Cube,Six-faced model.,Moderate,6 minutes
+,Hexahedron,Six-faced shape.,Moderate,8 minutes
+,Pyramid,Square pyramid model.,Moderate,8 minutes
+,Stegosaurus,Abstract dinosaur model with distinctive plates and tail.,Moderate,27 minutes
+,Octahedron One,Eight-sided shape.,Moderate,10 minutes
+,Octahedron Two,Asymmetrical eight-faced shape with indented bottom.,Intermediate,18 minutes
+,DNA Wheel,Circular wheel-like model created by flattening a DNA-like structure.,Moderate,16 minutes
+,Vel’Koz,Floating creature with single large eye and three tentacles.,Moderate,19 minutes
+,Sunken Pyramid,Three-sided pyramid with sunken tip.,Moderate,8 minutes
+,Helmet,Pointed Corinthian helmet with open backside.,Moderate,21 minutes
+,Five-Banded Armadillo,Armadillo with large segmented shell and feet ending in three toes.,Intermediate,1 hour 50 minutes
+,Oriental Dragon,"Wingless, flying dragon with hollow body and pronounced head.",Intermediate,2 hours 5 minutes
+,Thanksgiving Turkey,Abstract roasted turkey with distinctive arms and legs.,Intermediate,10 minutes
+,Beetle,Rhinoceros beetle with six segmented legs and distinctive horn.,Intermediate,47 minutes
+,Demon,Standing demon with two small wings and cloven feet.,Intermediate,42 minutes
+,Ouroboros,"Three-dimentional winged snake with large dragon-like wings, curved in a circle.",Intermediate,2 hours 24 minutes
+,Medusa,Woman with serpentine lower body and hair made of eight snakes.,Intermediate,2 hours 48 minutes
+,Sprout,Two leaves on a stem in a reverse-colored pot.,Intermediate,33 minutes
+,Griffin,"Distinctive half-lion, half-eagle with claws with three digits.",Intermediate,1 hour 5 minutes
+,Christmas Angel,Abstract humanoid creature with wings and arms folded behind its back.,Easy,9 minutes
+,Flying Serpent,"Winged snake with open mouth, long tail and two claws.",Intermediate,35 minutes
+,Sagittarius,"Bulky, abstract centaur model.",Moderate,26 minutes
+,Suit of Armor,"Standing armor with pauldrons, pointed helmet and distinctive knee pads.",Moderate,22 minutes
+,Igor,Hunch-backed humanoid figure.,Moderate,14 minutes
+,Bat,Abstract bat model with feet and distinctive ears.,Easy,11 minutes
+,Ghost,Abstract ghost with reverse-colored eyes and mouth.,Moderate,10 minutes
+,Pumpkin,Abstract pumpkin model with eight segments and a reverse-colored stem.,Moderate,10 minutes
+,Crow,Bird model with four digits on each talon.,Intermediate,48 minutes
+,Inchworm,Crawling catepillar model with curved body.,Moderate,26 minutes
+,Mouse,Sitting mouse model.,Moderate,14 minutes
+,Adirondack Chair,Chair with wide armrests and large backrest.,Moderate,21 minutes
+,Cat,"Sitting cat with three-dimentional head and reverse-colored snout, legs and underside.",Intermediate,1 hour 3 minutes
+,Red Wyvern,Wyvern with a horned head and talons with three digits.,Intermediate,1 hour 40 minutes
+,Styracosaurus,Dinsoaur with six spikes on its neck frill and a single horn on its nose.,Intermediate,55 minutes
+,Octopus,Abstract eight-legged bulbous octopus model.,Moderate,26 minutes
+,Common Loon,"Aquatic bird model with reverse-colored lower sides, breast and neck.",Moderate,16 minutes
+,Foxy fox,Standing fox model with reverse-colored tail and inner ears.,Moderate,24 minutes
+,Elephant Seal,"Sitting male elephant seal with distinctive nose, leaning back.",Moderate,26 minutes
+,Chicken,"Abstract chicken with reverse-colored comb, two independent wings and a single foot.",Easy,6 minutes
+,Jumping Cricket,Cricket with four distinct legs and hind legs pressed against its body that can be made to jump.,Moderate,24 minutes
+,Sailing Boat,Three-dimentional ship with two reverse-colored sails.,Moderate,18 minutes
+,Treasure Chest,Rectangular trunk with curved lid.,Moderate,38 minutes
+,Emperor penguin,Standing penguin with reverse-colored belly.,Moderate,19 minutes
+,Fish skeleton,Abstract fish bone model with distinctive ribs.,Moderate,8 minutes
+,Stegosaurus,"Standing dinosaur with large body, 8 plates on its back and a four-spiked thagomizer.",Intermediate,1 hour 35 minutes
+,Tapejara,Flying dinosaur with large wings and large crest on its head.,Intermediate,1 hour
+,Snail chopstick rest,Simple snail model with eyestalks and coiled shell.,Easy,7 minutes
+,Ankylosaurus,Standing ankylosaurus with distinctive spikes at its sides.,Intermediate,1 hour 20 minutes
+,Praying Mantis,"Insect standing on four legs, with two distinctive raptorial front legs.",Intermediate,48 minutes
+,Dimetrodon,Quadruped model with reverse-colored sail and eyes.,Intermediate,1 hour 35 minutes
+,The Shadow of Dragon,Nearly flat dragon shape on a reverse-colored diamond.,Intermediate,53 minutes
+,Goat,Standing goat with distinctive eyes and two horns.,Intermediate,47 minutes
+,Winged Sonobe (icosahedron),"Modular, winged polyhedron model folded from 30 sheets.",Intermediate,2 hours 4 minutes
+,Winged Sonobe (star tetrahedron),Stellated octahedron model made from winged Sonobe modules.,Intermediate,1 hour
+,Fox 2015,Standing fox with distinctive face and reverse-colored tail tip.,Intermediate,38 minutes
+,Rooster,"Rooster with reverse-colored wattle, comb and legs.",Intermediate,45 minutes
+,Bactrian Camel,Abstract standing camel model with two humps.,Intermediate,35 minutes
+,Flying squirrel,"Nearly flat squirrel model, with a head that features a nose, ears and eyes.",Intermediate,52 minutes
+,Tulip and Stem,Four-petalled flower with large stigma on a stem with a single leaf.,Moderate,8 minutes
+,Penguin,Traditional penguin model with single foot.,Easy,7 minutes
+,Masu box and Insert,Square container with four separate compartments.,Moderate,15 minutes
+,Ship,Hollow boat model with two decks.,Moderate,16 minutes
+,Fancy Goldfish,Simple fish model with hanging tail fin.,Easy,7 minutes
+,Seal,Traditional abstract seal model with two front flippers.,Easy,5 minutes
+,Bride,Boxy bride with long veil.,Moderate,23 minutes
+,Groom,Boxy groom with spikey hair and reverse-colored face and undershirt.,Moderate,21 minutes
+,Dress ver.1,Flat dress model with wide skirt.,Moderate,11 minutes
+,Bicycle,Bicycle with distinctive frame and reverse-colored wheels.,Hard,3 hours 5 minutes
+,Human Figure,Standing humanoid figure with reverse-colored face.,Moderate,14 minutes
+,Frying Pan,Square skillet model.,Moderate,8 minutes
+,Ornament,Ornament made from six sheets.,Moderate,10 minutes
+,Leaf & snail,Reverse-colored snail on a leaf from a single sheet.,Moderate,15 minutes
+,Troll,Bulky creature with large arms.,Moderate,11 minutes
+,Flower with stem,Simple plant stem with reverse-colored flower and two leaves.,Moderate,9 minutes
+,Waterbomb,"A simple, three-dimentional box.",Easy,6 minutes
+,Camel,Standing dromedary model with reverse-colored eye.,Intermediate,55 minutes
+,Unicorn,"Rearing unicorn with reverse-colored horn, mane and tail.",Intermediate,50 minutes
+,Old man,Humanoid creature with large claws and a reverse-colored crane on its chest.,Intermediate,1 hour 4 minutes
+,Sailboat,Abstract boat with two reverse-colored sails.,Easy,3 minutes
+,Dinosaur,Standing dinosaur with claws and reverse-colored underside and jaw.,Complex,2 hours 30 minutes
+,Dinosaur,Simple bipedal dinosaur model.,Moderate,5 minutes
+,Ponyta,Fiery horse Pokémon model with reverse-colored mane and tail.,Intermediate,37 minutes
+,Vulpix,Standing six-tailed fox with distinctive curls on its head.,Intermediate,46 minutes
+,Zapdos,Lightning bird with reverse-colored beak.,Intermediate,52 minutes
+,Firebender,Model of a kneeling humanoid figure creating flames.,Moderate,15 minutes
+,Crested Kingfisher,Bird with crest on its head and reverse-colored breast.,Moderate,17 minutes
+,Crow,Standing crow with four digits on each talon.,Hard,1 hour 50 minutes
+,Tent,Tent with open flaps on the front.,Easy,8 minutes
+,Monkey,Sitting monkey with reverse-colored face.,Intermediate,20 minutes
+,Shark,Shark model with open mouth.,Moderate,12 minutes
+,Turtle,Abstract turtle model.,Moderate,6 minutes
+,Spinosaurus,Dinosaur model with large sail and open mouth.,Intermediate,17 minutes
+,Dolphin,Simple asymmetric dolphin model.,Easy,7 minutes
+,Frog,"Boxy, three-dimentional frog model.",Moderate,22 minutes
+,Whale,"Simple, abstract long whale model.",Easy,4 minutes
+,Gorilla,Ape model with distinctive pose.,Moderate,11 minutes
+,Archaeopteryx,Bird-like dinosaur model with open beak and pronounced eye.,Moderate,13 minutes
+,Elephant,Abstract elephant model without thusks.,Moderate,8 minutes
+,Mr.Poo,Stylized pile of feces with eyes and mouth.,Easy,9 minutes
+,Penguin,Simple penguin model with reverse-colored front.,Easy,3 minutes
+,Snake,Flat snake model with reverse-colored eyes and tongue.,Intermediate,25 minutes
+,Bison,Bovine model with forward-leaning pose.,Moderate,10 minutes
+,Whale,Blocky whale model.,Moderate,15 minutes
+,Anglerfish,Anglerfish model with large mouth that can be animated.,Moderate,26 minutes
+,Bellsprout,Plant Pokémon with reverse colored leaves and lips.,Intermediate,27 minutes
+,Mount Fuji,Volcano with reverse-colored peak.,Easy,12 minutes
+,Dragon,"Standing dragon with long, straight neck.",Intermediate,26 minutes
+,Cattle,"Cow with distinctive head and reverse-colored head, tail and underside.",Moderate,32 minutes
+,Vaporeon,Pokémon model with long fish-like tail and reverse-colored fin around its neck.,Moderate,40 minutes
+,Jolteon,Pokémon model with spikey tail and reverse-colored ruff.,Moderate,44 minutes
+,Flareon,Quadrupedal Pokémon model with flaming tail and head.,Moderate,36 minutes
+,Crested Kingfisher,Bird model with large break and crest on its head.,Moderate,37 minutes
+,Goose,Standing goose model with reverse-colored legs and beak.,Intermediate,36 minutes
+,Fox 2017,Abstract fox model with large tail.,Moderate,11 minutes
+,Frilled Lizard,Standing lizard with large frill around its neck.,Intermediate,40 minutes
+,Mole,Front end of a mole with three-digit claws.,Moderate,9 minutes
+,Polar Bear,Abstract polar bear model with distinct ears.,Moderate,9 minutes
+,Mermaid,"Flat abstract mermaid model with reverse-colored head, body and arms.",Moderate,25 minutes
+,Chick,Stylized bird chick with wings.,Easy,6 minutes
+,Western Dragon,Quadrupal dragon with curved tail and horned head.,Intermediate,48 minutes
+,Kiwi,Standing kiwi bird with reverse-colored beak and feet.,Moderate,20 minutes
+,Wyvern,Wyvern model with horned head.,Intermediate,43 minutes
+,Three-headed Dragon,Three-headed bipedal dragon with horned heads and two claws.,Intermediate,1 hour 35 minutes
+,A Butterfly for Mr. Makoto Yamaguchi,Butterfly with reverse-colored body and wing details.,Moderate,22 minutes
+,Cerberus,Standing three-headed dog model.,Intermediate,43 minutes
+,Griffin,"Griffin model pronounced beak, ears and wings.",Intermediate,50 minutes
+,Pegasus,Winged horse model with one-sided mane.,Intermediate,50 minutes
+,Bride,Female figure in long wedding dress with veil.,Intermediate,47 minutes
+,Groom,Humanoid figure in suit.,Moderate,40 minutes
+,Unicorn,"Standing unicorn with long, twisted horn.",Intermediate,46 minutes
+,Snapping turtle,3D turtle model with segmented shell and claws with five digits.,Intermediate,1 hour 50 minutes
+,Rooster,Standing rooster model.,Intermediate,35 minutes
+,Ram,Standing ram model with distinctive horns and beard.,Intermediate,32 minutes
+,Dog,Standing dog model with hanging ears.,Moderate,31 minutes
+,Monkey,Monkey standing on its hind legs with curled tail and distinctive face.,Intermediate,39 minutes
+,Sea Serpent,Long-tailed serpent with wings and horned head.,Moderate,29 minutes
+,Horse,Horse model with mane on one side.,Moderate,28 minutes
+,Boar,"Model with distinctive body shape, tail, tusks and snout.",Moderate,30 minutes
+,Pegasus,"Detailed pegasus model with reverse-colored wing sides, mane and eyes.",Hard,2 hours 35 minutes
+,Winged Sonobe (cube),Modular origami cube made from six sheets.,Moderate,23 minutes
+,Metapod,Cocooned insect from the Pokémon franchise.,Moderate,17 minutes
+,Eagle,Abstract eagle model with distinctive beak.,Moderate,10 minutes
+,Parasaurolophus,Quadruped dinosaur model with large body.,Moderate,27 minutes
+,Centaur,Centaur model with a humanoid head and torso and the body of a horse.,Intermediate,27 minutes
+,American Turkey,Bird model with reverse-colored elements and detailed tail feathers.,Hard,1 hour 45 minutes
+,Chimera,"Winged mythological creature with the heads of a snake, lion and goat.",Intermediate,1 hour 15 minutes
+,Snake,Snake model with reverse-colored eye.,Moderate,16 minutes
+,Dilophosaurus 1.8,"Standing dinosaur model with open mouth, large reverse-colored neck frill and claws and feet with three digits.",Hard,3 hours 15 minutes
+,Horse,Horse model with mane and ears.,Moderate,31 minutes
+,Pelican,Standing pelican model with open beak.,Moderate,15 minutes
+,Fortune teller,Model used in games to tell the player’s fortune by choosing colors or numbers written on the different flaps.,Easy,4 minutes
+,Seated Lady,Abstract figure of a person with hood sitting in a rocking chair.,Moderate,21 minutes
+,Brachiosaurus,Quadruped dinosaur model with long neck and distinctive head shape.,Moderate,18 minutes
+,Mountain & Volcano,Conical origami model that can be modified to represent a vulcano.,Easy,6 minutes
+,Cracked dinosaur egg,Model of a cracked-open dinosaur egg.,Easy,5 minutes
+,Ward,The default vision ward from the League of Legends video game.,Intermediate,33 minutes
+,Gryposaurus,Standing dinosaur with distinctive nose.,Moderate,21 minutes
+,Iguandon,Bipedal dinosaur with spike-like thumbs and toes with three digits.,Intermediate,50 minutes
+,Triceratops,Dinosaur model with crest and large horns on its head.,Hard,59 minutes
+,Styracosaurus,Quadruped dinosaur with six spikes extending from its neck frill and a single large horn on its nose.,Hard,59 minutes
+,Prehistoric tree,Abstract tree with two branches.,Easy,5 minutes
+,Hadrosaurus,Bipedal dinosaur with feet with three digits and sharp claws.,Intermediate,52 minutes
+,Stegosaurus,"Quadruped dinosaur with reverse-colored eye, four tail spikes and 8 plates on its back.",Hard,1 hour 33 minutes
+,Tenontosaurus,"Dinosaur model with open mouth, standing on four legs.",Intermediate,24 minutes
+,Struthiomimus,Bipedal dinosaur model with long neck and pointy head.,Intermediate,29 minutes
+,Parasaurolophus,"Dinosaur model standing on two legs, with a large cranial crest.",Moderate,23 minutes
+,Sphaerotholus,Bipedal dinosaur with domed head.,Intermediate,24 minutes
+,Coelophysis,Spindly bipedal dinosaur model with very long neck and open mouth.,Moderate,29 minutes
+,Compsognathus,Dinosaur model with open mouth and long legs and neck.,Moderate,31 minutes
+,Protoceratops,Four-legged dinosaur model with large neck frill.,Moderate,28 minutes
+,Snowman,"Snowman with reverse-colored hat, eyes, nose, scarf and arms.",Intermediate,50 minutes
+,Standing fan,"A simple, standing fan that can be folded from a napkin.",Easy,3 minutes
+,Masu box,Simple square box with open top.,Easy,5 minutes
+,Puffy star,3D star with five points.,Easy,3 minutes
+,Star box masu,"Square box with a lid, with a star-shaped symbol.",Easy,14 minutes
+,Orb Weaver,Eight-legged spider with spherical abdomen.,Hard,1 hour 40 minutes
+,Chunky Whale,Blocky origami whale model with reverse-colored ventral pleats.,Moderate,16 minutes
+,Seahorse,Seahorse model with segmented tail.,Easy,12 minutes
+,Cup,Simple cup with reverse-colored inside.,Easy,2 minutes
+,Origami Austria Swan,Abstract bird model with reverse-colored head and wings.,Easy,4 minutes
+,Ox,Bovine model with reverse-colored horns.,Intermediate,31 minutes
+,Chinese Dragon,Long dragon model with open mouth and horned head.,Intermediate,35 minutes
+,Menko,Square card for playing Menko.,Moderate,7 minutes
+,Rat,Standing rat model.,Intermediate,21 minutes
+,Fox,Simple origami fox with reverse-colored breast.,Easy,4 minutes
+,Tiger,Standing tiger with recognizable head.,Moderate,23 minutes
+,Rabbit,Standing rabbit model with pronounced head and ears.,Moderate,24 minutes
+,Club,The diamonds playing card suit.,Intermediate,17 minutes
+,Heart,The hearts playing card suit.,Moderate,10 minutes
+,Spade,The spades playing card suit.,Moderate,8 minutes
+,Diamond,The diamonds playing card suit.,Moderate,5 minutes
+,Deep Sea Angler Fish,"Anglerfish model with reverse-colored eyes, teeth, esca, and beard.",Hard,58 minutes
+,Chameleon,Chameleon with open mouth and reverse-colored eyes.,Moderate,26 minutes
+,Eastern Dragon,Long standing quadruped dragon with no wings.,Intermediate,37 minutes
+,Waterbender,Model of a kneeling humanoid figure creating water.,Moderate,15 minutes
+,Senbazuru (square),"A pattern of crane models, joined together by head, tail and wings.",Intermediate,1 hour 36 minutes
+,Lop-eared rabbit,Abstract sitting rabbit with pronounced ears and tail.,Moderate,9 minutes
+,Lily,Traditional origami lily with four petals and stamen.,Moderate,10 minutes
+,Crested bird,Abstract bird model with crested head.,Moderate,14 minutes
+,Frame,A picture frame to put a photo in.,Moderate,18 minutes
+,Frog,Traditional origami frog model.,Moderate,14 minutes
+,Girl Figure,Standing female figure with hood and long skirt.,Intermediate,42 minutes
+,Penguin,Standing 3D penguin with hollow body.,Moderate,20 minutes
+,Senbazuru (line),Renzuru model of a line of cranes joined tail to wing and wing to head.,Intermediate,25 minutes
+,Hokkido Squirrel,Sitting squirrel model with reverse-colored belly.,Intermediate,28 minutes
+,Unicorn,"Abstract flat horned horse with reverse-colored horn, manes, tail and hooves.",Moderate,27 minutes
+,Speedboat,Boat model with windshield and two rear fins.,Intermediate,10 minutes
+,Dratini,Model of the serpentine Pokémon Dratini with fins on the side of its head.,Intermediate,31 minutes
+,Little toad,Toad model with reverse-colored eyes and underside.,Moderate,19 minutes
+,Cat,Simple abstract sitting cat model.,Moderate,8 minutes
+,Fox mask,Fox hand puppet head that can be animated.,Moderate,4 minutes
+,Nargacuga,Wyvern model from the Monster Hunter series.,Intermediate,1 hour 10 minutes
+,Allosaurus,Bipedal dinosaur model with open mouth.,Moderate,21 minutes
+,Senbazuru (kissing cranes),Renzuru model of four cranes joined by head.,Moderate,16 minutes
+,Senbazuru (conjoined),Renzuru model of two cranes joined by wing.,Moderate,9 minutes
+,Puppet,Finger puppet of a cat or a pig.,Easy,3 minutes
+,Tyrannosaurus,Bipedal standing dinosaur model with characteristic short arms and open mouth.,Moderate,23 minutes
+,Flapping bird,The flapping variant of the traditional origami crane.,Moderate,4 minutes
+,Little frog,Round frog model with reverse-colored eyes and underside.,Moderate,14 minutes
+,Darkness Dragon 2.0,"Quadruped dragon model with segmented tail, talons with three digits and large horns on its head.",Hard,2 hours 40 minutes
+,Lizard,"Plain, standing lizard model.",Moderate,20 minutes
+,Spinosaurus,Standing dinosaur with large sail on its back.,Moderate,21 minutes
+,Knight on horseback,Humanoid figure with lance and shield on top of a horse.,Intermediate,25 minutes
+,Frog,Frog with long hind legs and open mouth.,Moderate,17 minutes
+,Treehopper,Standing bug model with detailed legs and large pronotum.,Intermediate,53 minutes
+,Crane,Detailed crane model with talons featuring four digits.,Hard,1 hour 25 minutes
+,Barracuda,Long fish model with distinctive head and fins.,Intermediate,58 minutes
+,Spotted Ladybug,A pretty beetle model with reverse-colored head and spots.,Hard,1 hour 20 minutes
+,Froglet,"Froglet with arms, feet and tail.",Intermediate,26 minutes
+,Perch,Fish model with characteristic fins.,Intermediate,23 minutes
+,Tadpole with Hind Legs,Stylized tadpole model with legs.,Easy,5 minutes
+,Tadpole,"Simple, stylized tadpole without legs.",Easy,4 minutes
+,Tiger,Abstract standing tiger model.,Moderate,11 minutes
+,Dimetrodon,Prehistoric creature with large sail on its back.,Intermediate,35 minutes
+,Sea crab,Standing crab model with eight legs and two pincers.,Moderate,30 minutes
+,Beaver,Standing beaver model with reverse-colored teeth.,Moderate,14 minutes
+,Drinking bird,Stylized basin of water and bird that takes a sip when animated.,Moderate,5 minutes
+,Rose of Roses,Rose model with twist-fold base.,Moderate,14 minutes
+,Fiery Dragon ver.2,Dragon model with a tail ending in three points and talons with three digits.,Hard,1 hour 55 minutes
+,Frog,A 3D frog with three-toed feet and reverse-colored throat.,Moderate,30 minutes
+,Snake,Stylized snake model with reverse-colored eyes and chin.,Easy,8 minutes
+,Fiery Dragon,"Long dragon with open mouth, horned head and segmented tail and neck.",Hard,1 hour 13 minutes
+,Nils on Mårten Goose 1,Stylized model of a person sitting on top of a goose.,Moderate,7 minutes
+,Apatosaurus,Dinosaur model with sturdy legs and large body.,Moderate,18 minutes
+,Riojasaurus,Herbivorous dinosaur model with heavy body.,Moderate,22 minutes
+,Tanystropheus,Long-necked prehistoric dinosaur model.,Moderate,21 minutes
+,Rhamphorynchus,"A model with long, arrow-shaped tail and large beak.",Intermediate,27 minutes
+,Pterodactyl,Flying dinosaur model with pronounced cranial crest and two legs.,Intermediate,19 minutes
+,Elasmosaurus,Aquatic dinosaur model with long neck.,Moderate,15 minutes
+,Tato,A 8-sided coin purse or octagonal envelope.,Moderate,9 minutes
+,Windmill,Windmill model with alternating sail colors.,Easy,3 minutes
+,Pterodactylus,Flying dinosaur model with reverse-colored eyes.,Moderate,24 minutes
+,Pteranodon,Flying dinosaur with a distinctive cranial crest.,Intermediate,25 minutes
+,Hermit crab,"This model has pronounced eyes, four legs and two claws.",Moderate,19 minutes
+,Kimono,One-sided kimono model.,Easy,4 minutes
+,Water lily,Four-petalled single-colored water lily.,Easy,5 minutes
+,Triceratops,Standing model with two pronounced horns.,Intermediate,36 minutes
+,Orca (Killer Whale),One-sided model with reverse colored belly.,Moderate,16 minutes
+,Kissing fish,The lips of this fish move when the model is squeezed.,Moderate,10 minutes
+,Labrador,A standing dog model.,Intermediate,41 minutes
+,Stand,Origami stand that can be used to display models on.,Moderate,15 minutes
+,Turtle,Turtle with a four-segmented shell.,Moderate,13 minutes
+,Wasp,Standing six-legged 3D model with segmented abdomen.,Intermediate,1 hour 5 minutes
+,Pajarito,The icon of Spanish origami. Pajarito means ‘small bird’ in Spanish.,Moderate,4 minutes
+,Walking crab,Stylized crab that wiggles when tapped on a side.,Moderate,7 minutes
+,Crane,The traditional origami crane.,Moderate,5 minutes
+,Crown,A crown with 8 points.,Easy,5 minutes
+,Boat,The traditional origami boat model.,Easy,2 minutes
+,Frog,A stylized sitting frog.,Moderate,13 minutes
+,Christmas tree,Multi-sheet christmas tree with segmented foliage.,Moderate,1 hour 5 minutes
+,Kneeling Mary,Kneeling model of the Christian figure.,Easy,4 minutes
+,Joseph,Standing model of the Christian figure.,Easy,4 minutes
+,Palm tree 2,An abstract palm tree made from two sheets.,Moderate,15 minutes
+,Donkey,Standing model with reverse-colored underside and snout.,Intermediate,44 minutes
+,Bullfrog,3D frog model with open mouth and reverse-colored underside.,Intermediate,50 minutes
+,Grass,A patch of grassy leaves.,Moderate,5 minutes
+,Ghost,Humanoid figure with long cowl and stretched out arms.,Moderate,13 minutes
+,Snail,3D snail model with large spiral shell.,Intermediate,27 minutes
+,Cat,Sitting cat with reverse-colored breast and nose.,Moderate,17 minutes
+,Spider,Two-piece spider model with inflated 3D body.,Moderate,23 minutes
+,Chopstick Duck,Simple duck made from a chopstick wrapper.,Easy,4 minutes
+,Mother and Child,"Model of a woman with reverse-colored skirt, cradling a baby.",Intermediate,45 minutes
+,Giraffe,"Standing, long-necked model.",Intermediate,22 minutes
+,Harp seal pup,"Hollow model with reverse-colored eyes, nose and whiskers.",Intermediate,52 minutes
+,Lizard,Standing lizard with reverse-colored eyes.,Moderate,18 minutes
+,Cerberus,The three-headed hound of Hades from Greek mythology.,Intermediate,1 hour 30 minutes
+,Woodlouse,A simple segmented bug with two antennae.,Moderate,5 minutes
+,Cicada,Traditional stylized cicada model with reverse-colored stripe.,Easy,3 minutes
+,Rabbit,Stylized rabbit model with long pointy ears.,Easy,4 minutes
+,Robin,3D model of a standing Robin with reverse-colored breast and legs.,Intermediate,30 minutes
+,Snail on a leaf,Two-piece scene of a double-colored snail on a simple leaf.,Moderate,15 minutes
+,Bird,Single colored standing bird with layered wings.,Moderate,10 minutes
+,Three-Headed Standing Dragon,"Standing on two legs, this three-headed dragon has two sharp claws.",Intermediate,1 hour
+,Winged Lion,Standing winged lion with large mane.,Intermediate,30 minutes
+,Shield,A shield with large checkered pattern and a point on the top.,Easy,3 minutes
+,Wyvern,Bipedal wyvern with arrow-tipped tail and five spikes on its head.,Intermediate,45 minutes
+,Wizard,Robed wizard with pointy hat and long beard.,Moderate,20 minutes
+,Sloth,Sloth model hanging from its paws.,Moderate,30 minutes
+,Papa Penguin and his Baby Peep,Standing penguin with baby peeking from between its legs.,Moderate,5 minutes
+,Chameleon,Chameleon model with open mouth and reverse-colored eyes.,Moderate,15 minutes
+,Moose,Stylized standing moose with solid antlers.,Moderate,9 minutes
+,Pumba,3D warthog model of the Disney character with single tusk.,Moderate,20 minutes
+,Crocodile,Long crocodile model with distinctive head.,Moderate,20 minutes
+,Adirondack Moose,"Standing moose with large, solid antlers.",Intermediate,40 minutes
+,Cat,A stylized cat model with reverse-colored snout.,Moderate,6 minutes
+,Scorpion,3D scorpion model with two open pincers and a stinger.,Moderate,25 minutes
+,Wolf,Standing wolf model with characteristic head.,Intermediate,45 minutes
+,Stegosaurus,Quadruped dinosaur with spikes on its back.,Moderate,10 minutes
+,Hippogriff,Standing hippogriff model with distinctive eagle-like head.,Intermediate,55 minutes
+,Apatosaurus,Long-necked standing dinosaur model with a large body.,Moderate,15 minutes
+,Duck,Standing duckling model with reverse-colored beak and feet.,Moderate,25 minutes
+,Dragon v3,Bipedal dragon with segmented tail and horned head.,Intermediate,30 minutes
+,Airplane #2,Single propeller airplane with two wheels and vertical and horizontal stabilizers.,Moderate,15 minutes
+,Seal,Upright seal with hindflippers perpendicular to the body.,Moderate,15 minutes
+,Pig,Standing pig model with pronounced ears and snout.,Moderate,10 minutes
+,Whale,A stylized whale model with an open mouth.,Moderate,10 minutes
+,Parasaurolophus,Bipedal dinosaur model with reverse-colored horn on its distinctive head.,Moderate,10 minutes
+,Seagull,Stylized flying seagull model.,Moderate,5 minutes
+,Samurai Hat,A traditional samurai helmet with dual-colored features.,Easy,5 minutes
+,Dragon 8.0,"A European-style dragon with large wings, standing on four legs.",Intermediate,45 minutes
+,Deer,"Elegant deer with reverse colored inner ear, tail and breast.",Moderate,18 minutes
+,Knight,Human knight with sword and large shield.,Moderate,10 minutes
+,Rhino,Simple rhinoceros model with a large horn.,Moderate,10 minutes
+,Dragon,Standing dragon with reverse colored wings.,Moderate,20 minutes
+,Hammerhead shark,A hammerhead shark model with distinctive head.,Moderate,10 minutes
+,Allosaurus,A standing dinosaur with open mouth and short arms.,Moderate,30 minutes
+,Hercules Beetle,A six-legged beetle with distinctive horn.,Intermediate,30 minutes
+,Shark,A simple shark model.,Easy,10 minutes
+,Pegasus,A pegasus model folded from a single square.,Intermediate,35 minutes
+,Cap,A simple 3D cap.,Easy,5 minutes
+,Kangaroo,A stylized kangaroo model.,Moderate,16 minutes
+,Brown Bear,Single-colored bear model standing on four legs.,Moderate,18 minutes
+,Butterfly,Simple butterfly model.,Easy,4 minutes
+,Asian Elephant,"With reverse-colored tusks, this model is 3D sculpted to represent the elephant’s physique.",Intermediate,35 minutes
+,Songbird,A standing bird with independent wings.,Moderate,14 minutes
+,Fish,Traditional origami fish.,Easy,3 minutes
+,Mouse,"Sitting mouse with a long, thin tail.",Moderate,15 minutes
+,Quetzalcoatlus,This flying dinosaur model has reverse-colored eyes.,Moderate,19 minutes
+,Diplodocus,A long model that captures the hulking posture of the diplodocus.,Moderate,25 minutes
+,Bull Walrus,This model captures the distinctive pose and long tusks of the walrus very well.,Moderate,22 minutes
+,Canoe,A 3D canoe model with pointed ends.,Moderate,12 minutes
+,Duck,A simple model of a duck.,Easy,5 minutes
+,Giant Panda,A stylized panda bear.,Moderate,5 minutes
+,Triceratops,Dinosaur model that features a three-horned head.,Moderate,20 minutes
+,Rabbit,"With fluffy ears, breast and tail, this model has interesting color changes when folded with two-colored paper.",Moderate,24 minutes
+,Swan,A simple swan model with a long neck.,Easy,4 minutes
+,Martian,"Abstract humanoid figure with large, wide head.",Intermediate,20 minutes
