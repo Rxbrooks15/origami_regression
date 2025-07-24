@@ -136,7 +136,7 @@ def process_and_plot(df, highlight_name=None):
         ],
         title=f"Polynomial Fit (Degree {best_degree}) | R²: {best_r2:.3f}"
     )
-     fig.update_traces(
+    fig.update_traces(
         hovertemplate="""
         🏷️ <b>%{customdata[1]}</b><br>
         🧑‍🎨 <b>%{customdata[2]}</b><br>
