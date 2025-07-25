@@ -113,18 +113,18 @@ def process_and_plot(df, highlight_name=None):
     y = df['Complexity_Score'].values
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    best_degree, best_r2, best_model, best_poly = 1, -np.inf, None, None
-    for d in range(1, 7):
-        poly = PolynomialFeatures(degree=d, include_bias=False)
-        X_train_poly = poly.fit_transform(X_train)
-        X_test_poly = poly.transform(X_test)
-        model = LinearRegression().fit(X_train_poly, y_train)
-        r2 = r2_score(y_test, model.predict(X_test_poly))
-        if r2 > best_r2:
-            best_degree, best_r2, best_model, best_poly = d, r2, model, poly
+  # Avoid log(0) or negative inputs
+X_train_log = np.log(X_train + 1)
+X_test_log = np.log(X_test + 1)
 
-    X_full = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
-    y_pred = best_model.predict(best_poly.transform(X_full))
+# Train log-linear model
+log_model = LinearRegression().fit(X_train_log, y_train)
+log_r2 = r2_score(y_test, log_model.predict(X_test_log))
+
+# Predict for visualization
+X_full = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
+X_full_log = np.log(X_full + 1)
+y_pred = log_model.predict(X_full_log)
 
     fig = px.scatter(
         df, x='time_minutes', y='Complexity_Score',
