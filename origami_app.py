@@ -108,34 +108,31 @@ def process_and_plot(df, highlight_name=None):
     df["Image_github"] = df["Image"].apply(
         lambda url: "https://raw.githubusercontent.com/rxbrooks15/origami_regression/main/folder/" + os.path.basename(str(url))
     )
-
+    # --- Logarithmic Regression ---
     X = df[['time_minutes']].values
     y = df['Complexity_Score'].values
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    best_degree, best_r2, best_model, best_poly = 1, -np.inf, None, None
-    for d in range(1, 7):
-        poly = PolynomialFeatures(degree=d, include_bias=False)
-        X_train_poly = poly.fit_transform(X_train)
-        X_test_poly = poly.transform(X_test)
-        model = LinearRegression().fit(X_train_poly, y_train)
-        r2 = r2_score(y_test, model.predict(X_test_poly))
-        if r2 > best_r2:
-            best_degree, best_r2, best_model, best_poly = d, r2, model, poly
+    # Avoid log(0)
+    X_log = np.log1p(X)
+    X_train, X_test, y_train, y_test = train_test_split(X_log, y, test_size=0.2, random_state=42)
+
+    model = LinearRegression().fit(X_train, y_train)
+    r2 = model.score(X_test, y_test)
 
     X_full = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
-    y_pred = best_model.predict(best_poly.transform(X_full))
+    X_full_log = np.log1p(X_full)
+    y_pred = model.predict(X_full_log)
 
-    fig = px.scatter(
-        df, x='time_minutes', y='Complexity_Score',
-        color='Topic_Weighted_Difficulty',
-        custom_data=[
-            'Image_github', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
-            'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
-            'Name_Score', 'Description_Score'
-        ],
-        title=f"Polynomial Fit (Degree {best_degree}) | R²: {best_r2:.3f}"
-    )
+        fig = px.scatter(
+            df, x='time_minutes', y='Complexity_Score',
+            color='Topic_Weighted_Difficulty',
+            custom_data=[
+                'Image_github', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
+                'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
+                'Name_Score', 'Description_Score'
+            ],
+            title=f"Polynomial Fit (Degree {best_degree}) | R²: {best_r2:.3f}"
+        )
     fig.update_traces(
         hovertemplate="""
         🏷️ <b>%{customdata[1]}</b><br>
