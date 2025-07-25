@@ -268,6 +268,6 @@ if st.button("🔀 Randomize"):
             df.to_csv(CSV_PATH, index=False)
             highlight_name = new_model["Name"]
         else:
-            st.info(f"ℹ️ The '{new_model['Name']}' has been selected.")
+            st.info(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
