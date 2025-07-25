@@ -193,6 +193,10 @@ def process_and_plot(df, highlight_name=None):
                     size=6,
                     color='red',
                     symbol='circle'
+                ),
+                textfont=dict(
+                    color='red',
+                    size=12
                 )
             ))
 
