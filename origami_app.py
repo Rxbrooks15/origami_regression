@@ -131,7 +131,7 @@ def process_and_plot(df, highlight_name=None):
             'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
             'Name_Score', 'Description_Score'
         ],
-        title=f"Polynomial Fit (Degree {best_degree}) | R²: {best_r2:.3f}"
+        title=f"Logarithmic Fit | R²: {r2:.3f}"
     )
     fig.update_traces(
         hovertemplate="""
