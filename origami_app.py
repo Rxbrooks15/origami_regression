@@ -169,7 +169,7 @@ def process_and_plot(df, highlight_name=None):
                 marker=dict(
                     size=15,
                     color='rgba(255,0,0,0)',  # Transparent fill
-                    line=dict(color='red', width=2),
+                    line=dict(color='red', width=3),
                     symbol='circle'
                 ),
                 showlegend=False,
