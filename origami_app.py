@@ -267,5 +267,7 @@ if st.button("🔀 Randomize"):
             df = pd.concat([pd.DataFrame([new_model]), df], ignore_index=True)
             df.to_csv(CSV_PATH, index=False)
             highlight_name = new_model["Name"]
+        else:
+            st.info(f"ℹ️ The '{new_model['Name']}' has been selected.")
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
