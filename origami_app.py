@@ -167,7 +167,7 @@ def process_and_plot(df, highlight_name=None):
                 y=[y_val],
                 mode='markers',
                 marker=dict(
-                    size=26,
+                    size=15,
                     color='rgba(255,0,0,0)',  # Transparent fill
                     line=dict(color='red', width=4),
                     symbol='circle'
@@ -185,7 +185,7 @@ def process_and_plot(df, highlight_name=None):
                 text=[name_val],
                 textposition="top center",
                 marker=dict(
-                    size=12,
+                    size=6,
                     color='red',
                     symbol='circle'
                 )
