@@ -123,16 +123,16 @@ def process_and_plot(df, highlight_name=None):
     X_full_log = np.log1p(X_full)
     y_pred = model.predict(X_full_log)
 
-        fig = px.scatter(
-            df, x='time_minutes', y='Complexity_Score',
-            color='Topic_Weighted_Difficulty',
-            custom_data=[
-                'Image_github', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
-                'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
-                'Name_Score', 'Description_Score'
-            ],
-            title=f"Polynomial Fit (Degree {best_degree}) | R²: {best_r2:.3f}"
-        )
+    fig = px.scatter(
+        df, x='time_minutes', y='Complexity_Score',
+        color='Topic_Weighted_Difficulty',
+        custom_data=[
+            'Image_github', 'Name', 'Creator', 'time_minutes', 'Complexity_Score',
+            'Description', 'Dominant_Topic', 'Topic_Weighted_Difficulty',
+            'Name_Score', 'Description_Score'
+        ],
+        title=f"Polynomial Fit (Degree {best_degree}) | R²: {best_r2:.3f}"
+    )
     fig.update_traces(
         hovertemplate="""
         🏷️ <b>%{customdata[1]}</b><br>
