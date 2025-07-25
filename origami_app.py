@@ -150,7 +150,7 @@ def process_and_plot(df, highlight_name=None):
     <extra></extra>
     """,
     marker=dict(size=6, opacity=0.8),
-    hoverlabel=dict(bgcolor="white", font_size=13, font_family="Arial")
+    hoverlabel=dict(bgcolor="white", font_size=20, font_family="Arial")
 )
     fig.add_trace(go.Scatter(x=X_full.flatten(), y=y_pred, mode='lines', name='Fit', line=dict(color='black')))
 
@@ -164,7 +164,7 @@ def process_and_plot(df, highlight_name=None):
                 name='🔴Highlighted',
                 text=match["Name"],
                 textposition="top center",
-                marker=dict(color='red', size=15, symbol='circle-open-dot')
+                marker=dict(color='red', size=18, symbol='circle-open-dot')
             ))
 
     st.plotly_chart(fig, use_container_width=True)
