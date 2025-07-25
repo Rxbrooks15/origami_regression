@@ -155,41 +155,41 @@ def process_and_plot(df, highlight_name=None):
     fig.add_trace(go.Scatter(x=X_full.flatten(), y=y_pred, mode='lines', name='Fit', line=dict(color='black')))
 
     if highlight_name:
-    match = df[df["Name"].str.lower() == highlight_name.lower()]
-    if not match.empty:
-        x_val = match["time_minutes"].values[0]
-        y_val = match["Complexity_Score"].values[0]
-        name_val = match["Name"].values[0]
+        match = df[df["Name"].str.lower() == highlight_name.lower()]
+        if not match.empty:
+            x_val = match["time_minutes"].values[0]
+            y_val = match["Complexity_Score"].values[0]
+            name_val = match["Name"].values[0]
 
         # Outer bold circle
-        fig.add_trace(go.Scatter(
-            x=[x_val],
-            y=[y_val],
-            mode='markers',
-            marker=dict(
-                size=26,
-                color='rgba(255,0,0,0)',  # Transparent fill
-                line=dict(color='red', width=4),
-                symbol='circle'
-            ),
-            showlegend=False,
-            hoverinfo='skip'
-        ))
+            fig.add_trace(go.Scatter(
+                x=[x_val],
+                y=[y_val],
+                mode='markers',
+                marker=dict(
+                    size=26,
+                    color='rgba(255,0,0,0)',  # Transparent fill
+                    line=dict(color='red', width=4),
+                    symbol='circle'
+                ),
+                showlegend=False,
+                hoverinfo='skip'
+            ))
 
         # Inner dot
-        fig.add_trace(go.Scatter(
-            x=[x_val],
-            y=[y_val],
-            mode='markers+text',
-            name='🔴 Highlighted',
-            text=[name_val],
-            textposition="top center",
-            marker=dict(
-                size=12,
-                color='red',
-                symbol='circle'
-            )
-        ))
+            fig.add_trace(go.Scatter(
+                x=[x_val],
+                y=[y_val],
+                mode='markers+text',
+                name='🔴 Highlighted',
+                text=[name_val],
+                textposition="top center",
+                marker=dict(
+                    size=12,
+                    color='red',
+                    symbol='circle'
+                )
+            ))
 
     st.plotly_chart(fig, use_container_width=True)
     st.markdown(f"### Total Observations: {df.shape[0]-1}")
