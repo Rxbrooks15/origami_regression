@@ -203,7 +203,7 @@ def process_and_plot(df, highlight_name=None):
     The goal of this logarithm regression model is to guide users in selecting origami designs that match their skill level, while also offering an easy way to browse a wide variety of models along with their estimated difficulty scores.
     This regression calculates a **Complexity Score** based on a prior 5-point difficulty rating scale for each model and by analyzing each model's description using **topic modeling** (via Non-negative Matrix Factorization). The technique extracts dominant themes from model descriptions and weighs them to estimate model difficulty
     
-    **Note:** All origami model information and images are sourced from [origami-database.com](https://origami-database.com/models/). The models were not created by me. For inquiries please contact the site author directly at **info@origami-database.com**.
+    **Note:** All origami model information and images are sourced from [origami-database.com](https://origami-database.com/models/). The models were not created by me. For inquiries in regard to information the Origami Database please contact the site author directly at **info@origami-database.com**.
     """, unsafe_allow_html=True)
     st.markdown(f"### Total Observations: {df.shape[0]}")
     st.markdown("### Most difficult models:")
