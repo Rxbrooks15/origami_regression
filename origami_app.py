@@ -202,6 +202,7 @@ def process_and_plot(df, highlight_name=None):
     st.markdown("""
     The goal of this regression model is to guide users in selecting origami designs that match their skill level, while also offering an easy way to browse a wide variety of models along with their estimated difficulty scores.
     This logarithm regression calculates a **Complexity Score** based on a prior 5-point difficulty rating scale for each model and by analyzing each model's description using **topic modeling** (via Non-negative Matrix Factorization). The technique extracts dominant themes from model descriptions and weighs them to estimate model difficulty
+    
     **Note:** All origami model information and images are sourced from [origami-database.com](https://origami-database.com/models/). The models were not created by me. For inquiries please contact the site author directly at **info@origami-database.com**.
     """, unsafe_allow_html=True)
     st.markdown(f"### Total Observations: {df.shape[0]}")
@@ -261,8 +262,10 @@ if st.button("📥 Scrape Latest Model & Update Dataset"):
         if new_model and new_model['Name'].lower() not in set(df['Name'].dropna().str.lower()):
             st.success(f"🆕 Adding new model: {new_model['Name']}")
             df = pd.concat([pd.DataFrame([new_model]), df], ignore_index=True)
-            df.to_csv(CSV_PATH, index=False)
             highlight_name = new_model["Name"]
+            # Save after appending
+            df.to_csv(CSV_PATH, index=False)
+
         else:
             st.info(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
     else:
@@ -274,8 +277,10 @@ if st.button("🔀 Randomize"):
         if new_model and new_model['Name'].lower() not in set(df['Name'].dropna().str.lower()):
             st.success(f"🆕 Adding new model: {new_model['Name']}")
             df = pd.concat([pd.DataFrame([new_model]), df], ignore_index=True)
-            df.to_csv(CSV_PATH, index=False)
             highlight_name = new_model["Name"]
+            # Save after appending
+            df.to_csv(CSV_PATH, index=False)
+
         else:
             st.info(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
 # Plot the data
