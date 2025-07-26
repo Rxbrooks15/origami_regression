@@ -196,12 +196,14 @@ def process_and_plot(df, highlight_name=None):
                     size=14
                 )
             ))
+    
+    st.plotly_chart(fig, use_container_width=True)
+
     st.markdown("""
     The goal of this regression model is to guide users in selecting origami designs that match their skill level, while also offering an easy way to browse a wide variety of models along with their estimated difficulty scores.
     This logarithm regression calculates a **Complexity Score** based on a prior 5-point difficulty rating scale for each model and by analyzing each model's description using **topic modeling** (via Non-negative Matrix Factorization). The technique extracts dominant themes from model descriptions and weighs them to estimate model difficulty
     **Note:** All origami model information and images are sourced from [origami-database.com](https://origami-database.com/models/). The models were not created by me. For inquiries please contact the site author directly at **info@origami-database.com**.
     """, unsafe_allow_html=True)
-    st.plotly_chart(fig, use_container_width=True)
     st.markdown(f"### Total Observations: {df.shape[0]}")
     st.markdown("### Most difficult models:")
     st.dataframe(
@@ -223,7 +225,7 @@ Origami is the traditional Japanese art of paper folding, where a single sheet o
 
 This dashboard provides a collection of origami models and attributes a difficulty/ complexity score to each model. The logarithm regression aims to helps users explore a wide range of origami models with estimated difficulty scores. 
 
-[📁 Check out the Origami Database at](https://origami-database.com/models/)
+[📁 Check out the Origami Database(https://origami-database.com/models/)
 """, unsafe_allow_html=True)
 # Load CSV
 df = pd.read_csv(CSV_PATH)
