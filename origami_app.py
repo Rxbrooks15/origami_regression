@@ -215,12 +215,14 @@ def process_and_plot(df, highlight_name=None):
 # --- Streamlit UI ---
 st.title("📐 Origami Model Complexity Tracker")
 st.markdown("""
-Origami is the traditional Japanese art of paper folding, where a single sheet of paper is transformed into intricate sculptures without cutting or gluing. Models can range from simple cranes to complex creatures, requiring varying levels of skill, patience, and time.
+Origami is the traditional Japanese art of paper folding, where a single sheet of paper is transformed into intricate sculptures without cutting or gluing. 
 
-This dashboard provides a collection of origami models and attributes a difficulty/ complexity score to each model. The regression aims to helps users decide what models to attempt based on their skill level while also making it easy to explore a wide range of models with estimated difficulty scores. The regression calculates a **Complexity Score** based on a prior 5-scale difficuly (provid by https://origami-database.com/models/) for each model and by analyzing each model's description using **topic modeling** (specifically, Non-negative Matrix Factorization or NMF). The technique extracts dominant themes from model descriptions and weighs them to estimate model difficulty
-This approach helps quantify origami difficulty. Note: Origami Images where not created by me and where created by the author of https://origami-database.com/. The author can be contacted at info@origami-database.com.
+This dashboard provides a collection of origami models and attributes a difficulty/ complexity score to each model. The logarithm regression aims to helps users explore a wide range of origami models with estimated difficulty scores. 
 
-[📁 Check out the author's visualized models at](https://origami-database.com/models/)
+The regression calculates a **Complexity Score** based on a prior 5-scale difficuly (provid by https://origami-database.com/models/) for each model and by analyzing each model's description using **topic modeling** (via Non-negative Matrix Factorization). The technique extracts dominant themes from model descriptions and weighs them to estimate model difficulty
+Note: Origami models pictured where not created by me but by the author of https://origami-database.com/. The author can be contacted at info@origami-database.com.
+
+[📁 Check out the Origami Database at](https://origami-database.com/models/)
 """, unsafe_allow_html=True)
 # Load CSV
 df = pd.read_csv(CSV_PATH)
