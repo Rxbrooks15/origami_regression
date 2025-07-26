@@ -219,7 +219,7 @@ Origami is the traditional Japanese art of paper folding, where a single sheet o
 
 This dashboard provides a collection of origami models and attributes a difficulty/ complexity score to each model. The logarithm regression aims to helps users explore a wide range of origami models with estimated difficulty scores. 
 
-The regression calculates a **Complexity Score** based on a prior 5-scale difficuly (provid by https://origami-database.com/models/) for each model and by analyzing each model's description using **topic modeling** (via Non-negative Matrix Factorization). The technique extracts dominant themes from model descriptions and weighs them to estimate model difficulty
+The regression calculates a **Complexity Score** based on a prior 5-point difficulty rating scale for each model and by analyzing each model's description using **topic modeling** (via Non-negative Matrix Factorization). The technique extracts dominant themes from model descriptions and weighs them to estimate model difficulty
 Note: Origami models pictured where not created by me but by the author of https://origami-database.com/. The author can be contacted at info@origami-database.com.
 
 [📁 Check out the Origami Database at](https://origami-database.com/models/)
