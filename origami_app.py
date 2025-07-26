@@ -15,6 +15,18 @@ import plotly.express as px
 import plotly.graph_objects as go
 from urllib.parse import urljoin
 
+
+import csv
+from datetime import datetime
+
+LOG_PATH = "visitor_log.csv"
+
+def log_event(event_type, detail=None):
+    with open(LOG_PATH, "a", newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow([datetime.now(), event_type, detail or ""])
+
+
 CSV_PATH = "origami_scrape_final.csv"
 
 # --- Sidebar and Search Query ---
@@ -233,11 +245,17 @@ df = pd.read_csv(CSV_PATH)
 
 # Sidebar preview logic
 highlight_name = None
+# Sidebar preview logic
+highlight_name = None
 if search_query:
     match = df[df["Name"].str.contains(search_query, case=False, na=False)]
     if not match.empty:
         selected = match.iloc[0]
         highlight_name = selected["Name"]
+        
+        # ✅ Log searched model name
+        log_event("search", highlight_name)
+
         st.sidebar.image(selected.get("Image_github") or selected.get("Image"), caption=selected["Name"], width=220)
         st.sidebar.write(f"**Creator:** {selected.get('Creator')}")
         st.sidebar.write(f"**Difficulty:** {selected.get('Difficulty')}")
