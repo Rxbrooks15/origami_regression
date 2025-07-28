@@ -326,14 +326,13 @@ import csv
 from datetime import datetime
 
 
-# --- Sentence-BERT Embeddings ---
-st.write("🔄 Loading BERT embeddings...")
+from sentence_transformers import SentenceTransformer
+
 try:
-    model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
-    embeddings = model.encode(df['Description'].tolist(), show_progress_bar=True)
+    model = SentenceTransformer('all-MiniLM-L6-v2', device="cpu")
 except Exception as e:
-    st.warning(f"⚠️ Sentence-BERT failed: {e}. Falling back to TF-IDF.")
-    embeddings = tfidf_matrix.toarray()
+    st.warning(f"⚠️ Sentence-BERT unavailable, falling back to TF-IDF. Error: {e}")
+    model = None
 
 # --- Keyword Heuristics ---
 keywords_complex = ["dragon", "humanoid", "quadruped", "winged", "horned"]
