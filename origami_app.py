@@ -304,6 +304,31 @@ if st.button("🔀 Randomize"):
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
 
+from bertopic import BERTopic
+import umap
+from sentence_transformers import SentenceTransformer
+import streamlit.components.v1 as components
+
+st.markdown("## 🧠 BERTopic Topic Modeling Visualization")
+
+# If you don't already have embeddings, create them
+if 'embeddings' not in locals():
+    st.info("Generating BERT embeddings for descriptions...")
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    embeddings = model.encode(df["Description"].fillna(""), show_progress_bar=True)
+
+# Fit BERTopic
+topic_model = BERTopic(language="english", calculate_probabilities=True, verbose=True)
+topics, probs = topic_model.fit_transform(df["Description"], embeddings)
+
+# Add topic column to DataFrame
+df["BERTopic_Topic"] = topics
+
+# Show interactive topic plot
+fig_html = topic_model.visualize_topics().to_html()
+components.html(fig_html, height=700, scrolling=True)
+
+
 
 
 
