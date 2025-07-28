@@ -315,6 +315,10 @@ from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+
 # --- Load Data ---
 df = pd.read_csv("origami_scrape_final.csv").fillna("")
 
@@ -396,5 +400,7 @@ fig.update_layout(height=600, width=1000)
 
 # Show in Streamlit (instead of fig.show)
 st.plotly_chart(fig, use_container_width=True)
+
+
 
 
