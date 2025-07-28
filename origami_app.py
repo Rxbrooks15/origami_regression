@@ -14,6 +14,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import plotly.express as px
 import plotly.graph_objects as go
 from urllib.parse import urljoin
+from bertopic import BERTopic
+import umap
+from sentence_transformers import SentenceTransformer
+import streamlit.components.v1 as components
+
 
 
 import csv
@@ -303,11 +308,6 @@ if st.button("🔀 Randomize"):
             st.info(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
-
-from bertopic import BERTopic
-import umap
-from sentence_transformers import SentenceTransformer
-import streamlit.components.v1 as components
 
 st.markdown("## 🧠 BERTopic Topic Modeling Visualization")
 
