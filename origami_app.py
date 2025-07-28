@@ -310,7 +310,7 @@ if st.button("🔀 Randomize"):
 process_and_plot(df, highlight_name=highlight_name)
 
 
-st.markdown("## 🧠 BERTopic Topic Modeling Visualization")
+st.markdown("## 🧠 BERTopic Modeling Interactive Visualization")
 
 # If you don't already have embeddings, create them
 if 'embeddings' not in locals():
@@ -329,61 +329,17 @@ df["BERTopic_Topic"] = topics
 fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
-# --- Scatter Plot: Folding Time vs Predicted Complexity ---
-st.markdown("## 📊 Origami Folding Time vs Predicted Complexity")
+import streamlit as st
 
-# Ensure Predicted_Complexity exists
-if "Predicted_Complexity" not in df.columns:
-    df["Predicted_Complexity"] = np.log1p(df["time_minutes"])  # fallback proxy
+st.markdown("##  Intertopic Distance Map")
 
-# Filter data
-df_filtered = df[(df['time_minutes'] > 0) & (df['BERTopic_Topic'] != -1)].copy()
+# Show saved visualization images
+st.image("kmeans.png", caption="Intertopic Distance Map with Optimal Clusters", use_container_width=True)
 
-# Fit logarithmic regression
-X_log = np.log(df_filtered['time_minutes'].values).reshape(-1, 1)
-y_all = df_filtered['Predicted_Complexity'].values
-log_reg = LinearRegression()
-log_reg.fit(X_log, y_all)
-y_pred_train = log_reg.predict(X_log)
+st.markdown("## Log Regression Using BERTopic Model")
+st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
 
-# Regression metrics
-r2 = r2_score(y_all, y_pred_train)
-mae = mean_absolute_error(y_all, y_pred_train)
-mse = mean_squared_error(y_all, y_pred_train)
 
-# Predict regression line for plotting
-x_range = np.linspace(df_filtered['time_minutes'].min(), df_filtered['time_minutes'].max(), 200)
-y_pred_all = log_reg.predict(np.log(x_range).reshape(-1, 1))
-
-# Create scatter plot
-fig_scatter = px.scatter(
-    df_filtered,
-    x="time_minutes",
-    y="Predicted_Complexity",
-    color="Difficulty",
-    size="Difficulty_Numeric",
-    hover_data=["Name", "Description", "time_minutes", "Predicted_Complexity", "Difficulty"],
-    labels={
-        "time_minutes": "Folding Time (minutes)",
-        "Predicted_Complexity": "Predicted Complexity Score"
-    },
-    title=f"Origami Folding Time vs Complexity<br>R²: {r2:.3f} | MAE: {mae:.3f} | MSE: {mse:.3f}",
-    opacity=0.8,
-    color_discrete_sequence=px.colors.qualitative.Set2,
-    size_max=15
-)
-
-# Add regression line
-fig_scatter.add_scatter(
-    x=x_range,
-    y=y_pred_all,
-    mode="lines",
-    name="Log Regression Line",
-    line=dict(color="red", width=2)
-)
-
-fig_scatter.update_traces(marker=dict(size=8, line=dict(width=0.5, color="DarkSlateGrey")))
-st.plotly_chart(fig_scatter, use_container_width=True)
 
 
 
