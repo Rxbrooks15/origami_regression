@@ -337,7 +337,20 @@ st.markdown("##  Intertopic Distance Map")
 st.image("kmeans.png", caption="Intertopic Distance Map with Optimal Clusters", use_container_width=True)
 
 st.markdown("## Log Regression Using BERTopic Model")
+# Show regression metrics
+st.markdown("""
+**Regression Performance Metrics**
+
+- R² Score: **0.753**  
+- MAE: **0.326**  
+- MSE: **0.159**  
+""")
 st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
+st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
+
+
+
 
 
 
