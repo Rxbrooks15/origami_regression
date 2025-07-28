@@ -309,6 +309,26 @@ if st.button("🔀 Randomize"):
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
 
+
+st.markdown("## 🧠 BERTopic Topic Modeling Visualization")
+
+# If you don't already have embeddings, create them
+if 'embeddings' not in locals():
+    st.info("Generating BERT embeddings for descriptions...")
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    embeddings = model.encode(df["Description"].fillna(""), show_progress_bar=True)
+
+# Fit BERTopic
+topic_model = BERTopic(language="english", calculate_probabilities=True, verbose=True)
+topics, probs = topic_model.fit_transform(df["Description"], embeddings)
+
+# Add topic column to DataFrame
+df["BERTopic_Topic"] = topics
+
+# Show interactive topic plot
+fig_html = topic_model.visualize_topics().to_html()
+components.html(fig_html, height=700, scrolling=True)
+
 # --- Scatter Plot: Folding Time vs Predicted Complexity ---
 st.markdown("## 📊 Origami Folding Time vs Predicted Complexity")
 
@@ -365,24 +385,6 @@ fig_scatter.add_scatter(
 fig_scatter.update_traces(marker=dict(size=8, line=dict(width=0.5, color="DarkSlateGrey")))
 st.plotly_chart(fig_scatter, use_container_width=True)
 
-st.markdown("## 🧠 BERTopic Topic Modeling Visualization")
-
-# If you don't already have embeddings, create them
-if 'embeddings' not in locals():
-    st.info("Generating BERT embeddings for descriptions...")
-    model = SentenceTransformer("all-MiniLM-L6-v2")
-    embeddings = model.encode(df["Description"].fillna(""), show_progress_bar=True)
-
-# Fit BERTopic
-topic_model = BERTopic(language="english", calculate_probabilities=True, verbose=True)
-topics, probs = topic_model.fit_transform(df["Description"], embeddings)
-
-# Add topic column to DataFrame
-df["BERTopic_Topic"] = topics
-
-# Show interactive topic plot
-fig_html = topic_model.visualize_topics().to_html()
-components.html(fig_html, height=700, scrolling=True)
 
 
 
