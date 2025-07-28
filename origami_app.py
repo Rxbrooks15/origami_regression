@@ -309,6 +309,62 @@ if st.button("🔀 Randomize"):
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
 
+# --- Scatter Plot: Folding Time vs Predicted Complexity ---
+st.markdown("## 📊 Origami Folding Time vs Predicted Complexity")
+
+# Ensure Predicted_Complexity exists
+if "Predicted_Complexity" not in df.columns:
+    df["Predicted_Complexity"] = np.log1p(df["time_minutes"])  # fallback proxy
+
+# Filter data
+df_filtered = df[(df['time_minutes'] > 0) & (df['BERTopic_Topic'] != -1)].copy()
+
+# Fit logarithmic regression
+X_log = np.log(df_filtered['time_minutes'].values).reshape(-1, 1)
+y_all = df_filtered['Predicted_Complexity'].values
+log_reg = LinearRegression()
+log_reg.fit(X_log, y_all)
+y_pred_train = log_reg.predict(X_log)
+
+# Regression metrics
+r2 = r2_score(y_all, y_pred_train)
+mae = mean_absolute_error(y_all, y_pred_train)
+mse = mean_squared_error(y_all, y_pred_train)
+
+# Predict regression line for plotting
+x_range = np.linspace(df_filtered['time_minutes'].min(), df_filtered['time_minutes'].max(), 200)
+y_pred_all = log_reg.predict(np.log(x_range).reshape(-1, 1))
+
+# Create scatter plot
+fig_scatter = px.scatter(
+    df_filtered,
+    x="time_minutes",
+    y="Predicted_Complexity",
+    color="Difficulty",
+    size="Difficulty_Numeric",
+    hover_data=["Name", "Description", "time_minutes", "Predicted_Complexity", "Difficulty"],
+    labels={
+        "time_minutes": "Folding Time (minutes)",
+        "Predicted_Complexity": "Predicted Complexity Score"
+    },
+    title=f"Origami Folding Time vs Complexity<br>R²: {r2:.3f} | MAE: {mae:.3f} | MSE: {mse:.3f}",
+    opacity=0.8,
+    color_discrete_sequence=px.colors.qualitative.Set2,
+    size_max=15
+)
+
+# Add regression line
+fig_scatter.add_scatter(
+    x=x_range,
+    y=y_pred_all,
+    mode="lines",
+    name="Log Regression Line",
+    line=dict(color="red", width=2)
+)
+
+fig_scatter.update_traces(marker=dict(size=8, line=dict(width=0.5, color="DarkSlateGrey")))
+st.plotly_chart(fig_scatter, use_container_width=True)
+
 st.markdown("## 🧠 BERTopic Topic Modeling Visualization")
 
 # If you don't already have embeddings, create them
@@ -327,130 +383,6 @@ df["BERTopic_Topic"] = topics
 # Show interactive topic plot
 fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
-
-
-# --- Scatter Plot: Time vs Complexity ---
-st.markdown("## ⏱️ Origami Folding Time vs Predicted Complexity")
-
-df_filtered = df[(df['time_minutes'] > 0) & (df['BERTopic_Topic'] != -1)].copy()
-
-X_log = np.log(df_filtered['time_minutes'].values).reshape(-1, 1)
-y_all = df_filtered['Predicted_Complexity'].values
-
-log_reg = LinearRegression()
-log_reg.fit(X_log, y_all)
-y_pred_train = log_reg.predict(X_log)
-
-r2 = r2_score(y_all, y_pred_train)
-mae = mean_absolute_error(y_all, y_pred_train)
-mse = mean_squared_error(y_all, y_pred_train)
-
-x_range = np.linspace(df_filtered['time_minutes'].min(), df_filtered['time_minutes'].max(), 200)
-y_pred_all = log_reg.predict(np.log(x_range).reshape(-1, 1))
-
-fig_scatter = px.scatter(
-    df_filtered,
-    x="time_minutes",
-    y="Predicted_Complexity",
-    color="Difficulty",
-    size="Difficulty_Numeric",
-    hover_data=["Name", "Description", "time_minutes", "Predicted_Complexity", "Difficulty"],
-    labels={
-        "time_minutes": "Folding Time (minutes)",
-        "Predicted_Complexity": "Predicted Complexity Score"
-    },
-    title=f"Origami Folding Time vs Complexity<br>R²: {r2:.3f} | MAE: {mae:.3f} | MSE: {mse:.3f}",
-    opacity=0.8,
-    color_discrete_sequence=px.colors.qualitative.Set2,
-    size_max=15
-)
-fig_scatter.add_scatter(x=x_range, y=y_pred_all, mode="lines", name="Log Regression Line", line=dict(color="red", width=1))
-st.plotly_chart(fig_scatter, use_container_width=True)
-
-# --- BERTopic Visualization ---
-st.markdown("## 🧠 BERTopic Topic Modeling Visualization")
-
-# Generate embeddings if missing
-if 'embeddings' not in locals():
-    st.info("Generating BERT embeddings for descriptions...")
-    model = SentenceTransformer("all-MiniLM-L6-v2")
-    embeddings = model.encode(df["Description"].fillna(""), show_progress_bar=True)
-
-topic_model = BERTopic(language="english", calculate_probabilities=True, verbose=True)
-topics, probs = topic_model.fit_transform(df["Description"], embeddings)
-df["BERTopic_Topic"] = topics
-
-# Extract topic info
-topic_info = topic_model.get_topic_info()
-topic_info = topic_info[topic_info.Topic != -1]
-valid_topics = topic_info.Topic.tolist()
-
-umap_model = umap.UMAP(n_neighbors=15, n_components=2, metric='cosine', random_state=42)
-topic_embeddings = topic_model.c_tf_idf_[valid_topics].toarray()
-umap_coords = umap_model.fit_transform(topic_embeddings)
-topic_info['D1'] = umap_coords[:, 0]
-topic_info['D2'] = umap_coords[:, 1]
-
-# Find optimal K
-sil_scores = {}
-for k in range(2, min(11, len(valid_topics))):
-    kmeans = KMeans(n_clusters=k, random_state=42)
-    labels = kmeans.fit_predict(umap_coords)
-    sil_scores[k] = silhouette_score(umap_coords, labels)
-optimal_k = max(sil_scores, key=sil_scores.get)
-
-# Cluster with optimal K
-kmeans = KMeans(n_clusters=optimal_k, random_state=42)
-topic_info['Group'] = kmeans.fit_predict(umap_coords)
-group_labels = {i: f"Group {i+1}" for i in range(optimal_k)}
-topic_info['GroupName'] = topic_info['Group'].map(group_labels)
-
-# Add top 3 words
-topic_words = {}
-for topic_num in valid_topics:
-    words = topic_model.get_topic(topic_num)
-    if words:
-        top_words = [w for w, _ in words[:3]]
-        topic_words[topic_num] = ", ".join(top_words)
-    else:
-        topic_words[topic_num] = "No words"
-topic_info["Top_Words"] = topic_info["Topic"].map(topic_words)
-
-# Build interactive topic map
-fig_topic = go.Figure()
-for group in topic_info['Group'].unique():
-    group_data = topic_info[topic_info['Group'] == group]
-    fig_topic.add_trace(go.Scatter(
-        x=group_data["D1"], y=group_data["D2"],
-        mode="markers+text",
-        marker=dict(size=group_data["Count"]*0.6, opacity=0.6, line=dict(width=1, color="DarkSlateGrey")),
-        text=[f"Topic {t}" for t in group_data["Topic"]],
-        textposition="top center",
-        hovertext=[f"Topic {row.Topic}<br>Docs: {row.Count}<br>Words: {row.Top_Words}"
-                   for _, row in group_data.iterrows()],
-        hoverinfo="text",
-        name=group_labels[group]
-    ))
-    x0, x1 = group_data["D1"].min()-0.1, group_data["D1"].max()+0.1
-    y0, y1 = group_data["D2"].min()-0.1, group_data["D2"].max()+0.1
-    fig_topic.add_shape(type="rect", x0=x0, y0=y0, x1=x1, y1=y1, line=dict(color="orange", width=2))
-    words_text = "<br>".join([f"<b>Topic {row.Topic}</b>: {row.Top_Words}" for _, row in group_data.iterrows()])
-    fig_topic.add_annotation(x=(x0+x1)/2, y=y1+0.1,
-                             text=f"<b>{group_labels[group]}</b><br>{words_text}",
-                             showarrow=False,
-                             align="left",
-                             font=dict(size=12, color="black"),
-                             bordercolor="orange",
-                             borderwidth=1,
-                             bgcolor="white",
-                             opacity=0.9)
-
-fig_topic.update_layout(
-    title=f"Intertopic Distance Map with Optimal Clusters (k={optimal_k})",
-    title_x=0.5,
-    xaxis_title="D1", yaxis_title="D2", showlegend=False
-)
-st.plotly_chart(fig_topic, use_container_width=True)
 
 
 
