@@ -305,50 +305,116 @@ if st.button("🔀 Randomize"):
 process_and_plot(df, highlight_name=highlight_name)
 
 
-# Prepare data for logarithmic regression
-df_filtered = df[df['time_minutes'] > 0]  # avoid log(0) errors
-X = np.log(df_filtered['time_minutes'].values).reshape(-1, 1)
-y = df_filtered['Predicted_Complexity'].values
+import pandas as pd
+import numpy as np
+import plotly.express as px
+from sentence_transformers import SentenceTransformer
+from sklearn.linear_model import Ridge
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+import re
 
-# Fit log regression
-log_reg = LinearRegression()
-log_reg.fit(X, y)
+# --- Load Data ---
+df = pd.read_csv("origami_scrape_final.csv").fillna("")
 
-# Predict values for smooth line
-x_range = np.linspace(df_filtered['time_minutes'].min(), df_filtered['time_minutes'].max(), 200)
-y_pred = log_reg.predict(np.log(x_range).reshape(-1, 1))
+# Convert folding time into minutes
+def convert_to_minutes(time_str):
+    if pd.isna(time_str): return 0
+    time_str = time_str.lower().replace("hours", "hr").replace("hour", "hr")
+    time_str = time_str.replace("minutes", "min").replace("minute", "min").replace(".", "").strip()
+    h = int(re.search(r'(\d+)\s*hr', time_str).group(1)) if re.search(r'(\d+)\s*hr', time_str) else 0
+    m = int(re.search(r'(\d+)\s*min', time_str).group(1)) if re.search(r'(\d+)\s*min', time_str) else 0
+    return h * 60 + m
 
-# Create scatter plot
+df['time_minutes'] = df['Time'].apply(convert_to_minutes)
+
+# --- Load Sentence-BERT Model ---
+print("Loading embeddings model...")
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+print("Encoding descriptions...")
+embeddings = model.encode(df['Description'].tolist(), show_progress_bar=True)
+
+# --- Keyword Weighting ---
+keywords_complex = ["dragon", "humanoid", "quadruped", "winged", "horned"]
+keywords_simple  = ["boat", "bird", "simple", "flat", "flower"]
+
+def keyword_complexity(text):
+    score = 0
+    words = text.lower().split()
+    score += sum([2 for w in words if w in keywords_complex])
+    score -= sum([1 for w in words if w in keywords_simple])
+    return score
+
+df['Keyword_Score'] = df['Description'].apply(keyword_complexity)
+
+# --- Labels (Difficulty or Fallback) ---
+if 'Difficulty' in df.columns:
+    df['Difficulty'] = df['Difficulty'].astype(str).str.strip().str.lower()
+    difficulty_map = {'easy': 1, 'moderate': 2, 'intermediate': 3, 'hard': 4, 'complex': 5}
+    df['Difficulty_Numeric'] = df['Difficulty'].map(difficulty_map).fillna(1)
+    y = df['Difficulty_Numeric']
+else:
+    df['Difficulty_Numeric'] = df['Keyword_Score'].rank(method='dense')
+    y = df['Difficulty_Numeric']
+
+# --- Train Regression Model ---
+X = np.hstack([embeddings, df[['Keyword_Score']].values])
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+reg = Ridge(alpha=1.0)
+reg.fit(X_scaled, y)
+
+df['Predicted_Complexity'] = reg.predict(X_scaled)
+
+# --- PCA for Embedding Visualization ---
+pca = PCA(n_components=2, random_state=42)
+embeddings_2d = pca.fit_transform(embeddings)
+
+df['PCA1'] = embeddings_2d[:,0]
+df['PCA2'] = embeddings_2d[:,1]
+
+# --- Scatter Plot of Embeddings ---
 fig = px.scatter(
     df,
-    x="time_minutes",
-    y="Predicted_Complexity",
+    x="PCA1",
+    y="PCA2",
     color="Predicted_Complexity",
-    hover_data={
-        "Name": True,
-        "Description": True,
-        "time_minutes": True,
-        "Predicted_Complexity": True,
-        "Keyword_Score": True
-    },
-    labels={
-        "time_minutes": "Folding Time (minutes)",
-        "Predicted_Complexity": "Predicted Complexity Score"
-    },
-    title="Origami Folding Time vs Predicted Complexity (Log Regression)",
-    opacity=0.75,
+    hover_data={"Name": True, "Description": True, "Predicted_Complexity": True},
+    title="Origami Semantic Topics in 2D Embedding Space (Colored by Complexity)",
     color_continuous_scale="Viridis"
-)
-
-# Add regression line
-fig.add_scatter(
-    x=x_range,
-    y=y_pred,
-    mode="lines",
-    name="Logarithmic Regression",
-    line=dict(color="red", width=3)
 )
 
 fig.update_traces(marker=dict(size=8))
 fig.update_layout(height=600, width=1000)
-fig.show(renderer="colab")
+fig.show()
+from sklearn.decomposition import PCA
+import plotly.express as px
+
+# Reduce embeddings to 2D for visualization
+pca = PCA(n_components=2, random_state=42)
+embeddings_2d = pca.fit_transform(embeddings)
+
+df['PCA1'] = embeddings_2d[:,0]
+df['PCA2'] = embeddings_2d[:,1]
+
+# Scatter plot: show clusters of topics, color by predicted complexity
+fig = px.scatter(
+    df,
+    x="PCA1",
+    y="PCA2",
+    color="Predicted_Complexity",
+    hover_data={
+        "Name": True,
+        "Description": True,
+        "Predicted_Complexity": True,
+        "Keyword_Score": True
+    },
+    title="Origami Topics in Embedding Space Colored by Predicted Complexity",
+    color_continuous_scale="Viridis"
+)
+
+fig.update_traces(marker=dict(size=8))
+fig.update_layout(height=600, width=1000)
+fig.show(renderer="colab")  # Ensure it displays in Colab
+
