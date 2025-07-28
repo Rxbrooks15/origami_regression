@@ -416,5 +416,6 @@ fig = px.scatter(
 
 fig.update_traces(marker=dict(size=8))
 fig.update_layout(height=600, width=1000)
-fig.show(renderer="colab")  # Ensure it displays in Colab
+st.plotly_chart(fig, use_container_width=True)
+
 
