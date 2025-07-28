@@ -303,3 +303,52 @@ if st.button("🔀 Randomize"):
             st.info(f"ℹ️ The '{new_model['Name']}' is the most recent origami model.")
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
+
+
+# Prepare data for logarithmic regression
+df_filtered = df[df['time_minutes'] > 0]  # avoid log(0) errors
+X = np.log(df_filtered['time_minutes'].values).reshape(-1, 1)
+y = df_filtered['Predicted_Complexity'].values
+
+# Fit log regression
+log_reg = LinearRegression()
+log_reg.fit(X, y)
+
+# Predict values for smooth line
+x_range = np.linspace(df_filtered['time_minutes'].min(), df_filtered['time_minutes'].max(), 200)
+y_pred = log_reg.predict(np.log(x_range).reshape(-1, 1))
+
+# Create scatter plot
+fig = px.scatter(
+    df,
+    x="time_minutes",
+    y="Predicted_Complexity",
+    color="Predicted_Complexity",
+    hover_data={
+        "Name": True,
+        "Description": True,
+        "time_minutes": True,
+        "Predicted_Complexity": True,
+        "Keyword_Score": True
+    },
+    labels={
+        "time_minutes": "Folding Time (minutes)",
+        "Predicted_Complexity": "Predicted Complexity Score"
+    },
+    title="Origami Folding Time vs Predicted Complexity (Log Regression)",
+    opacity=0.75,
+    color_continuous_scale="Viridis"
+)
+
+# Add regression line
+fig.add_scatter(
+    x=x_range,
+    y=y_pred,
+    mode="lines",
+    name="Logarithmic Regression",
+    line=dict(color="red", width=3)
+)
+
+fig.update_traces(marker=dict(size=8))
+fig.update_layout(height=600, width=1000)
+fig.show(renderer="colab")
