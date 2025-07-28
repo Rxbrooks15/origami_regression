@@ -306,101 +306,170 @@ process_and_plot(df, highlight_name=highlight_name)
 
 
 import streamlit as st
+import requests
+from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
 import re
-import plotly.express as px
-from sentence_transformers import SentenceTransformer
-from sklearn.linear_model import Ridge
+import os
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import NMF, PCA
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-
+from sklearn.linear_model import Ridge
+import plotly.express as px
+import plotly.graph_objects as go
+from urllib.parse import urljoin
 from sentence_transformers import SentenceTransformer
+import csv
+from datetime import datetime
 
-model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+LOG_PATH = "visitor_log.csv"
+CSV_PATH = "origami_scrape_final.csv"
 
-# --- Load Data ---
-df = pd.read_csv("origami_scrape_final.csv").fillna("")
+def log_event(event_type, detail=None):
+    with open(LOG_PATH, "a", newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow([datetime.now(), event_type, detail or ""])
 
-# Utility to convert folding time into minutes
+# --- Sidebar and Search Query ---
+st.sidebar.header("Preview Origami Models")
+search_query = st.sidebar.text_input("🔎 Search Model Name")
+
+# --- Utility ---
 def convert_to_minutes(time_str):
     if pd.isna(time_str): return 0
-    time_str = time_str.lower().replace("hours", "hr").replace("hour", "hr")
+    time_str = str(time_str).lower().replace("hours", "hr").replace("hour", "hr")
     time_str = time_str.replace("minutes", "min").replace("minute", "min").replace(".", "").strip()
     h = int(re.search(r'(\d+)\s*hr', time_str).group(1)) if re.search(r'(\d+)\s*hr', time_str) else 0
     m = int(re.search(r'(\d+)\s*min', time_str).group(1)) if re.search(r'(\d+)\s*min', time_str) else 0
     return h * 60 + m
 
+# --- Scraping functions ---
+def scrape_model_detail(url):
+    headers = {"User-Agent": "Mozilla/5.0"}
+    try:
+        response = requests.get(url, headers=headers)
+        soup = BeautifulSoup(response.text, "html.parser")
+        name = soup.select_one("h1").text.strip()
+        image_tag = soup.select_one(".single-model__image img")
+        image = urljoin(url, image_tag["src"].strip()) if image_tag else ""
+        desc_tag = soup.select_one(".single-model__content p")
+        description = desc_tag.text.strip() if desc_tag else "No description available"
+        creator_tag = soup.select_one(".single-model__content__creator a")
+        creator = creator_tag.text.strip() if creator_tag else "Unknown"
+
+        difficulty = ""
+        meta_items = soup.select(".single-model__content__meta__item")
+        for item in meta_items:
+            text = item.get_text(" ", strip=True)
+            match = re.search(r"\b(easy|moderate|intermediate|hard|complex)\b", text, re.I)
+            if match:
+                difficulty = match.group(1).capitalize()
+                break
+
+        time_tag = soup.select_one(
+            ".single-model__content__meta__item:nth-child(5) .single-model__content__meta__item__description"
+        )
+        time_str = time_tag.text.strip() if time_tag else ""
+
+        return {
+            "Image": image,
+            "Name": name,
+            "Creator": creator,
+            "Description": description,
+            "Difficulty": difficulty,
+            "Time": time_str
+        }
+    except Exception as e:
+        st.error(f"Failed to scrape {url}: {e}")
+        return None
+
+# --- Load Data ---
+df = pd.read_csv(CSV_PATH).fillna("")
 df['time_minutes'] = df['Time'].apply(convert_to_minutes)
 
-# --- Load Sentence-BERT Model ---
-st.write("🔄 Loading embeddings model...")
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# --- Topic Modeling via TF-IDF + NMF ---
+df['Difficulty'] = df['Difficulty'].astype(str).str.strip().str.lower()
+difficulty_map = {'easy': 1, 'moderate': 2, 'intermediate': 3, 'hard': 4, 'complex': 5}
+df['Difficulty_Numeric'] = df['Difficulty'].map(difficulty_map).fillna(1)
 
-st.write("🔄 Encoding descriptions...")
-embeddings = model.encode(df['Description'].tolist(), show_progress_bar=True)
+tfidf = TfidfVectorizer(stop_words='english', max_features=100)
+tfidf_matrix = tfidf.fit_transform(df['Description'].fillna(""))
+nmf = NMF(n_components=7, random_state=42)
+topic_matrix = nmf.fit_transform(tfidf_matrix)
+df['Dominant_Topic'] = topic_matrix.argmax(axis=1)
 
-# --- Keyword Weighting ---
+topic_weights = {6: 2.13, 2: 2.57, 3: 2.89, 1: 2.92, 0: 2.95, 5: 3.08, 4: 3.13}
+df['Topic_Weighted_Difficulty'] = df['Dominant_Topic'].map(topic_weights)
+
+# --- Sentence-BERT Embeddings ---
+st.write("🔄 Loading BERT embeddings...")
+try:
+    model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+    embeddings = model.encode(df['Description'].tolist(), show_progress_bar=True)
+except Exception as e:
+    st.warning(f"⚠️ Sentence-BERT failed: {e}. Falling back to TF-IDF.")
+    embeddings = tfidf_matrix.toarray()
+
+# --- Keyword Heuristics ---
 keywords_complex = ["dragon", "humanoid", "quadruped", "winged", "horned"]
 keywords_simple  = ["boat", "bird", "simple", "flat", "flower"]
-
 def keyword_complexity(text):
     score = 0
     words = text.lower().split()
     score += sum([2 for w in words if w in keywords_complex])
     score -= sum([1 for w in words if w in keywords_simple])
     return score
-
 df['Keyword_Score'] = df['Description'].apply(keyword_complexity)
 
-# --- Labels (Difficulty or Fallback) ---
-if 'Difficulty' in df.columns:
-    df['Difficulty'] = df['Difficulty'].astype(str).str.strip().str.lower()
-    difficulty_map = {'easy': 1, 'moderate': 2, 'intermediate': 3, 'hard': 4, 'complex': 5}
-    df['Difficulty_Numeric'] = df['Difficulty'].map(difficulty_map).fillna(1)
-    y = df['Difficulty_Numeric']
-else:
-    df['Difficulty_Numeric'] = df['Keyword_Score'].rank(method='dense')
-    y = df['Difficulty_Numeric']
-
-# --- Train Regression Model ---
+# --- Ridge Regression for Complexity ---
 X = np.hstack([embeddings, df[['Keyword_Score']].values])
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 reg = Ridge(alpha=1.0)
-reg.fit(X_scaled, y)
-
+reg.fit(X_scaled, df['Difficulty_Numeric'])
 df['Predicted_Complexity'] = reg.predict(X_scaled)
 
 # --- PCA for Embedding Visualization ---
 pca = PCA(n_components=2, random_state=42)
 embeddings_2d = pca.fit_transform(embeddings)
+df['PCA1'] = embeddings_2d[:, 0]
+df['PCA2'] = embeddings_2d[:, 1]
 
-df['PCA1'] = embeddings_2d[:,0]
-df['PCA2'] = embeddings_2d[:,1]
+# --- Streamlit Tabs ---
+tab1, tab2 = st.tabs(["📊 Logarithmic Regression", "🧠 Embedding Space"])
 
-# --- Scatter Plot ---
-fig = px.scatter(
-    df,
-    x="PCA1",
-    y="PCA2",
-    color="Predicted_Complexity",
-    hover_data={
-        "Name": True,
-        "Description": True,
-        "Predicted_Complexity": True,
-        "Keyword_Score": True
-    },
-    title="Origami Topics in Embedding Space Colored by Predicted Complexity",
-    color_continuous_scale="Viridis"
-)
+with tab1:
+    X_full = np.linspace(df['time_minutes'].min(), df['time_minutes'].max(), 300).reshape(-1, 1)
+    X_full_log = np.log1p(X_full)
+    log_model = LinearRegression().fit(np.log1p(df[['time_minutes']].values), df['Predicted_Complexity'].values)
+    y_pred = log_model.predict(X_full_log)
 
-fig.update_traces(marker=dict(size=8))
-fig.update_layout(height=600, width=1000)
+    fig1 = px.scatter(
+        df,
+        x='time_minutes',
+        y='Predicted_Complexity',
+        color='Predicted_Complexity',
+        hover_data={'Name': True, 'Description': True},
+        title="Logarithmic Fit of Time vs Predicted Complexity",
+        color_continuous_scale="Viridis"
+    )
+    fig1.add_trace(go.Scatter(x=X_full.flatten(), y=y_pred, mode='lines', name='Log Fit', line=dict(color='red')))
+    st.plotly_chart(fig1, use_container_width=True)
 
-# Show in Streamlit (instead of fig.show)
-st.plotly_chart(fig, use_container_width=True)
-
+with tab2:
+    fig2 = px.scatter(
+        df,
+        x="PCA1",
+        y="PCA2",
+        color="Predicted_Complexity",
+        hover_data={"Name": True, "Description": True, "Keyword_Score": True},
+        title="Origami Topics in Embedding Space (Colored by Complexity)",
+        color_continuous_scale="Viridis"
+    )
+    st.plotly_chart(fig2, use_container_width=True)
 
 
 
