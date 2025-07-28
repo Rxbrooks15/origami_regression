@@ -11,3 +11,4 @@ numpy
 streamlit-plotly-events
 sentence_transformers
 torch
+bertopic[all]
