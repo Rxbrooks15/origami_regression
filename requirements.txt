@@ -10,3 +10,4 @@ plotly
 numpy               
 streamlit-plotly-events
 sentence_transformers
+torch
