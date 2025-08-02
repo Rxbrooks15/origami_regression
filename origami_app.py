@@ -273,17 +273,6 @@ model_choice = st.sidebar.radio(
 )
 
 # --- Interactive Plot ---
-import plotly.express as px
-
-# Define custom color map for difficulties
-difficulty_colors = {
-    1: "blue",      # Easy
-    2: "lightblue", # Moderate
-    3: "yellow",    # Intermediate
-    4: "orange",    # Hard
-    5: "red"        # Complex
-}
-
 fig = px.scatter(
     df_clean,
     x="time_minutes",
@@ -299,7 +288,7 @@ fig = px.scatter(
     },
     labels={
         "time_minutes": "Folding Time (Minutes)",
-        "GAMI": "GAMI Score",
+        "💲💲💲GAMI": "GAMI Score",
         "Difficulty_Numeric": "Difficulty"
     },
     title="GAMI vs Folding Time (Difficulty: Blue=Easy → Red=Complex)"
@@ -450,6 +439,7 @@ fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
+
 
 
 
