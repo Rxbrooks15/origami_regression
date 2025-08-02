@@ -267,7 +267,7 @@ r2_rf = r2_score(y, rf_model.predict(X))
 
 # --- Sidebar: Model Selector ---
 model_choice = st.sidebar.radio(
-    "Choose Regression Model:",
+    "Choose Regression For Gami Model:",
     ("🌲 Random Forest", "Linear", "Logarithmic", "Decision Tree"),
     index=0  # default Random Forest
 )
@@ -423,6 +423,7 @@ fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
+
 
 
 
