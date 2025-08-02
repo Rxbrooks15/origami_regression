@@ -282,7 +282,7 @@ fig = px.scatter(
         "Name": True, "Keyword_Score": True,
         "Edge_Count": True, "Difficulty_Numeric": True, "GAMI": True
     },
-    labels={"time_minutes": "Folding Time (Minutes)", "GAMI": "GAMI Score"},
+    labels={"time_minutes": "Folding Time (Minutes)", "GAMI": "Gami"},
 )
 
 # --- Add only the chosen regression line ---
@@ -423,6 +423,7 @@ fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
+
 
 
 
