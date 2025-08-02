@@ -18,9 +18,14 @@ from bertopic import BERTopic
 import umap
 from sentence_transformers import SentenceTransformer
 import streamlit.components.v1 as components
-
-
-
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
 import csv
 from datetime import datetime
 
@@ -416,6 +421,7 @@ st.markdown("""
 """)
 st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
 st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
 
 
 
