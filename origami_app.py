@@ -48,8 +48,6 @@ st.title("📐 Origami Model Complexity Tracker")
 st.markdown("""
 Origami is the traditional Japanese art of paper folding, where a single sheet of paper is transformed into intricate sculptures without cutting or gluing. 
 
-This dashboard provides a collection of origami models and attributes a difficulty/ complexity score to each model. The logarithm regression aims to helps users explore a wide range of origami models with estimated difficulty scores. 
-
 [📁 Check out the Origami Database(https://origami-database.com/models/)
 """, unsafe_allow_html=True)
 
@@ -408,6 +406,7 @@ df["BERTopic_Topic"] = topics
 # Show interactive topic plot
 fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
+
 
 
 
