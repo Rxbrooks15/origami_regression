@@ -395,7 +395,116 @@ else:  # 🌲 Random Forest default
                              name=f"🌲 Random Forest (R²={r2_rf:.3f})", line=dict(color="green", width=4)))
     fig.update_layout(title=f"GAMI vs Folding Time | Random Forest R²={r2_rf:.3f}")
 
-# --- Show in Streamlit ---
+# --- Sidebar Search ---
+st.sidebar.header("Preview Origami Models")
+search_query = st.sidebar.text_input("🔎 Search Model Name")
+highlight_name = None
+
+if search_query:
+    match = df[df["Name"].str.contains(search_query, case=False, na=False)]
+    if not match.empty:
+        selected = match.iloc[0]
+        highlight_name = selected["Name"]
+
+        # Log searched model
+        log_event("search", highlight_name)
+
+        st.sidebar.image(selected.get("Image_github") or selected.get("Image"),
+                         caption=selected["Name"], width=220)
+        st.sidebar.write(f"**Creator:** {selected.get('Creator')}")
+        st.sidebar.write(f"**Difficulty:** {selected.get('Difficulty')}")
+        st.sidebar.write(f"**Description:** {selected.get('Description')[:150]}...")
+else:
+    try:
+        sample = df.sample(1).iloc[0]
+        highlight_name = sample["Name"]
+        st.sidebar.image(sample.get("Image_github") or sample.get("Image"),
+                         caption="Random Origami", width=220)
+        st.sidebar.write(f"**Name:** {sample.get('Name')}")
+        st.sidebar.write(f"**Creator:** {sample.get('Creator')}")
+        st.sidebar.write(f"**Difficulty:** {sample.get('Difficulty')}")
+        st.sidebar.write(f"**Description:** {sample.get('Description')[:150]}...")
+    except Exception as e:
+        st.sidebar.error(f"Sidebar error: {e}")
+
+
+# --- GAMI Plot with Search Highlight ---
+fig = px.scatter(
+    df_clean,
+    x="time_minutes",
+    y="GAMI",
+    color=df_clean["Difficulty_Numeric"].astype(str),
+    custom_data=[
+        'Image_github', 'Name', 'Keyword_Score', 'Edge_Count',
+        'Difficulty_Numeric', 'GAMI', 'Description'
+    ],
+    labels={
+        "time_minutes": "🕒 Folding Time (Minutes)",
+        "GAMI": "💲 GAMI Score",
+        "Difficulty_Numeric": "Difficulty"
+    },
+    title=f"💲GAMI vs 🕒Folding Time | {model_choice} Fit"
+)
+
+# Base hover template
+fig.update_traces(
+    hovertemplate="""
+    🏷 <b>%{customdata[1]}</b><br>
+    ⏱ <b>%{x:.1f}</b> minutes<br>
+    💲 <b>GAMI:</b> %{customdata[5]:.2f}<br>
+    📊 <b>Difficulty:</b> %{customdata[4]}<br>
+    🔑 <b>Keyword Score:</b> %{customdata[2]:.2f}<br>
+    🧩 <b>Edge Count:</b> %{customdata[3]}<br>
+    📃 <b>Description:</b> %{customdata[6]}<br>
+    <extra></extra>
+    """,
+    marker=dict(size=6, opacity=0.8),
+    hoverlabel=dict(bgcolor="#D4F1F9", font_size=11, font_family="Arial")
+)
+
+# Add regression line for selected model
+if model_choice == "Linear":
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_lin, mode="lines",
+                             name=f"Linear (R²={r2_lin:.3f})", line=dict(color="blue", width=2)))
+elif model_choice == "Logarithmic":
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_log, mode="lines",
+                             name=f"Logarithmic (R²={r2_log:.3f})", line=dict(color="purple", width=2)))
+elif model_choice == "Decision Tree":
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_dt, mode="lines",
+                             name=f"Decision Tree (R²={r2_dt:.3f})", line=dict(color="red", width=2)))
+else:  # Random Forest default
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_rf, mode="lines",
+                             name=f"🌲 Random Forest (R²={r2_rf:.3f})", line=dict(color="green", width=4)))
+
+# 🔴 Highlight searched model if exists
+if highlight_name:
+    match = df_clean[df_clean["Name"].str.lower() == highlight_name.lower()]
+    if not match.empty:
+        x_val = match["time_minutes"].values[0]
+        y_val = match["GAMI"].values[0]
+        name_val = match["Name"].values[0]
+
+        # Outer circle
+        fig.add_trace(go.Scatter(
+            x=[x_val], y=[y_val],
+            mode='markers',
+            marker=dict(size=14, color='rgba(255,0,0,0)',
+                        line=dict(color='red', width=3)),
+            showlegend=False,
+            hoverinfo='skip'
+        ))
+
+        # Inner dot + label
+        fig.add_trace(go.Scatter(
+            x=[x_val], y=[y_val],
+            mode='markers+text',
+            text=[name_val],
+            textposition="top center",
+            marker=dict(size=6, color='red'),
+            textfont=dict(color='red', size=14),
+            name="🔴 Highlighted"
+        ))
+
 st.plotly_chart(fig, use_container_width=True)
 
 
@@ -512,6 +621,7 @@ fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
+
 
 
 
