@@ -289,6 +289,15 @@ fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_rf, mode="lines",
 # --- Show in Streamlit ---
 st.plotly_chart(fig, use_container_width=True)
 
+# --- Streamlit UI ---
+st.title("📐 Origami Model Complexity Tracker")
+st.markdown("""
+Origami is the traditional Japanese art of paper folding, where a single sheet of paper is transformed into intricate sculptures without cutting or gluing. 
+
+This dashboard provides a collection of origami models and attributes a difficulty/ complexity score to each model. The logarithm regression aims to helps users explore a wide range of origami models with estimated difficulty scores. 
+
+[📁 Check out the Origami Database(https://origami-database.com/models/)
+""", unsafe_allow_html=True)
 
 st.markdown("""
 The goal of this logarithm regression model is to guide users in selecting origami designs that match their skill level, while also offering an easy way to browse a wide variety of models along with their estimated difficulty scores.
@@ -310,15 +319,7 @@ st.dataframe(
 )
 
 
-# --- Streamlit UI ---
-st.title("📐 Origami Model Complexity Tracker")
-st.markdown("""
-Origami is the traditional Japanese art of paper folding, where a single sheet of paper is transformed into intricate sculptures without cutting or gluing. 
 
-This dashboard provides a collection of origami models and attributes a difficulty/ complexity score to each model. The logarithm regression aims to helps users explore a wide range of origami models with estimated difficulty scores. 
-
-[📁 Check out the Origami Database(https://origami-database.com/models/)
-""", unsafe_allow_html=True)
 # Load CSV
 df = pd.read_csv(CSV_PATH)
 
@@ -421,3 +422,4 @@ st.markdown("""
 """)
 st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
 st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
