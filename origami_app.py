@@ -160,6 +160,7 @@ def process_and_plot(df, highlight_name=None):
         ],
         title=f"Logarithmic Fit | R²: {r2:.3f}"
     )
+    
     fig.update_traces(
         hovertemplate="""
         🏷️ <b>%{customdata[1]}</b><br>
@@ -403,6 +404,7 @@ df["BERTopic_Topic"] = topics
 # Show interactive topic plot
 fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
+
 
 
 
