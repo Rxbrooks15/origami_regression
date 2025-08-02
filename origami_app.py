@@ -47,9 +47,7 @@ search_query = st.sidebar.text_input("🔎 Search Model Name")
 st.title("📐 Origami Model Complexity Tracker")
 st.markdown("""
 Origami is the traditional Japanese art of paper folding, where a single sheet of paper is transformed into intricate sculptures without cutting or gluing. 
-
 This dashboard provides a collection of origami models and attributes a difficulty/ complexity score to each model. The logarithm regression aims to helps users explore a wide range of origami models with estimated difficulty scores. 
-
 [📁 Check out the Origami Database(https://origami-database.com/models/)
 """, unsafe_allow_html=True)
 
@@ -266,7 +264,7 @@ dt_model = DecisionTreeRegressor(max_depth=5, random_state=42).fit(X, y)
 y_dt = dt_model.predict(x_range)
 r2_dt = r2_score(y, dt_model.predict(X))
 
-# Random Forest
+# Random Forest (Default/Dominant)
 rf_model = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42).fit(X, y)
 y_rf = rf_model.predict(x_range)
 r2_rf = r2_score(y, rf_model.predict(X))
@@ -282,11 +280,10 @@ fig = px.scatter(
         "Edge_Count": True, "Difficulty_Numeric": True, "GAMI": True
     },
     labels={"time_minutes": "Folding Time (Minutes)", "GAMI": "GAMI Score"},
-    title=("GAMI vs Folding Time with Multiple Regressions<br>"
-           f"Linear R²={r2_lin:.3f}, Logarithmic R²={r2_log:.3f}, "
-           f"Decision Tree R²={r2_dt:.3f}, Random Forest R²={r2_rf:.3f}")
+    title=f"📊 GAMI vs Folding Time (Default: Random Forest) | Random Forest R²={r2_rf:.3f}"
 )
 
+# Add regression lines (Random Forest last so it's on top)
 fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_lin, mode="lines",
                          name=f"Linear (R²={r2_lin:.3f})", line=dict(color="blue", width=2)))
 fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_log, mode="lines",
@@ -294,7 +291,7 @@ fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_log, mode="lines",
 fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_dt, mode="lines",
                          name=f"Decision Tree (R²={r2_dt:.3f})", line=dict(color="red", width=2)))
 fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_rf, mode="lines",
-                         name=f"Random Forest (R²={r2_rf:.3f})", line=dict(color="green", width=2)))
+                         name=f"🌲 Random Forest (R²={r2_rf:.3f})", line=dict(color="green", width=4)))
 
 # --- Show in Streamlit ---
 st.plotly_chart(fig, use_container_width=True)
@@ -412,6 +409,7 @@ fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
+
 
 
 
