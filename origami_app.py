@@ -222,7 +222,7 @@ def process_and_plot(df, highlight_name=None):
     # --- Load dataset from GitHub ---
 @st.cache_data
 def load_data():
-    url = "https://raw.githubusercontent.com/your-username/your-repo/main/Combined_CNN_BERT.csv"
+    url = "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/refs/heads/main/Combined_CNN_BERT.csv"
     return pd.read_csv(url)
 
 df = load_data()
@@ -421,6 +421,7 @@ st.markdown("""
 """)
 st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
 st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
 
 
 
