@@ -48,17 +48,6 @@ st.title("📐 Origami Model Complexity Tracker")
 st.markdown("""
 Origami is the traditional Japanese art of paper folding, where a single sheet of paper is transformed into intricate sculptures without cutting or gluing. 
 
-[📁 Check out the Origami Database(https://origami-database.com/models/)
-""", unsafe_allow_html=True)
-
-st.markdown("""
-These regressions calculate a **Gami**(origami complexity, difficulty, and visual appeal) based on a prior 5-point difficulty rating scale for each model and by analyzing each model's description using **topic modeling** (via Non-negative Matrix Factorization). A convolutional neural network was recently implimented to extract edge_counts from each model. The topic model extracts dominant themes from model descriptions and weights them to estimate the value of an origami model.
-    
-**Note:** All origami model information and images are sourced from [origami-database.com](https://origami-database.com/models/). The models were not created by me. For inquiries in regard to information the Origami Database please contact the site author directly at **info@origami-database.com**.
-""", unsafe_allow_html=True)
-
-
-
 # --- Scraping functions ---
 def scrape_model_detail(url):
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -370,6 +359,14 @@ if st.button("🔀 Randomize"):
 # Plot the data
 process_and_plot(df, highlight_name=highlight_name)
 
+[📁 Check out the Origami Database(https://origami-database.com/models/)
+""", unsafe_allow_html=True)
+
+st.markdown("""
+These regressions calculate a **Gami**(origami complexity, difficulty, and visual appeal) based on a prior 5-point difficulty rating scale for each model and by analyzing each model's description using **topic modeling** (via Non-negative Matrix Factorization). A convolutional neural network was recently implimented to extract edge_counts from each model. The topic model extracts dominant themes from model descriptions and weights them to estimate the value of an origami model.
+    
+**Note:** All origami model information and images are sourced from [origami-database.com](https://origami-database.com/models/). The models were not created by me. For inquiries in regard to information the Origami Database please contact the site author directly at **info@origami-database.com**.
+""", unsafe_allow_html=True)
 
 st.markdown("##  Intertopic Distance Map")
 
@@ -406,6 +403,7 @@ df["BERTopic_Topic"] = topics
 # Show interactive topic plot
 fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
+
 
 
 
