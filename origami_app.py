@@ -172,6 +172,75 @@ def process_and_plot(df, highlight_name=None):
 )
 
     fig.add_trace(go.Scatter(x=X_full.flatten(), y=y_pred, mode='lines', name='Fit', line=dict(color='black')))
+    # --- Load dataset from GitHub ---
+@st.cache_data
+def load_data():
+    url = "https://raw.githubusercontent.com/your-username/your-repo/main/Combined_CNN_BERT.csv"
+    return pd.read_csv(url)
+
+df = load_data()
+
+# --- Data Cleaning ---
+df_clean = df.dropna(subset=["Keyword_Score", "Edge_Count", "Difficulty_Numeric", "time_minutes"]).copy()
+df_clean = df_clean[df_clean["time_minutes"] > 0]
+
+# Create GAMI score
+df_clean["GAMI"] = df_clean["Keyword_Score"] * df_clean["Edge_Count"] * df_clean["Difficulty_Numeric"]
+
+# Features & Target
+X = df_clean[["time_minutes"]].values
+y = df_clean["GAMI"].values
+x_range = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
+
+# --- Models ---
+# Linear Regression
+lin_model = LinearRegression().fit(X, y)
+y_lin = lin_model.predict(x_range)
+r2_lin = r2_score(y, lin_model.predict(X))
+
+# Logarithmic Regression
+X_log = np.log(X)
+log_model = LinearRegression().fit(X_log, y)
+y_log = log_model.predict(np.log(x_range))
+r2_log = r2_score(y, log_model.predict(X_log))
+
+# Decision Tree
+dt_model = DecisionTreeRegressor(max_depth=5, random_state=42).fit(X, y)
+y_dt = dt_model.predict(x_range)
+r2_dt = r2_score(y, dt_model.predict(X))
+
+# Random Forest
+rf_model = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42).fit(X, y)
+y_rf = rf_model.predict(x_range)
+r2_rf = r2_score(y, rf_model.predict(X))
+
+# --- Interactive Plot ---
+fig = px.scatter(
+    df_clean,
+    x="time_minutes",
+    y="GAMI",
+    color="Difficulty_Numeric",
+    hover_data={
+        "Name": True, "Keyword_Score": True,
+        "Edge_Count": True, "Difficulty_Numeric": True, "GAMI": True
+    },
+    labels={"time_minutes": "Folding Time (Minutes)", "GAMI": "GAMI Score"},
+    title=("GAMI vs Folding Time with Multiple Regressions<br>"
+           f"Linear R²={r2_lin:.3f}, Logarithmic R²={r2_log:.3f}, "
+           f"Decision Tree R²={r2_dt:.3f}, Random Forest R²={r2_rf:.3f}")
+)
+
+fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_lin, mode="lines",
+                         name=f"Linear (R²={r2_lin:.3f})", line=dict(color="blue", width=2)))
+fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_log, mode="lines",
+                         name=f"Logarithmic (R²={r2_log:.3f})", line=dict(color="purple", width=2)))
+fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_dt, mode="lines",
+                         name=f"Decision Tree (R²={r2_dt:.3f})", line=dict(color="red", width=2)))
+fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_rf, mode="lines",
+                         name=f"Random Forest (R²={r2_rf:.3f})", line=dict(color="green", width=2)))
+
+# --- Show in Streamlit ---
+st.plotly_chart(fig, use_container_width=True)
 
     if highlight_name:
         match = df[df["Name"].str.lower() == highlight_name.lower()]
@@ -347,6 +416,7 @@ st.markdown("""
 """)
 st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
 st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
 
 
 
