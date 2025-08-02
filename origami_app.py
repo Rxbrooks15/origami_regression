@@ -273,12 +273,23 @@ model_choice = st.sidebar.radio(
 )
 
 # --- Interactive Plot ---
+import plotly.express as px
+
+# Define custom color map for difficulties
+difficulty_colors = {
+    1: "blue",      # Easy
+    2: "lightblue", # Moderate
+    3: "yellow",    # Intermediate
+    4: "orange",    # Hard
+    5: "red"        # Complex
+}
+
 fig = px.scatter(
     df_clean,
     x="time_minutes",
     y="GAMI",
-    color="Difficulty_Numeric",
-    color_continuous_scale=[(0, "blue"), (1, "red")],  # 1 → blue, 5 → red
+    color=df_clean["Difficulty_Numeric"].astype(str),  # convert to string for discrete colors
+    color_discrete_map={str(k): v for k, v in difficulty_colors.items()},
     hover_data={
         "Name": True,
         "Keyword_Score": True,
@@ -289,9 +300,12 @@ fig = px.scatter(
     labels={
         "time_minutes": "Folding Time (Minutes)",
         "GAMI": "GAMI Score",
-        "Difficulty_Numeric": "Difficulty (1=Easy → 5=Complex)"
+        "Difficulty_Numeric": "Difficulty"
     },
+    title="GAMI vs Folding Time (Difficulty: Blue=Easy → Red=Complex)"
 )
+
+st.plotly_chart(fig, use_container_width=True)
 
 # Reverse the colorbar so high difficulty = red
 fig.update_coloraxes(reversescale=False)
@@ -436,6 +450,7 @@ fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
+
 
 
 
