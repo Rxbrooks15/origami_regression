@@ -374,6 +374,23 @@ if st.button("🔀 Randomize"):
 process_and_plot(df, highlight_name=highlight_name)
 
 
+st.markdown("##  Intertopic Distance Map")
+
+# Show saved visualization images
+st.image("kmeans.png", caption="Intertopic Distance Map with Optimal Clusters", use_container_width=True)
+
+st.markdown("## Log Regression Using BERTopic Model")
+# Show regression metrics
+st.markdown("""
+**Regression Performance Metrics**
+
+- R² Score: **0.753**  
+- MAE: **0.326**  
+- MSE: **0.159**  
+""")
+st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
+st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
 st.markdown("## 🧠 BERTopic Modeling Interactive Visualization")
 
 # If you don't already have embeddings, create them
@@ -393,23 +410,7 @@ df["BERTopic_Topic"] = topics
 fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
-import streamlit as st
 
-st.markdown("##  Intertopic Distance Map")
 
-# Show saved visualization images
-st.image("kmeans.png", caption="Intertopic Distance Map with Optimal Clusters", use_container_width=True)
-
-st.markdown("## Log Regression Using BERTopic Model")
-# Show regression metrics
-st.markdown("""
-**Regression Performance Metrics**
-
-- R² Score: **0.753**  
-- MAE: **0.326**  
-- MSE: **0.159**  
-""")
-st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
-st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
 
 
