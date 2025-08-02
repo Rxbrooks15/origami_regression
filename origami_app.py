@@ -306,19 +306,6 @@ This regression calculates a **Complexity Score** based on a prior 5-point diffi
     
 **Note:** All origami model information and images are sourced from [origami-database.com](https://origami-database.com/models/). The models were not created by me. For inquiries in regard to information the Origami Database please contact the site author directly at **info@origami-database.com**.
 """, unsafe_allow_html=True)
-st.markdown(f"### Total Observations: {df.shape[0]}")
-st.markdown("### Most difficult models:")
-st.dataframe(
-    df.sort_values('Complexity_Score', ascending=False)
-        .head(5)[['Name', 'Difficulty', 'Complexity_Score']],
-    use_container_width=True
-)
-st.markdown("### Most recent models:")
-st.dataframe(
-    df.head(5)[['Name', 'Difficulty', 'Complexity_Score']],
-    use_container_width=True
-)
-
 
 
 # Load CSV
@@ -386,6 +373,25 @@ if st.button("🔀 Randomize"):
 process_and_plot(df, highlight_name=highlight_name)
 
 
+st.markdown("##  Intertopic Distance Map")
+
+# Show saved visualization images
+st.image("kmeans.png", caption="Intertopic Distance Map with Optimal Clusters", use_container_width=True)
+
+st.markdown("## Log Regression Using BERTopic Model")
+# Show regression metrics
+st.markdown("""
+**Regression Performance Metrics**
+
+- R² Score: **0.753**  
+- MAE: **0.326**  
+- MSE: **0.159**  
+""")
+st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
+st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
+
+
 st.markdown("## 🧠 BERTopic Modeling Interactive Visualization")
 
 # If you don't already have embeddings, create them
@@ -407,22 +413,6 @@ components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
 
-st.markdown("##  Intertopic Distance Map")
-
-# Show saved visualization images
-st.image("kmeans.png", caption="Intertopic Distance Map with Optimal Clusters", use_container_width=True)
-
-st.markdown("## Log Regression Using BERTopic Model")
-# Show regression metrics
-st.markdown("""
-**Regression Performance Metrics**
-
-- R² Score: **0.753**  
-- MAE: **0.326**  
-- MSE: **0.159**  
-""")
-st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
-st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
 
 
 
