@@ -162,26 +162,27 @@ def process_and_plot(df, highlight_name=None):
     )
     
     fig.update_traces(
-    hovertemplate=r"""
-    <b>%{customdata[1]}</b><br>
-    <b>%{customdata[2]}</b><br>
-    <b>%{customdata[3]:.1f}</b> minutes<br>
-    <b>Complexity:</b> %{customdata[4]:.2f}<br>
-    <b>Topic Group:</b> %{customdata[6]}<br>
-    <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
-    <b>Name Score:</b> %{customdata[8]:.2f}<br>
-    <b>Description Score:</b> %{customdata[9]:.2f}<br>
-    <b>Description:</b> %{customdata[5]}<br>
-    <extra></extra>
-    """,
-    marker=dict(size=6, opacity=0.8),
-    hoverlabel=dict(
-        bgcolor="#D4F1F9",       # Light blue background
-        font_size=11,
-        font_family="Arial"
+        hovertemplate="""
+        🏷️ <b>%{customdata[1]}</b><br>
+        🧑‍🎨 <b>%{customdata[2]}</b><br>
+        ⏱️ <b>%{customdata[3]:.1f}</b> minutes<br>
+        📊 <b>Complexity:</b> %{customdata[4]:.2f}<br>
+        <b>Topic Group:</b> %{customdata[6]}<br>
+        <b>Topic Weight:</b> %{customdata[7]:.2f}<br>
+        <b>Name Score:</b> %{customdata[8]:.2f}<br>
+        <b>Description Score:</b> %{customdata[9]:.2f}<br>
+        📃<b>Description:</b> %{customdata[5]}<br>
+        <extra></extra>
+        """,
+        marker=dict(size=6, opacity=0.8),
+        hoverlabel=dict(
+            bgcolor="#D4F1F9",       # Light blue background
+            font_size=11,            # Smaller font
+            font_family="Arial"
     )
 )
 
+    
 
     fig.add_trace(go.Scatter(x=X_full.flatten(), y=y_pred, mode='lines', name='Fit', line=dict(color='black')))
     if highlight_name:
@@ -405,6 +406,7 @@ df["BERTopic_Topic"] = topics
 # Show interactive topic plot
 fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
+
 
 
 
