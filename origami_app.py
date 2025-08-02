@@ -226,8 +226,6 @@ This regression calculates a **Complexity Score** based on a prior 5-point diffi
     
 **Note:** All origami model information and images are sourced from [origami-database.com](https://origami-database.com/models/). The models were not created by me. For inquiries in regard to information the Origami Database please contact the site author directly at **info@origami-database.com**.
 """, unsafe_allow_html=True)
-st.markdown(f"### Total Observations: {df.shape[0]}")
-
 
 # --- Streamlit UI ---
 st.title("📐 Origami Model Complexity Tracker")
@@ -238,7 +236,6 @@ This dashboard provides a collection of origami models and attributes a difficul
 
 [📁 Check out the Origami Database(https://origami-database.com/models/)
 """, unsafe_allow_html=True)
-
 
  # --- Load dataset from GitHub ---
 @st.cache_data
@@ -413,6 +410,7 @@ st.markdown("""
 """)
 st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
 st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
 
 
 
