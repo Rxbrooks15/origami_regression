@@ -248,26 +248,29 @@ y = df_clean["GAMI"].values
 x_range = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
 
 # --- Models ---
-# Linear Regression
 lin_model = LinearRegression().fit(X, y)
 y_lin = lin_model.predict(x_range)
 r2_lin = r2_score(y, lin_model.predict(X))
 
-# Logarithmic Regression
 X_log = np.log(X)
 log_model = LinearRegression().fit(X_log, y)
 y_log = log_model.predict(np.log(x_range))
 r2_log = r2_score(y, log_model.predict(X_log))
 
-# Decision Tree
 dt_model = DecisionTreeRegressor(max_depth=5, random_state=42).fit(X, y)
 y_dt = dt_model.predict(x_range)
 r2_dt = r2_score(y, dt_model.predict(X))
 
-# Random Forest (Default/Dominant)
 rf_model = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42).fit(X, y)
 y_rf = rf_model.predict(x_range)
 r2_rf = r2_score(y, rf_model.predict(X))
+
+# --- Sidebar: Model Selector ---
+model_choice = st.sidebar.radio(
+    "Choose Regression Model:",
+    ("🌲 Random Forest", "Linear", "Logarithmic", "Decision Tree"),
+    index=0  # default Random Forest
+)
 
 # --- Interactive Plot ---
 fig = px.scatter(
@@ -280,21 +283,32 @@ fig = px.scatter(
         "Edge_Count": True, "Difficulty_Numeric": True, "GAMI": True
     },
     labels={"time_minutes": "Folding Time (Minutes)", "GAMI": "GAMI Score"},
-    title=f"📊 GAMI vs Folding Time (Default: Random Forest) | Random Forest R²={r2_rf:.3f}"
 )
 
-# Add regression lines (Random Forest last so it's on top)
-fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_lin, mode="lines",
-                         name=f"Linear (R²={r2_lin:.3f})", line=dict(color="blue", width=2)))
-fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_log, mode="lines",
-                         name=f"Logarithmic (R²={r2_log:.3f})", line=dict(color="purple", width=2)))
-fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_dt, mode="lines",
-                         name=f"Decision Tree (R²={r2_dt:.3f})", line=dict(color="red", width=2)))
-fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_rf, mode="lines",
-                         name=f"🌲 Random Forest (R²={r2_rf:.3f})", line=dict(color="green", width=4)))
+# --- Add only the chosen regression line ---
+if model_choice == "Linear":
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_lin, mode="lines",
+                             name=f"Linear (R²={r2_lin:.3f})", line=dict(color="blue", width=2)))
+    fig.update_layout(title=f"GAMI vs Folding Time | Linear R²={r2_lin:.3f}")
+
+elif model_choice == "Logarithmic":
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_log, mode="lines",
+                             name=f"Logarithmic (R²={r2_log:.3f})", line=dict(color="purple", width=2)))
+    fig.update_layout(title=f"GAMI vs Folding Time | Logarithmic R²={r2_log:.3f}")
+
+elif model_choice == "Decision Tree":
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_dt, mode="lines",
+                             name=f"Decision Tree (R²={r2_dt:.3f})", line=dict(color="red", width=2)))
+    fig.update_layout(title=f"GAMI vs Folding Time | Decision Tree R²={r2_dt:.3f}")
+
+else:  # 🌲 Random Forest default
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_rf, mode="lines",
+                             name=f"🌲 Random Forest (R²={r2_rf:.3f})", line=dict(color="green", width=4)))
+    fig.update_layout(title=f"GAMI vs Folding Time | Random Forest R²={r2_rf:.3f}")
 
 # --- Show in Streamlit ---
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 st.markdown("""
@@ -409,6 +423,7 @@ fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
+
 
 
 
