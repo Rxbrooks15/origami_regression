@@ -265,20 +265,36 @@ rf_model = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42)
 y_rf = rf_model.predict(x_range)
 r2_rf = r2_score(y, rf_model.predict(X))
 
-# --- Sidebar: Model Selector ---
+# --- Sidebar: Search + Model Choice ---
+search_query = st.sidebar.text_input("🔎 Search Model Name")
+highlight_name = None
+
+if search_query:
+    match = df_clean[df_clean["Name"].str.contains(search_query, case=False, na=False)]
+    if not match.empty:
+        selected = match.iloc[0]
+        highlight_name = selected["Name"]
+        st.sidebar.image(selected.get("Image_github") if "Image_github" in selected else None,
+                         caption=selected["Name"], width=220)
+        st.sidebar.write(f"**Creator:** {selected.get('Creator', 'Unknown')}")
+        st.sidebar.write(f"**Difficulty:** {selected.get('Difficulty', 'Unknown')}")
+        st.sidebar.write(f"**Description:** {selected.get('Description', '')[:150]}...")
+        
 model_choice = st.sidebar.radio(
     "Choose Regression For Gami Model:",
     ("🌲 Random Forest", "Linear", "Logarithmic", "Decision Tree"),
-    index=0  # default Random Forest
+    index=0
 )
 
-# --- Interactive Plot ---
-# --- Interactive GAMI Plot with Enhanced Hover ---
+# --- Difficulty Colors ---
+difficulty_colors = {1: "blue", 2: "lightblue", 3: "orange", 4: "darkorange", 5: "red"}
+
+# --- Interactive Scatter Plot ---
 fig = px.scatter(
     df_clean,
     x="time_minutes",
     y="GAMI",
-    color=df_clean["Difficulty_Numeric"].astype(str),  # Discrete colors
+    color=df_clean["Difficulty_Numeric"].astype(str),
     color_discrete_map={str(k): v for k, v in difficulty_colors.items()},
     custom_data=[
         'Image_github', 'Name', 'Keyword_Score', 'Edge_Count', 
@@ -289,46 +305,53 @@ fig = px.scatter(
         "GAMI": "💲 GAMI Score",
         "Difficulty_Numeric": "Difficulty"
     },
-    title=f"💲GAMI vs 🕒Folding Time | Random Forest Fit R²={r2_rf:.3f}"
+    title="💲GAMI vs 🕒Folding Time"
 )
 
 fig.update_traces(
     hovertemplate="""
-    🏷️ <b>%{customdata[1]}</b><br>
-    ⏱️ <b>%{x:.1f}</b> minutes<br>
-    💲 <b>GAMI:</b> %{customdata[5]:.2f}<br>
-    📊 <b>Difficulty:</b> %{customdata[4]}<br>
-    🔑 <b>Keyword Score:</b> %{customdata[2]:.2f}<br>
-    🧩 <b>Edge Count:</b> %{customdata[3]}<br>
-    📃 <b>Description:</b> %{customdata[6]}<br>
+    <b>%{customdata[1]}</b><br>
+    ⏱️ Folding Time: %{x:.1f} minutes<br>
+    💲 GAMI: %{customdata[5]:.2f}<br>
+    📊 Difficulty: %{customdata[4]}<br>
+    🔑 Keyword Score: %{customdata[2]:.2f}<br>
+    🧩 Edge Count: %{customdata[3]}<br>
+    📃 Description: %{customdata[6]}<br>
     <extra></extra>
     """,
     marker=dict(size=6, opacity=0.8),
-    hoverlabel=dict(
-        bgcolor="#D4F1F9",       
-        font_size=11,
-        font_family="Arial"
-    )
+    hoverlabel=dict(bgcolor="#D4F1F9", font_size=11, font_family="Arial")
 )
 
-# Add Random Forest regression line (default model)
-fig.add_trace(go.Scatter(
-    x=x_range.flatten(),
-    y=y_rf,
-    mode="lines",
-    name=f"🌲 Random Forest (R²={r2_rf:.3f})",
-    line=dict(color="green", width=3)
-))
+# --- Add chosen regression line ---
+if model_choice == "Linear":
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_lin, mode="lines",
+                             name=f"Linear (R²={r2_lin:.3f})", line=dict(color="blue", width=2)))
+    fig.update_layout(title=f"GAMI vs Folding Time | Linear R²={r2_lin:.3f}")
 
-# Optional: Highlight model if user searched
-if 'highlight_name' in locals() and highlight_name:
+elif model_choice == "Logarithmic":
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_log, mode="lines",
+                             name=f"Logarithmic (R²={r2_log:.3f})", line=dict(color="purple", width=2)))
+    fig.update_layout(title=f"GAMI vs Folding Time | Logarithmic R²={r2_log:.3f}")
+
+elif model_choice == "Decision Tree":
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_dt, mode="lines",
+                             name=f"Decision Tree (R²={r2_dt:.3f})", line=dict(color="red", width=2)))
+    fig.update_layout(title=f"GAMI vs Folding Time | Decision Tree R²={r2_dt:.3f}")
+
+else:
+    fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_rf, mode="lines",
+                             name=f"🌲 Random Forest (R²={r2_rf:.3f})", line=dict(color="green", width=4)))
+    fig.update_layout(title=f"GAMI vs Folding Time | Random Forest R²={r2_rf:.3f}")
+
+# --- Highlight searched model ---
+if highlight_name:
     match = df_clean[df_clean["Name"].str.lower() == highlight_name.lower()]
     if not match.empty:
         x_val = match["time_minutes"].values[0]
         y_val = match["GAMI"].values[0]
         name_val = match["Name"].values[0]
 
-        # Outer circle
         fig.add_trace(go.Scatter(
             x=[x_val], y=[y_val],
             mode='markers',
@@ -337,7 +360,6 @@ if 'highlight_name' in locals() and highlight_name:
             showlegend=False,
             hoverinfo='skip'
         ))
-        # Inner dot with label
         fig.add_trace(go.Scatter(
             x=[x_val], y=[y_val],
             mode='markers+text',
@@ -348,6 +370,7 @@ if 'highlight_name' in locals() and highlight_name:
             name="🔴 Highlighted"
         ))
 
+# --- Show Plot ---
 st.plotly_chart(fig, use_container_width=True)
 
 
@@ -489,6 +512,7 @@ fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
+
 
 
 
