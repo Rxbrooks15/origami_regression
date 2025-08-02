@@ -172,6 +172,48 @@ def process_and_plot(df, highlight_name=None):
 )
 
     fig.add_trace(go.Scatter(x=X_full.flatten(), y=y_pred, mode='lines', name='Fit', line=dict(color='black')))
+    if highlight_name:
+        match = df[df["Name"].str.lower() == highlight_name.lower()]
+        if not match.empty:
+            x_val = match["time_minutes"].values[0]
+            y_val = match["Complexity_Score"].values[0]
+            name_val = match["Name"].values[0]
+
+        # Outer bold circle
+            fig.add_trace(go.Scatter(
+                x=[x_val],
+                y=[y_val],
+                mode='markers',
+                marker=dict(
+                    size=10,
+                    color='rgba(255,0,0,0)',  # Transparent fill
+                    line=dict(color='red', width=3),
+                    symbol='circle'
+                ),
+                showlegend=False,
+                hoverinfo='skip'
+            ))
+
+        # Inner dot
+            fig.add_trace(go.Scatter(
+                x=[x_val],
+                y=[y_val],
+                mode='markers+text',
+                name='🔴 Highlighted',
+                text=[name_val],
+                textposition="top center",
+                marker=dict(
+                    size=3,
+                    color='red',
+                    symbol='circle'
+                ),
+                textfont=dict(
+                    color='red',
+                    size=14
+                )
+            ))
+    
+    st.plotly_chart(fig, use_container_width=True)
     # --- Load dataset from GitHub ---
 @st.cache_data
 def load_data():
@@ -242,48 +284,6 @@ fig.add_trace(go.Scatter(x=x_range.flatten(), y=y_rf, mode="lines",
 # --- Show in Streamlit ---
 st.plotly_chart(fig, use_container_width=True)
 
-    if highlight_name:
-        match = df[df["Name"].str.lower() == highlight_name.lower()]
-        if not match.empty:
-            x_val = match["time_minutes"].values[0]
-            y_val = match["Complexity_Score"].values[0]
-            name_val = match["Name"].values[0]
-
-        # Outer bold circle
-            fig.add_trace(go.Scatter(
-                x=[x_val],
-                y=[y_val],
-                mode='markers',
-                marker=dict(
-                    size=10,
-                    color='rgba(255,0,0,0)',  # Transparent fill
-                    line=dict(color='red', width=3),
-                    symbol='circle'
-                ),
-                showlegend=False,
-                hoverinfo='skip'
-            ))
-
-        # Inner dot
-            fig.add_trace(go.Scatter(
-                x=[x_val],
-                y=[y_val],
-                mode='markers+text',
-                name='🔴 Highlighted',
-                text=[name_val],
-                textposition="top center",
-                marker=dict(
-                    size=3,
-                    color='red',
-                    symbol='circle'
-                ),
-                textfont=dict(
-                    color='red',
-                    size=14
-                )
-            ))
-    
-    st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""
     The goal of this logarithm regression model is to guide users in selecting origami designs that match their skill level, while also offering an easy way to browse a wide variety of models along with their estimated difficulty scores.
@@ -416,6 +416,7 @@ st.markdown("""
 """)
 st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
 st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
 
 
 
