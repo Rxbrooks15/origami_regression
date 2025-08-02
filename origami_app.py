@@ -297,17 +297,6 @@ This regression calculates a **Complexity Score** based on a prior 5-point diffi
 **Note:** All origami model information and images are sourced from [origami-database.com](https://origami-database.com/models/). The models were not created by me. For inquiries in regard to information the Origami Database please contact the site author directly at **info@origami-database.com**.
 """, unsafe_allow_html=True)
 st.markdown(f"### Total Observations: {df.shape[0]}")
-st.markdown("### Most difficult models:")
-st.dataframe(
-    df.sort_values('Complexity_Score', ascending=False)
-        .head(5)[['Name', 'Difficulty', 'Complexity_Score']],
-    use_container_width=True
-)
-st.markdown("### Most recent models:")
-st.dataframe(
-    df.head(5)[['Name', 'Difficulty', 'Complexity_Score']],
-    use_container_width=True
-)
 
 
 # --- Streamlit UI ---
@@ -421,6 +410,7 @@ st.markdown("""
 """)
 st.image("BERT_regression.png", caption="Folding Time vs Predicted Complexity with Log Regression", use_container_width=True)
 st.image("confusion.png", caption="Confusion Matrix for Classification =0.539", use_container_width=True)
+
 
 
 
