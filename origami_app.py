@@ -278,12 +278,25 @@ fig = px.scatter(
     x="time_minutes",
     y="GAMI",
     color="Difficulty_Numeric",
+    color_continuous_scale=[(0, "blue"), (1, "red")],  # 1 → blue, 5 → red
     hover_data={
-        "Name": True, "Keyword_Score": True,
-        "Edge_Count": True, "Difficulty_Numeric": True, "GAMI": True
+        "Name": True,
+        "Keyword_Score": True,
+        "Edge_Count": True,
+        "Difficulty_Numeric": True,
+        "GAMI": True
     },
-    labels={"time_minutes": "Folding Time (Minutes)", "GAMI": "Gami"},
+    labels={
+        "time_minutes": "Folding Time (Minutes)",
+        "GAMI": "GAMI Score",
+        "Difficulty_Numeric": "Difficulty (1=Easy → 5=Complex)"
+    },
 )
+
+# Reverse the colorbar so high difficulty = red
+fig.update_coloraxes(reversescale=False)
+
+st.plotly_chart(fig, use_container_width=True)
 
 # --- Add only the chosen regression line ---
 if model_choice == "Linear":
@@ -423,6 +436,7 @@ fig_html = topic_model.visualize_topics().to_html()
 components.html(fig_html, height=700, scrolling=True)
 
 import streamlit as st
+
 
 
 
