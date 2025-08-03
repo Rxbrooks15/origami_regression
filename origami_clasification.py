@@ -47,12 +47,10 @@ def get_gradcam(model, img_batch, pred_class):
 # --- Streamlit App ---
 st.title("📸 Origami Difficulty Classification: Application of Convolutional Neural Networks in the Realm of Origami")
 uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
- 
 
 if uploaded_file is not None:
     # Read uploaded image
     image = Image.open(uploaded_file)
-    st.image(image, use_container_width=True, caption="Uploaded Origami Image")
 
     # Preprocess
     img_rgb, img_bgr = preprocess_image(image)
@@ -95,19 +93,17 @@ if uploaded_file is not None:
     axes[1,1].axis("off")
 
     st.pyplot(fig)
-     # Show uploaded image last
+
+    # Show uploaded image only once at the end
     st.image(image, use_container_width=True, caption="Uploaded Origami Image")
+
 # --- Citations ---
 st.markdown("""
-    ---
+---
 **Acknowledgments**
 
-This project leverages Convolutional Neural Networks to predict origami difficulty (easy, intermediate, and complex). This would not have been possible without:
+This project leverages Convolutional Neural Networks to predict origami difficulty (easy, intermediate, and complex).  
+It would not have been possible without:
 
 - *OrigamiSet1.0: Two New Datasets for Origami Classification and Difficulty Estimation*  
-D. Ma, G. Friedland, M.M. Krell (2018). In *Proceedings of Origami Science, Mathematics, and Education (7OSME)*, Oxford, UK.  
-- [Origami Database](https://origamidatabase.com). Website includes high-resolution images, metadata and external resources such as diagrams, video tutorials and crease patterns.
-
-These resources help bring origami into the digital world, supporting both scientific research and broader community access.
-""")
-    
+  D. Ma, G. Friedland, M.M. Kr
