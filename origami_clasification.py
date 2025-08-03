@@ -45,7 +45,7 @@ def get_gradcam(model, img_batch, pred_class):
     return cv2.resize(heatmap, (128,128))
 
 # --- Streamlit App ---
-st.title("📸 Origami Difficulty Classification: Application of Convolutional Neural Networks in the Realm of origami")
+st.title("📸 Origami Difficulty Classification: Application of Convolutional Neural Networks in the Realm of Origami")
 uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
  # --- Citations ---
 st.markdown("""
