@@ -104,16 +104,16 @@ if uploaded_file is not None:
     for idx, (level, img_path) in enumerate(reference_images.items()):
         with cols[idx]:
             st.image(img_path, caption=f"{level} Example", use_container_width=True)
-
-    # --- Rating Section ---
-    st.subheader("⭐ Rate Difficulty on 5-point Scale")
-    rating = st.slider("How close was the prediction to what you expected?", 
-                       min_value=1, max_value=5, value=3)
-    
     # --- User's own classification ---
     st.subheader("🔎 Your Classification")
-    user_class = st.radio("What do you think the difficulty should be?", 
+    user_class = st.radio("What do you think the difficulty should be (on 3-point scale)?", 
                           ["Easy", "Intermediate", "Complex"])
+    # --- Rating Section ---
+    st.subheader("⭐ Rate Difficulty on 5-point Scale")
+    rating = st.radio("What do you think the difficulty should be (on 5 point scale)?", 
+                       ["Easy","Moderate", "Intermediate", "Hard", "Complex"])
+    
+    
 
     # --- Submit button ---
     if st.button("Submit Feedback"):
