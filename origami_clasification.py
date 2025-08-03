@@ -106,13 +106,9 @@ if uploaded_file is not None:
             st.image(img_path, caption=f"{level} Example", use_container_width=True)
 
     # --- Rating Section ---
-    st.subheader("⭐ Rate the Prediction")
+    st.subheader("⭐ Rate Difficulty on 5-point Scale")
     rating = st.slider("How close was the prediction to what you expected?", 
                        min_value=1, max_value=5, value=3)
-    
-    # --- Feedback Section ---
-    st.subheader("💬 Feedback")
-    feedback_text = st.text_area("Leave your feedback here")
     
     # --- User's own classification ---
     st.subheader("🔎 Your Classification")
