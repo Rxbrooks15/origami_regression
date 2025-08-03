@@ -126,7 +126,8 @@ if uploaded_file is not None:
             owner = "Rxbrooks15"
             repo = "origami_regression"
             file_path = "user_feedback.csv"
-            token = st.secrets["GITHUB_TOKEN"]
+            token = st.secrets["GITHUB_ORIGO_TOKEN"]
+
 
             url = f"https://api.github.com/repos/{owner}/{repo}/contents/{file_path}"
             headers = {"Authorization": f"token {token}"}
