@@ -14,9 +14,9 @@ difficulty_map = {0: "Easy", 1: "Intermediate", 2: "Complex"}
 
 # --- Reference images for each difficulty ---
 reference_images = {
-    "Easy": "easy_example.jpg",          # replace with paths or URLs
-    "Intermediate": "intermediate_example.jpg",
-    "Complex": "complex_example.jpg"
+    "Easy": "DSC00617-export-3000x3000.jpg",        # Rat
+    "Intermediate": "DSC02215-export-scaled.jpg",   # Unicorn
+    "Complex": "DSC03255-export-900x900.jpg"        # Dragon
 }
 
 # --- Functions ---
@@ -97,6 +97,13 @@ if uploaded_file is not None:
     # Show uploaded image at the end
     st.image(image, use_container_width=True, caption="Uploaded Origami Image")
 
+    # --- Show Reference Images Before Rating ---
+    st.subheader("📌 Reference Difficulty Examples")
+    cols = st.columns(3)
+    for idx, (level, img_path) in enumerate(reference_images.items()):
+        with cols[idx]:
+            st.image(img_path, caption=f"{level} Example", use_container_width=True)
+
     # --- Rating Section ---
     st.subheader("⭐ Rate the Prediction")
     rating = st.slider("How close was the prediction to what you expected?", 
@@ -114,7 +121,6 @@ if uploaded_file is not None:
     # --- Submit button ---
     if st.button("Submit Feedback"):
         st.success(f"✅ Thank you! You rated this {rating}/5, chose '{user_class}', and left feedback: {feedback_text}")
-        
 
 # --- Citations ---
 st.markdown("""
