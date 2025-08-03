@@ -123,11 +123,9 @@ if uploaded_file is not None:
                           ["Easy", "Intermediate", "Complex"])
 
     st.subheader("⭐ Rate Difficulty on 5-point Scale")
-    rating = st.radio("How would you rate this difficulty?", 
+    rating = st.radio("What di you think the difficulty should be?", 
                       ["Easy", "Moderate", "Intermediate", "Hard", "Complex"])
 
-    st.subheader("💬 Feedback")
-    feedback_text = st.text_area("Leave your feedback here")
 
     # --- Save Feedback ---
     if st.button("Submit Feedback"):
