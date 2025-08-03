@@ -19,7 +19,6 @@ tensorflow
 keras
 opencv-python-headless
 Pillow
-PyGithub
 
 
 
