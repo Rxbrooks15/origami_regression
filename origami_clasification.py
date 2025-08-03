@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from PIL import Image
+import pandas as pd
+import os
+from datetime import datetime
 
 # --- Load trained model ---
 model = load_model("origami_image_classification.keras")
@@ -14,11 +17,19 @@ difficulty_map = {0: "Easy", 1: "Intermediate", 2: "Complex"}
 
 # --- Reference images for each difficulty (raw GitHub URLs) ---
 reference_images = {
-    "Easy": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC00617-export-3000x3000.jpg",        # Rat
-    "Intermediate": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC02215-export-scaled.jpg",   # Unicorn
-    "Complex": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC03255-export-900x900.jpg"        # Dragon
+    "Easy": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC00617-export-3000x3000.jpg",
+    "Intermediate": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC02215-export-scaled.jpg",
+    "Complex": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC03255-export-900x900.jpg"
 }
 
+# --- Dataset Path ---
+feedback_file = "user_feedback.csv"
+if not os.path.exists(feedback_file):
+    df = pd.DataFrame(columns=[
+        "timestamp", "image_path", "edge_count", "confidence",
+        "predicted_difficulty", "user_class", "rating_5scale", "feedback"
+    ])
+    df.to_csv(feedback_file, index=False)
 
 # --- Functions ---
 def preprocess_image(image, IMG_SIZE=(128,128)):
@@ -67,6 +78,7 @@ if uploaded_file is not None:
     preds = model.predict(img_batch)
     pred_class = np.argmax(preds[0])
     confidence = np.max(preds[0])
+    predicted_difficulty = difficulty_map[pred_class]
 
     # Grad-CAM
     heatmap = get_gradcam(model, img_batch, pred_class)
@@ -84,11 +96,11 @@ if uploaded_file is not None:
     axes[0,1].axis("off")
 
     axes[1,0].imshow(overlay)
-    axes[1,0].set_title(f"Grad-CAM Heatmap\nPred: {difficulty_map[pred_class]} ({confidence:.2f})")
+    axes[1,0].set_title(f"Grad-CAM Heatmap\nPred: {predicted_difficulty} ({confidence:.2f})")
     axes[1,0].axis("off")
 
     axes[1,1].text(0.5, 0.5,
-                  f"Predicted: {difficulty_map[pred_class]}\nConfidence: {confidence:.2f}\nEdges: {edge_count}",
+                  f"Predicted: {predicted_difficulty}\nConfidence: {confidence:.2f}\nEdges: {edge_count}",
                   fontsize=14, ha="center", va="center")
     axes[1,1].set_title("Prediction Metrics")
     axes[1,1].axis("off")
@@ -104,32 +116,37 @@ if uploaded_file is not None:
     for idx, (level, img_path) in enumerate(reference_images.items()):
         with cols[idx]:
             st.image(img_path, caption=f"{level} Example", use_container_width=True)
-    # --- User's own classification ---
-    st.subheader("🔎 Your Classification")
-    user_class = st.radio("What do you think the difficulty should be (on 3-point scale)?", 
+
+    # --- User Ratings ---
+    st.subheader("🔎 Your Classification (3-point scale)")
+    user_class = st.radio("What do you think the difficulty should be?", 
                           ["Easy", "Intermediate", "Complex"])
-    # --- Rating Section ---
+
     st.subheader("⭐ Rate Difficulty on 5-point Scale")
-    rating = st.radio("What do you think the difficulty should be (on 5 point scale)?", 
-                       ["Easy","Moderate", "Intermediate", "Hard", "Complex"])
-    
-    
+    rating = st.radio("How would you rate this difficulty?", 
+                      ["Easy", "Moderate", "Intermediate", "Hard", "Complex"])
 
-    # --- Submit button ---
+    st.subheader("💬 Feedback")
+    feedback_text = st.text_area("Leave your feedback here")
+
+    # --- Save Feedback ---
     if st.button("Submit Feedback"):
-        st.success(f"✅ Thank you! You rated this {rating}/5, chose '{user_class}', and left feedback: {feedback_text}")
+        image_save_path = f"uploaded_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
+        image.save(image_save_path)
 
-# --- Citations ---
-st.markdown("""
----
-**Acknowledgments**
+        new_feedback = pd.DataFrame([{
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "image_path": image_save_path,
+            "edge_count": int(edge_count),
+            "confidence": round(float(confidence), 2),
+            "predicted_difficulty": predicted_difficulty,
+            "user_class": user_class,
+            "rating_5scale": rating,
+            "feedback": feedback_text
+        }])
 
-This project leverages Convolutional Neural Networks to predict origami difficulty (easy, intermediate, and complex).  
-It would not have been possible without:
+        df = pd.read_csv(feedback_file)
+        df = pd.concat([df, new_feedback], ignore_index=True)
+        df.to_csv(feedback_file, index=False)
 
-- *OrigamiSet1.0: Two New Datasets for Origami Classification and Difficulty Estimation*  
-  D. Ma, G. Friedland, M.M. Krell (2018). In *Proceedings of Origami Science, Mathematics, and Education (7OSME)*, Oxford, UK.  
-- [Origami Database](https://origamidatabase.com) — includes high-resolution images, metadata, and external resources such as diagrams, video tutorials, and crease patterns.
-
-These resources help bring origami into the digital world, supporting both scientific research and broader community access.
-""")
+        st.success("✅ Thank you! Your feedback and image have been saved.")
