@@ -7,7 +7,9 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 import pandas as pd
 from datetime import datetime
-from github import Github
+import requests
+import base64
+import json
 import io
 
 # --- Load trained model ---
@@ -50,7 +52,8 @@ def get_gradcam(model, img_batch, pred_class):
     return cv2.resize(heatmap, (128,128))
 
 # --- Streamlit App ---
-st.title("📸 Origami Difficulty Classification: Application of Convolutional Neural Networks in the Realm of Origami")
+st.title("📸 Origami Difficulty Classification with Grad-CAM")
+
 uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
@@ -70,6 +73,7 @@ if uploaded_file is not None:
     preds = model.predict(img_batch)
     pred_class = np.argmax(preds[0])
     confidence = np.max(preds[0])
+    predicted_label = difficulty_map[pred_class]
 
     # Grad-CAM
     heatmap = get_gradcam(model, img_batch, pred_class)
@@ -87,11 +91,11 @@ if uploaded_file is not None:
     axes[0,1].axis("off")
 
     axes[1,0].imshow(overlay)
-    axes[1,0].set_title(f"Grad-CAM Heatmap\nPred: {difficulty_map[pred_class]} ({confidence:.2f})")
+    axes[1,0].set_title(f"Grad-CAM Heatmap\nPred: {predicted_label} ({confidence:.2f})")
     axes[1,0].axis("off")
 
     axes[1,1].text(0.5, 0.5,
-                  f"Predicted: {difficulty_map[pred_class]}\nConfidence: {confidence:.2f}\nEdges: {edge_count}",
+                  f"Predicted: {predicted_label}\nConfidence: {confidence:.2f}\nEdges: {edge_count}",
                   fontsize=14, ha="center", va="center")
     axes[1,1].set_title("Prediction Metrics")
     axes[1,1].axis("off")
@@ -110,47 +114,61 @@ if uploaded_file is not None:
 
     # --- Feedback Form ---
     with st.form(key="feedback_form"):
-        user_class = st.radio("What do you think the difficulty should be on a 3-point scale)?",
+        user_class = st.radio("What do you think the difficulty should be on a 3-point scale?",
                               ["Easy", "Intermediate", "Complex"])
-        rating = st.radio("What do you think the difficulty should be on a 5-point scale)?",
+        rating = st.radio("What do you think the difficulty should be on a 5-point scale?",
                           ["Easy", "Moderate", "Intermediate", "Hard", "Complex"])
         feedback_text = st.text_area("Leave your feedback here")
         submit_button = st.form_submit_button("Submit Feedback")
 
         if submit_button:
-            # --- Save to GitHub CSV ---
-            g = Github(st.secrets["GITHUB_TOKEN"])
-            repo = g.get_user("Rxbrooks15").get_repo("origami_regression")
+            # --- Save to GitHub CSV (REST API) ---
+            owner = "Rxbrooks15"
+            repo = "origami_regression"
             file_path = "user_feedback.csv"
+            token = st.secrets["GITHUB_TOKEN"]
 
-            try:
-                file = repo.get_contents(file_path)
-                content = file.decoded_content.decode()
+            url = f"https://api.github.com/repos/{owner}/{repo}/contents/{file_path}"
+            headers = {"Authorization": f"token {token}"}
+
+            # Get file if it exists
+            r = requests.get(url, headers=headers)
+            if r.status_code == 200:
+                file_data = r.json()
+                sha = file_data["sha"]
+                content = base64.b64decode(file_data["content"]).decode("utf-8")
                 df = pd.read_csv(io.StringIO(content))
-            except:
+            else:
+                sha = None
                 df = pd.DataFrame(columns=[
-                    "timestamp", "image_name", "edge_count",
-                    "confidence", "predicted_difficulty",
-                    "user_class", "rating_5scale", "feedback"
+                    "timestamp", "image_name", "edge_count", "confidence",
+                    "predicted_difficulty", "user_class", "rating_5scale", "feedback"
                 ])
 
+            # Add feedback row
             new_feedback = pd.DataFrame([{
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "image_name": uploaded_file.name,
                 "edge_count": int(edge_count),
                 "confidence": round(float(confidence), 2),
-                "predicted_difficulty": difficulty_map[pred_class],
+                "predicted_difficulty": predicted_label,
                 "user_class": user_class,
                 "rating_5scale": rating,
                 "feedback": feedback_text
             }])
-
             df = pd.concat([df, new_feedback], ignore_index=True)
+
+            # Upload CSV to GitHub
             csv_data = df.to_csv(index=False)
+            payload = {
+                "message": "Update feedback",
+                "content": base64.b64encode(csv_data.encode()).decode()
+            }
+            if sha:
+                payload["sha"] = sha
 
-            if 'file' in locals():
-                repo.update_file(file_path, "Update feedback", csv_data, file.sha)
+            put_r = requests.put(url, headers=headers, data=json.dumps(payload))
+            if put_r.status_code in [200, 201]:
+                st.success("✅ Thank you! Your feedback has been saved to GitHub.")
             else:
-                repo.create_file(file_path, "Create feedback file", csv_data)
-
-            st.success("✅ Thank you! Your feedback has been saved.")
+                st.error(f"⚠️ Error saving feedback: {put_r.json()}")
