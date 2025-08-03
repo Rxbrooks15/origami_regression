@@ -5,3 +5,4 @@ timestamp,image_name,edge_count,confidence,predicted_difficulty,user_class,ratin
 2025-08-03 22:51:39,13ORIGAMI4-superJumbo-v2.jpg,1386,0.54,Complex,Complex,Complex,test
 2025-08-03 22:53:58,5821939f405e1_58218778994c0_1570406273.jpg,1494,0.47,Complex,Complex,Hard,Origo to the moon
 2025-08-03 23:00:30,origami-hopping-bunny-rabbit-tutorial-00-2-400x400.jpg,857,0.65,Easy,Easy,Easy,I like your work 
+2025-08-03 23:06:33,DSC00568-export-3000x3000.jpg,564,0.79,Easy,Easy,Moderate,test
