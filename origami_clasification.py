@@ -25,20 +25,26 @@ def preprocess_image(image, IMG_SIZE=(128,128)):
 def get_gradcam(model, img_batch, pred_class):
     last_conv_layer_name = [layer.name for layer in model.layers if 'conv' in layer.name][-1]
     grad_model = tf.keras.models.Model(
-        [model.inputs],
+        [model.inputs], 
         [model.get_layer(last_conv_layer_name).output, model.output]
     )
+
     with tf.GradientTape() as tape:
         conv_outputs, predictions = grad_model(img_batch)
+
+        # Fix shape issue
+        predictions = tf.reshape(predictions, (1, -1))
         loss = predictions[:, pred_class]
+
     grads = tape.gradient(loss, conv_outputs)
     pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+
     conv_outputs = conv_outputs[0].numpy()
     heatmap = np.sum(conv_outputs * pooled_grads.numpy(), axis=-1)
     heatmap = np.maximum(heatmap, 0)
     heatmap /= np.max(heatmap) + 1e-10
-    heatmap = cv2.resize(heatmap, (128,128))
-    return heatmap
+
+    return cv2.resize(heatmap, (128,128))
 
 # --- Streamlit App ---
 st.title("📸 Origami Difficulty Classification with Grad-CAM")
@@ -48,7 +54,8 @@ uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", 
 if uploaded_file is not None:
     # Read uploaded image
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(img, use_container_width=True)
+
 
     # Preprocess
     img_rgb, img_bgr = preprocess_image(image)
