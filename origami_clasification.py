@@ -15,7 +15,7 @@ difficulty_map = {0: "Easy", 1: "Intermediate", 2: "Complex"}
 # --- Reference images for each difficulty (raw GitHub URLs) ---
 reference_images = {
     "Easy": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC00617-export-3000x3000.jpg",        # Rat
-    "Intermediate": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC02215-export-scaled.jpg",   # Unicorn
+    "Intermediate": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC02454-export-900x900.jpg",   # Vulpin
     "Complex": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC03255-export-900x900.jpg"        # Dragon
 }
 
