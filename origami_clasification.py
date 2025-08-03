@@ -106,4 +106,8 @@ This project leverages Convolutional Neural Networks to predict origami difficul
 It would not have been possible without:
 
 - *OrigamiSet1.0: Two New Datasets for Origami Classification and Difficulty Estimation*  
-  D. Ma, G. Friedland, M.M. Kr
+  D. Ma, G. Friedland, M.M. Krell (2018). In *Proceedings of Origami Science, Mathematics, and Education (7OSME)*, Oxford, UK.  
+- [Origami Database](https://origamidatabase.com) — includes high-resolution images, metadata, and external resources such as diagrams, video tutorials, and crease patterns.
+
+These resources help bring origami into the digital world, supporting both scientific research and broader community access.
+""")
