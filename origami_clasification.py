@@ -47,8 +47,6 @@ def get_gradcam(model, img_batch, pred_class):
 # --- Streamlit App ---
 st.title("📸 Origami Difficulty Classification with Grad-CAM")
 
-uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
-
 if uploaded_file is not None:
     # Read uploaded image
     image = Image.open(uploaded_file)
@@ -95,3 +93,4 @@ if uploaded_file is not None:
     axes[1,1].axis("off")
 
     st.pyplot(fig)
+    uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
