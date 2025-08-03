@@ -7,6 +7,8 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 import pandas as pd
 from datetime import datetime
+from github import Github
+import io
 
 # --- Load trained model ---
 model = load_model("origami_image_classification.keras")
@@ -14,19 +16,12 @@ model = load_model("origami_image_classification.keras")
 # --- Difficulty Map ---
 difficulty_map = {0: "Easy", 1: "Intermediate", 2: "Complex"}
 
-# --- Reference images ---
+# --- Reference images for each difficulty (raw GitHub URLs) ---
 reference_images = {
     "Easy": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC00617-export-3000x3000.jpg",
     "Intermediate": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC02215-export-scaled.jpg",
     "Complex": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC03255-export-900x900.jpg"
 }
-
-# Initialize feedback dataset in session state
-if "feedback_df" not in st.session_state:
-    st.session_state.feedback_df = pd.DataFrame(columns=[
-        "timestamp", "image_name", "edge_count", "confidence",
-        "predicted_difficulty", "user_class", "rating_5scale", "feedback"
-    ])
 
 # --- Functions ---
 def preprocess_image(image, IMG_SIZE=(128,128)):
@@ -55,11 +50,14 @@ def get_gradcam(model, img_batch, pred_class):
     return cv2.resize(heatmap, (128,128))
 
 # --- Streamlit App ---
-st.title("📸 Origami Difficulty Classification: User Feedback Integration")
+st.title("📸 Origami Difficulty Classification: Application of Convolutional Neural Networks in the Realm of Origami")
 uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
+    # Read uploaded image
     image = Image.open(uploaded_file)
+
+    # Preprocess
     img_rgb, img_bgr = preprocess_image(image)
     edges = cv2.Canny(cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY), 75, 150)
     edge_count = np.sum(edges > 0)
@@ -68,51 +66,91 @@ if uploaded_file is not None:
     combined_input = np.concatenate([img_rgb, edges_norm], axis=-1)
     img_batch = np.expand_dims(combined_input, axis=0)
 
+    # Predict
     preds = model.predict(img_batch)
     pred_class = np.argmax(preds[0])
     confidence = np.max(preds[0])
-    predicted_difficulty = difficulty_map[pred_class]
 
-    # Show results
-    st.image(image, caption="Uploaded Origami Image", use_container_width=True)
+    # Grad-CAM
+    heatmap = get_gradcam(model, img_batch, pred_class)
+    heatmap_colored = cv2.applyColorMap(np.uint8(255 * heatmap), cv2.COLORMAP_JET)
+    overlay = cv2.addWeighted((img_rgb*255).astype(np.uint8), 0.6, heatmap_colored, 0.4, 0)
 
+    # --- Show Results in 4 Panels ---
+    fig, axes = plt.subplots(2, 2, figsize=(12,8))
+    axes[0,0].imshow(img_rgb)
+    axes[0,0].set_title("Original Image")
+    axes[0,0].axis("off")
+
+    axes[0,1].imshow(edges, cmap="gray")
+    axes[0,1].set_title(f"Edge Map (Count: {edge_count})")
+    axes[0,1].axis("off")
+
+    axes[1,0].imshow(overlay)
+    axes[1,0].set_title(f"Grad-CAM Heatmap\nPred: {difficulty_map[pred_class]} ({confidence:.2f})")
+    axes[1,0].axis("off")
+
+    axes[1,1].text(0.5, 0.5,
+                  f"Predicted: {difficulty_map[pred_class]}\nConfidence: {confidence:.2f}\nEdges: {edge_count}",
+                  fontsize=14, ha="center", va="center")
+    axes[1,1].set_title("Prediction Metrics")
+    axes[1,1].axis("off")
+
+    st.pyplot(fig)
+
+    # Show uploaded image
+    st.image(image, use_container_width=True, caption="Uploaded Origami Image")
+
+    # Reference examples
     st.subheader("📌 Reference Difficulty Examples")
     cols = st.columns(3)
     for idx, (level, img_path) in enumerate(reference_images.items()):
         with cols[idx]:
             st.image(img_path, caption=f"{level} Example", use_container_width=True)
 
-    # --- User Feedback Form ---
+    # --- Feedback Form ---
     with st.form(key="feedback_form"):
-        user_class = st.radio("What do you think the difficulty should be?", 
+        user_class = st.radio("What do you think the difficulty should be on a 3-point scale)?",
                               ["Easy", "Intermediate", "Complex"])
-        rating = st.radio("Rate Difficulty on 5-point Scale", 
+        rating = st.radio("What do you think the difficulty should be on a 5-point scale)?",
                           ["Easy", "Moderate", "Intermediate", "Hard", "Complex"])
         feedback_text = st.text_area("Leave your feedback here")
         submit_button = st.form_submit_button("Submit Feedback")
 
         if submit_button:
+            # --- Save to GitHub CSV ---
+            g = Github(st.secrets["GITHUB_TOKEN"])
+            repo = g.get_user("Rxbrooks15").get_repo("origami_regression")
+            file_path = "user_feedback.csv"
+
+            try:
+                file = repo.get_contents(file_path)
+                content = file.decoded_content.decode()
+                df = pd.read_csv(io.StringIO(content))
+            except:
+                df = pd.DataFrame(columns=[
+                    "timestamp", "image_name", "edge_count",
+                    "confidence", "predicted_difficulty",
+                    "user_class", "rating_5scale", "feedback"
+                ])
+
             new_feedback = pd.DataFrame([{
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "image_name": uploaded_file.name,
                 "edge_count": int(edge_count),
                 "confidence": round(float(confidence), 2),
-                "predicted_difficulty": predicted_difficulty,
+                "predicted_difficulty": difficulty_map[pred_class],
                 "user_class": user_class,
                 "rating_5scale": rating,
                 "feedback": feedback_text
             }])
 
-            st.session_state.feedback_df = pd.concat(
-                [st.session_state.feedback_df, new_feedback], ignore_index=True
-            )
+            df = pd.concat([df, new_feedback], ignore_index=True)
+            csv_data = df.to_csv(index=False)
+
+            if 'file' in locals():
+                repo.update_file(file_path, "Update feedback", csv_data, file.sha)
+            else:
+                repo.create_file(file_path, "Create feedback file", csv_data)
 
             st.success("✅ Thank you! Your feedback has been saved.")
-
-    # Display live dataset
-    st.subheader("📊 Current Feedback Dataset")
-    st.dataframe(st.session_state.feedback_df)
-
-    # Download button for dataset
-    csv = st.session_state.feedback_df.to_csv(index=False).encode("utf-8")
-    st.download_button("📥 Download Feedback CSV", csv, "user_feedback.csv", "text/csv")
