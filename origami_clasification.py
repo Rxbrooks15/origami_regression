@@ -94,3 +94,19 @@ if uploaded_file is not None:
     axes[1,1].axis("off")
 
     st.pyplot(fig)
+     # Show uploaded image last
+    st.image(image, use_container_width=True, caption="Uploaded Origami Image")
+     # --- Citations ---
+    st.markdown("""
+    ---
+    **Acknowledgments**
+
+    This project leverages research and resources that make origami more accessible in the digital space.  
+    It would not have been possible without:
+
+    - *OrigamiSet1.0: Two New Datasets for Origami Classification and Difficulty Estimation*  
+      D. Ma, G. Friedland, M.M. Krell (2018). In *Proceedings of Origami Science, Mathematics, and Education (7OSME)*, Oxford, UK.  
+    - [Origami Database](https://origamidatabase.com)
+
+    These resources help bring origami into the digital world, supporting both scientific research and broader community access.
+    """)
