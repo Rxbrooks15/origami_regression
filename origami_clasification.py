@@ -47,6 +47,20 @@ def get_gradcam(model, img_batch, pred_class):
 # --- Streamlit App ---
 st.title("📸 Origami Difficulty Classification with Grad-CAM")
 uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
+ # --- Citations ---
+st.markdown("""
+    ---
+**Acknowledgments**
+
+This project leverages Convolutional Neural Networks to predict origami difficulty (easy, intermediate, and complex). This  
+would not have been possible without:
+
+- *OrigamiSet1.0: Two New Datasets for Origami Classification and Difficulty Estimation*  
+D. Ma, G. Friedland, M.M. Krell (2018). In *Proceedings of Origami Science, Mathematics, and Education (7OSME)*, Oxford, UK.  
+- [Origami Database](https://origamidatabase.com)
+
+These resources help bring origami into the digital world, supporting both scientific research and broader community access.
+""")
 
 if uploaded_file is not None:
     # Read uploaded image
@@ -96,17 +110,4 @@ if uploaded_file is not None:
     st.pyplot(fig)
      # Show uploaded image last
     st.image(image, use_container_width=True, caption="Uploaded Origami Image")
-     # --- Citations ---
-    st.markdown("""
-    ---
-    **Acknowledgments**
-
-    This project leverages research and resources that make origami more accessible in the digital space.  
-    It would not have been possible without:
-
-    - *OrigamiSet1.0: Two New Datasets for Origami Classification and Difficulty Estimation*  
-      D. Ma, G. Friedland, M.M. Krell (2018). In *Proceedings of Origami Science, Mathematics, and Education (7OSME)*, Oxford, UK.  
-    - [Origami Database](https://origamidatabase.com)
-
-    These resources help bring origami into the digital world, supporting both scientific research and broader community access.
-    """)
+    
