@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from PIL import Image
-import io
 
 # --- Load trained model ---
 model = load_model("origami_image_classification.keras")
@@ -15,7 +14,7 @@ difficulty_map = {0: "Easy", 1: "Intermediate", 2: "Complex"}
 
 # --- Functions ---
 def preprocess_image(image, IMG_SIZE=(128,128)):
-    # Convert to OpenCV format
+    """Convert uploaded PIL image to RGB + BGR formats for processing"""
     img = np.array(image.convert("RGB"))
     img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
     img_bgr = cv2.resize(img_bgr, IMG_SIZE)
@@ -23,16 +22,15 @@ def preprocess_image(image, IMG_SIZE=(128,128)):
     return img_rgb, img_bgr
 
 def get_gradcam(model, img_batch, pred_class):
+    """Generate Grad-CAM heatmap for the predicted class"""
     last_conv_layer_name = [layer.name for layer in model.layers if 'conv' in layer.name][-1]
     grad_model = tf.keras.models.Model(
-        [model.inputs], 
+        [model.inputs],
         [model.get_layer(last_conv_layer_name).output, model.output]
     )
 
     with tf.GradientTape() as tape:
         conv_outputs, predictions = grad_model(img_batch)
-
-        # Fix shape issue
         predictions = tf.reshape(predictions, (1, -1))
         loss = predictions[:, pred_class]
 
@@ -54,8 +52,7 @@ uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", 
 if uploaded_file is not None:
     # Read uploaded image
     image = Image.open(uploaded_file)
-    st.image(img, use_container_width=True)
-
+    st.image(image, use_container_width=True, caption="Uploaded Origami Image")
 
     # Preprocess
     img_rgb, img_bgr = preprocess_image(image)
