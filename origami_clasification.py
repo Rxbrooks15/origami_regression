@@ -93,4 +93,3 @@ if uploaded_file is not None:
     axes[1,1].axis("off")
 
     st.pyplot(fig)
-    uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
