@@ -12,9 +12,15 @@ model = load_model("origami_image_classification.keras")
 # --- Difficulty Map ---
 difficulty_map = {0: "Easy", 1: "Intermediate", 2: "Complex"}
 
+# --- Reference images for each difficulty ---
+reference_images = {
+    "Easy": "easy_example.jpg",          # replace with paths or URLs
+    "Intermediate": "intermediate_example.jpg",
+    "Complex": "complex_example.jpg"
+}
+
 # --- Functions ---
 def preprocess_image(image, IMG_SIZE=(128,128)):
-    """Convert uploaded PIL image to RGB + BGR formats for processing"""
     img = np.array(image.convert("RGB"))
     img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
     img_bgr = cv2.resize(img_bgr, IMG_SIZE)
@@ -22,26 +28,21 @@ def preprocess_image(image, IMG_SIZE=(128,128)):
     return img_rgb, img_bgr
 
 def get_gradcam(model, img_batch, pred_class):
-    """Generate Grad-CAM heatmap for the predicted class"""
     last_conv_layer_name = [layer.name for layer in model.layers if 'conv' in layer.name][-1]
     grad_model = tf.keras.models.Model(
         [model.inputs],
         [model.get_layer(last_conv_layer_name).output, model.output]
     )
-
     with tf.GradientTape() as tape:
         conv_outputs, predictions = grad_model(img_batch)
         predictions = tf.reshape(predictions, (1, -1))
         loss = predictions[:, pred_class]
-
     grads = tape.gradient(loss, conv_outputs)
     pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
-
     conv_outputs = conv_outputs[0].numpy()
     heatmap = np.sum(conv_outputs * pooled_grads.numpy(), axis=-1)
     heatmap = np.maximum(heatmap, 0)
     heatmap /= np.max(heatmap) + 1e-10
-
     return cv2.resize(heatmap, (128,128))
 
 # --- Streamlit App ---
@@ -73,7 +74,6 @@ if uploaded_file is not None:
 
     # --- Show Results in 4 Panels ---
     fig, axes = plt.subplots(2, 2, figsize=(12,8))
-
     axes[0,0].imshow(img_rgb)
     axes[0,0].set_title("Original Image")
     axes[0,0].axis("off")
@@ -94,8 +94,27 @@ if uploaded_file is not None:
 
     st.pyplot(fig)
 
-    # Show uploaded image only once at the end
+    # Show uploaded image at the end
     st.image(image, use_container_width=True, caption="Uploaded Origami Image")
+
+    # --- Rating Section ---
+    st.subheader("⭐ Rate the Prediction")
+    rating = st.slider("How close was the prediction to what you expected?", 
+                       min_value=1, max_value=5, value=3)
+    
+    # --- Feedback Section ---
+    st.subheader("💬 Feedback")
+    feedback_text = st.text_area("Leave your feedback here")
+    
+    # --- User's own classification ---
+    st.subheader("🔎 Your Classification")
+    user_class = st.radio("What do you think the difficulty should be?", 
+                          ["Easy", "Intermediate", "Complex"])
+
+    # --- Submit button ---
+    if st.button("Submit Feedback"):
+        st.success(f"✅ Thank you! You rated this {rating}/5, chose '{user_class}', and left feedback: {feedback_text}")
+        
 
 # --- Citations ---
 st.markdown("""
