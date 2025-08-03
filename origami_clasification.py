@@ -121,19 +121,40 @@ if uploaded_file is not None:
         feedback_text = st.text_area("Leave your feedback here")
         submit_button = st.form_submit_button("Submit Feedback")
 
-        if submit_button:
-            # --- Save to GitHub CSV (REST API) ---
+                if submit_button:
+            # --- GitHub setup ---
             owner = "Rxbrooks15"
             repo = "origami_regression"
-            file_path = "user_feedback.csv"
+            feedback_file = "user_feedback.csv"
             token = st.secrets["GITHUB_ORIGO_TOKEN"]
 
-
-            url = f"https://api.github.com/repos/{owner}/{repo}/contents/{file_path}"
             headers = {"Authorization": f"token {token}"}
 
-            # Get file if it exists
-            r = requests.get(url, headers=headers)
+            # --- 1. Upload image to new_origami folder ---
+            img_bytes = io.BytesIO()
+            image.save(img_bytes, format="JPEG")
+            img_base64 = base64.b64encode(img_bytes.getvalue()).decode()
+
+            img_filename = f"new_origami/{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uploaded_file.name}"
+            img_url = f"https://api.github.com/repos/{owner}/{repo}/contents/{img_filename}"
+
+            img_payload = {
+                "message": "Add new origami upload",
+                "content": img_base64
+            }
+            img_put = requests.put(img_url, headers=headers, data=json.dumps(img_payload))
+            if img_put.status_code in [200, 201]:
+                st.info("📤 Uploaded image saved to GitHub (new_origami).")
+            else:
+                st.error(f"⚠️ Error uploading image: {img_put.json()}")
+                img_filename = "upload_failed"
+
+            # Direct link to the uploaded image
+            image_link = f"https://raw.githubusercontent.com/{owner}/{repo}/main/{img_filename}"
+
+            # --- 2. Get existing CSV ---
+            csv_url = f"https://api.github.com/repos/{owner}/{repo}/contents/{feedback_file}"
+            r = requests.get(csv_url, headers=headers)
             if r.status_code == 200:
                 file_data = r.json()
                 sha = file_data["sha"]
@@ -142,14 +163,16 @@ if uploaded_file is not None:
             else:
                 sha = None
                 df = pd.DataFrame(columns=[
-                    "timestamp", "image_name", "edge_count", "confidence",
-                    "predicted_difficulty", "user_class", "rating_5scale", "feedback"
+                    "timestamp", "image_name", "image_url", "edge_count", 
+                    "confidence", "predicted_difficulty", 
+                    "user_class", "rating_5scale", "feedback"
                 ])
 
-            # Add feedback row
+            # --- 3. Add feedback row ---
             new_feedback = pd.DataFrame([{
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "image_name": uploaded_file.name,
+                "image_url": image_link,
                 "edge_count": int(edge_count),
                 "confidence": round(float(confidence), 2),
                 "predicted_difficulty": predicted_label,
@@ -159,17 +182,17 @@ if uploaded_file is not None:
             }])
             df = pd.concat([df, new_feedback], ignore_index=True)
 
-            # Upload CSV to GitHub
+            # --- 4. Upload updated CSV ---
             csv_data = df.to_csv(index=False)
             payload = {
-                "message": "Update feedback",
+                "message": "Update feedback with new origami upload",
                 "content": base64.b64encode(csv_data.encode()).decode()
             }
             if sha:
                 payload["sha"] = sha
 
-            put_r = requests.put(url, headers=headers, data=json.dumps(payload))
+            put_r = requests.put(csv_url, headers=headers, data=json.dumps(payload))
             if put_r.status_code in [200, 201]:
-                st.success("✅ Thank you! Your feedback has been saved to GitHub.")
+                st.success("✅ Feedback and uploaded image saved to GitHub!")
             else:
-                st.error(f"⚠️ Error saving feedback: {put_r.json()}")
+                st.error(f"⚠️ Error saving feedback CSV: {put_r.json()}")
