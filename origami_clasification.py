@@ -82,7 +82,7 @@ def save_image_to_github(image, uploaded_file, token, owner, repo):
         return None
 
 # --- Streamlit App ---
-st.title("📸 Origami Difficulty Classification with Grad-CAM")
+st.title("📸 Origami Difficulty Classification utilizing CNNs with Grad-CAM")
 
 uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
 
@@ -144,11 +144,14 @@ if uploaded_file is not None:
 
     # --- Feedback Form ---
     with st.form(key="feedback_form"):
-        user_class = st.radio("What do you think the difficulty should be on a 3-point scale?",
-                              ["Easy", "Intermediate", "Complex"])
+        origami_is = st.radio("Is the model uploaded origami?",
+                              ["Yes", "No"])
         rating = st.radio("What do you think the difficulty should be on a 5-point scale?",
                           ["Easy", "Moderate", "Intermediate", "Hard", "Complex"])
-        feedback_text = st.text_area("Leave your feedback here")
+        user_class = st.radio("What do you think the difficulty should be on a 3-point scale?",
+                              ["Easy", "Intermediate", "Complex"])
+        
+        feedback_text = st.text_area("Leave your feedback here or type N/a")
         submit_button = st.form_submit_button("Submit Feedback")
 
         if submit_button:
