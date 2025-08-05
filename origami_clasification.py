@@ -117,9 +117,9 @@ if uploaded_file is not None:
     axes[0,0].set_title("Original Image")
     axes[0,0].axis("off")
 
-    axes[0,1].imshow(edges, cmap="gray")
-    axes[0,1].set_title(f"Edge Map (Count: {edge_count})")
-    axes[0,1].axis("off")
+    axes[1,1].imshow(edges, cmap="gray")
+    axes[1,1].set_title(f"Edge Map (Count: {edge_count})")
+    axes[1,1].axis("off")
 
     axes[1,0].imshow(overlay)
     axes[1,0].set_title(f"Grad-CAM Heatmap\nPred: {predicted_label} ({confidence:.2f})")
@@ -128,8 +128,8 @@ if uploaded_file is not None:
     axes[1,1].text(0.5, 0.5,
                   f"Predicted: {predicted_label}\nConfidence: {confidence:.2f}\nEdges: {edge_count}",
                   fontsize=14, ha="center", va="center")
-    axes[1,1].set_title("Prediction Metrics")
-    axes[1,1].axis("off")
+    axes[0,1].set_title("Prediction Metrics")
+    axes[0,1].axis("off")
 
     st.pyplot(fig)
 
