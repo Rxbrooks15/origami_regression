@@ -125,7 +125,7 @@ if uploaded_file is not None:
     axes[1,0].set_title(f"Grad-CAM Heatmap\nPred: {predicted_label} ({confidence:.2f})")
     axes[1,0].axis("off")
 
-    axes[1,1].text(0.5, 0.5,
+    axes[0,1].text(0.5, 0.5,
                   f"Predicted: {predicted_label}\nConfidence: {confidence:.2f}\nEdges: {edge_count}",
                   fontsize=14, ha="center", va="center")
     axes[0,1].set_title("Prediction Metrics")
