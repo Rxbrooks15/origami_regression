@@ -82,7 +82,7 @@ def save_image_to_github(image, uploaded_file, token, owner, repo):
         return None
 
 # --- Streamlit App ---
-st.title("📸 Origami Difficulty Classification utilizing CNNs with Grad-CAM")
+st.title("📸 Origami Difficulty Classification Utilizing CNNs (Visualized With Grad-CAM")
 
 uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
 
