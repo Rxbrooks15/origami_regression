@@ -12,6 +12,7 @@ import base64
 import json
 import io
 
+
 # --- Load trained model ---
 model = load_model("origami_image_classification.keras")
 
@@ -82,7 +83,7 @@ def save_image_to_github(image, uploaded_file, token, owner, repo):
         return None
 
 # --- Streamlit App ---
-st.title("📸 Origami Difficulty Classification: Utilizing CNNs (Visualized With Grad-CAM)"
+st.title("📸 Origami Difficulty Classification: Edge Detection + CNNs + Grad-CAM")
 
 uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
 
