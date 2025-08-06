@@ -98,6 +98,9 @@ def add_highlight(fig, df_target, y_col):
             ))
     return fig
 
+
+st.markdown("Model experiences overfitting issues with decision trees, try the logistic regression for a smoother model")
+
 # --- GAMI Plot ---
 fig_gami = px.scatter(
     df_clean,
