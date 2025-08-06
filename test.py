@@ -125,5 +125,3 @@ else:
 fig_gami = add_highlight(fig_gami, df_clean, "GAMI")
 st.plotly_chart(fig_gami, use_container_width=True)
 
-# --- Complexity Plot ---
-process_and_plot(df, highlight_name=highlight_name)  # reuse your existing function
