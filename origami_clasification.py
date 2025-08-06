@@ -7,7 +7,6 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 import pandas as pd
 from datetime import datetime
-from github import Github
 import io
 
 # --- Load trained model ---
