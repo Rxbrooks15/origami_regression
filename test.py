@@ -120,7 +120,7 @@ fig_gami = px.scatter(
     },
     labels={
         "Name": "🔖Origami Name",
-        "GAMI": "💲 Gami Score",
+        "GAMI": "💲 Gami (model value)",
         "time_minutes": "🕒 Folding Time",
         "Difficulty_Numeric": "😓Difficulty",
         "spacer": "==========",  # This line creates the visual gap
