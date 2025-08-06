@@ -28,6 +28,8 @@ df = load_data()
 df_clean = df.dropna(subset=["Keyword_Score", "Edge_Count", "Difficulty_Numeric", "time_minutes"]).copy()
 df_clean = df_clean[df_clean["time_minutes"] > 0]
 df_clean["GAMI"] = df_clean["Keyword_Score"] * df_clean["Edge_Count"] * df_clean["Difficulty_Numeric"]
+df_clean["spacer"] = ""
+
 
 # --- Features & Models ---
 X = df_clean[["time_minutes"]].values
@@ -108,12 +110,13 @@ fig_gami = px.scatter(
     custom_data=['Name', 'Keyword_Score', 'Edge_Count', 'Difficulty_Numeric', 'GAMI', 'Description'],
     hover_data={
         "Name": True,
-        "Keyword_Score": True,
-        "Edge_Count": True,
-        "Difficulty_Numeric": True,
         "GAMI": True,
-        "Description": True,
-        "time_minutes": False  # optional: hide if already in x-axis
+        "time_minutes": True,
+        "Difficulty_Numeric": True,
+        "spacer": True,  # <-- Spacer here
+        "Edge_Count": True,
+        "Keyword_Score": True,
+        "Description": True
     },
     labels={
         "Name": "🔖Origami Name",
@@ -121,6 +124,7 @@ fig_gami = px.scatter(
         "time_minutes": "🕒 Folding Time",
         
         "Difficulty_Numeric": "😓Difficulty",
+        "spacer": " ",  # This line creates the visual gap
         "Edge_Count": "🧩 Edge Count",
         "Keyword_Score": "🔑 Keyword Score",
         "Description": "📜 Description"
