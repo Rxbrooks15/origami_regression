@@ -105,7 +105,7 @@ fig_gami = px.scatter(
     color=df_clean["Difficulty_Numeric"].astype(str),
     color_discrete_map={str(k): v for k, v in difficulty_colors.items()},
     custom_data=['Name', 'Keyword_Score', 'Edge_Count', 'Difficulty_Numeric', 'GAMI', 'Description'],
-    labels={"Name":,"time_minutes": "🕒 Folding Time", "GAMI": "💲 GAMI Score", "Difficulty_Numeric": "Difficulty"},
+    labels={"Name":"time_minutes": "🕒 Folding Time", "GAMI": "💲 GAMI Score", "Difficulty_Numeric": "Difficulty"},
     title=f"💲 GAMI vs 🕒 Folding Time | {model_choice}"
 )
 
