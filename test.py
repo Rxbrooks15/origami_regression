@@ -28,7 +28,7 @@ df = load_data()
 df_clean = df.dropna(subset=["Keyword_Score", "Edge_Count", "Difficulty_Numeric", "time_minutes"]).copy()
 df_clean = df_clean[df_clean["time_minutes"] > 0]
 df_clean["GAMI"] = df_clean["Keyword_Score"] * df_clean["Edge_Count"] * df_clean["Difficulty_Numeric"]
-df_clean["spacer"] = ""
+df_clean["spacer"] = "_"
 
 
 # --- Features & Models ---
