@@ -98,9 +98,6 @@ def add_highlight(fig, df_target, y_col):
             ))
     return fig
 
-
-st.markdown("Model experiences overfitting issues with decision trees, try the logistic regression for a smoother model")
-
 # --- GAMI Plot ---
 fig_gami = px.scatter(
     df_clean,
@@ -108,7 +105,7 @@ fig_gami = px.scatter(
     color=df_clean["Difficulty_Numeric"].astype(str),
     color_discrete_map={str(k): v for k, v in difficulty_colors.items()},
     custom_data=['Name', 'Keyword_Score', 'Edge_Count', 'Difficulty_Numeric', 'GAMI', 'Description'],
-    labels={"time_minutes": "🕒 Folding Time", "GAMI": "💲 GAMI Score", "Difficulty_Numeric": "Difficulty"},
+    labels={"Name":,"time_minutes": "🕒 Folding Time", "GAMI": "💲 GAMI Score", "Difficulty_Numeric": "Difficulty"},
     title=f"💲 GAMI vs 🕒 Folding Time | {model_choice}"
 )
 
@@ -127,4 +124,6 @@ else:
 
 fig_gami = add_highlight(fig_gami, df_clean, "GAMI")
 st.plotly_chart(fig_gami, use_container_width=True)
+st.markdown("Model experiences overfitting issues with decision trees, try the logistic regression for a smoother model")
+st.markdown("Check the plot for names of models, you might be intersted in, and use the search bar with the origami's model name")
 
