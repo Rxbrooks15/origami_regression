@@ -208,4 +208,4 @@ if uploaded_file is not None:
                 if put_r.status_code in [200, 201]:
                     st.success("✅ Feedback and uploaded image saved to GitHub!")
                 else:
-                    st.error(f"⚠️ Error saving feedback CSV: {put_r.json()}")..... add the Origami prediction to the Confidence and metrics 
+                    st.error(f"⚠️ Error saving feedback CSV: {put_r.json()}")
