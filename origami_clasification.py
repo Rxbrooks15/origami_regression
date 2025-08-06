@@ -15,7 +15,9 @@ import io
 
 # --- Load trained model ---
 # --- Load Models ---
-binary_model = load_model("origami_yesno_final.keras")  # Yes/No classifier
+binary_model = load_model("origami_yesno_final.keras", compile=False)
+binary_model.build(input_shape=(None, 224, 224, 3))
+
 difficulty_model = load_model("origami_image_classification.keras")  # Difficulty classifier
 
 # --- Difficulty Map ---
