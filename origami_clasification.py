@@ -11,8 +11,6 @@ import requests
 import base64
 import json
 import io
-
-
 import streamlit as st
 import numpy as np
 import cv2
@@ -30,6 +28,12 @@ model = load_difficulty_model()
 
 # --- Difficulty Map ---
 difficulty_map = {0: "Easy", 1: "Intermediate", 2: "Complex"}
+reference_images = {
+    "Easy": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC00617-export-3000x3000.jpg",
+    "Intermediate": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC02215-export-scaled.jpg",
+    "Complex": "https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/origami_images/DSC03255-export-900x900.jpg"
+}
+
 
 # --- Preprocess Function ---
 def preprocess_image(image, IMG_SIZE=(128,128)):
