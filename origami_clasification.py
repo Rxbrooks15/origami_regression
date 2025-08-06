@@ -145,7 +145,7 @@ if uploaded_file is not None:
 
     # --- Feedback Form ---
     with st.form(key="feedback_form"):
-        origami_is = st.radio("Is the model uploaded origami?",
+        origami_is = st.radio("Is the uploaded image an origami model?",
                               ["Yes", "No"])
         rating = st.radio("What do you think the difficulty should be on a 5-point scale?",
                           ["Easy", "Moderate", "Intermediate", "Hard", "Complex"])
