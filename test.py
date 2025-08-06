@@ -28,7 +28,7 @@ df = load_data()
 df_clean = df.dropna(subset=["Keyword_Score", "Edge_Count", "Difficulty_Numeric", "time_minutes"]).copy()
 df_clean = df_clean[df_clean["time_minutes"] > 0]
 df_clean["GAMI"] = df_clean["Keyword_Score"] * df_clean["Edge_Count"] * df_clean["Difficulty_Numeric"]
-df_clean["spacer"] = "_"
+df_clean["spacer"] = "="
 
 
 # --- Features & Models ---
@@ -123,7 +123,7 @@ fig_gami = px.scatter(
         "GAMI": "💲 GAMI Score",
         "time_minutes": "🕒 Folding Time",
         "Difficulty_Numeric": "😓Difficulty",
-        "spacer": "____________",  # This line creates the visual gap
+        "spacer": "==========",  # This line creates the visual gap
         "Edge_Count": "🧩 Edge Count",
         "Keyword_Score": "🔑 Keyword Score",
         "Description": "📜 Description"
