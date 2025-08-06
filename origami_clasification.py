@@ -10,7 +10,7 @@ import requests
 import base64
 import json
 import io
-
+import streamlit
 
 # --- Load trained model ---
 model = load_model("origami_image_classification.keras")
