@@ -29,7 +29,7 @@ binary_model = Sequential([
 ])
 
 # Load weights
-binary_model.load_weights("origami_yesno_final.keras")
+
 binary_model.build(input_shape=(None, 224, 224, 3))
 
 difficulty_model = load_model("origami_image_classification.keras")  # Difficulty classifier
