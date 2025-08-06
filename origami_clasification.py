@@ -16,10 +16,20 @@ import io
 # --- Load trained model ---
 @st.cache_resource
 def load_yesno_model():
-    return load_model("origami_yesno_final.h5", compile=False)
+    from tensorflow.keras.applications import VGG16
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Flatten, Dense, Dropout
 
-binary_model = load_yesno_model()
-
+    base_model = VGG16(weights=None, include_top=False, input_shape=(224,224,3))
+    model = Sequential([
+        base_model,
+        Flatten(),
+        Dense(256, activation="relu"),
+        Dropout(0.5),
+        Dense(1, activation="sigmoid")
+    ])
+    model.load_weights("origami_yesno_final.h5")
+    return model
 difficulty_model = load_model("origami_image_classification.keras")  # Difficulty classifier
 
 # --- Difficulty Map ---
