@@ -101,13 +101,32 @@ def add_highlight(fig, df_target, y_col):
 # --- GAMI Plot ---
 fig_gami = px.scatter(
     df_clean,
-    x="time_minutes", y="GAMI",
+    x="time_minutes",
+    y="GAMI",
     color=df_clean["Difficulty_Numeric"].astype(str),
     color_discrete_map={str(k): v for k, v in difficulty_colors.items()},
     custom_data=['Name', 'Keyword_Score', 'Edge_Count', 'Difficulty_Numeric', 'GAMI', 'Description'],
-    labels={"Name":"Name", "time_minutes": "🕒 Folding Time", "GAMI": "💲 GAMI Score", "Difficulty_Numeric": "Difficulty"},
+    hover_data={
+        "Name": True,
+        "Keyword_Score": True,
+        "Edge_Count": True,
+        "Difficulty_Numeric": True,
+        "GAMI": True,
+        "Description": True,
+        "time_minutes": False  # optional: hide if already in x-axis
+    },
+    labels={
+        "time_minutes": "🕒 Folding Time",
+        "GAMI": "💲 GAMI Score",
+        "Difficulty_Numeric": "Difficulty",
+        "Name": "Origami Name",
+        "Keyword_Score": "🔑 Keyword Score",
+        "Edge_Count": "🧩 Edge Count",
+        "Description": "📜 Description"
+    },
     title=f"💲 GAMI vs 🕒 Folding Time | {model_choice}"
 )
+
 
 if model_choice == "Linear":
     fig_gami.add_trace(go.Scatter(x=x_range.flatten(), y=y_lin, mode="lines",
