@@ -16,7 +16,7 @@ import io
 # --- Load trained model ---
 @st.cache_resource
 def load_yesno_model():
-    return load_model("origami_yesno_final.keras", compile=False)
+    return load_model("origami_yesno_final.h5", compile=False)
 
 binary_model = load_yesno_model()
 
