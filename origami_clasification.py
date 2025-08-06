@@ -107,49 +107,83 @@ if uploaded_file is not None:
         with cols[idx]:
             st.image(img_path, caption=f"{level} Example", use_container_width=True)
 
-    # --- Feedback Form ---
+      # --- Feedback Form ---
     with st.form(key="feedback_form"):
-        user_class = st.radio("What do you think the difficulty should be on a 3-point scale)?",
-                              ["Easy", "Intermediate", "Complex"])
-        rating = st.radio("What do you think the difficulty should be on a 5-point scale)?",
+        origami_is = st.radio("Is the model uploaded origami?", ["Yes", "No"])
+        rating = st.radio("What do you think the difficulty should be on a 5-point scale?",
                           ["Easy", "Moderate", "Intermediate", "Hard", "Complex"])
-        feedback_text = st.text_area("Leave your feedback here")
+        user_class = st.radio("What do you think the difficulty should be on a 3-point scale?",
+                              ["Easy", "Intermediate", "Complex"])
+        feedback_text = st.text_area("Leave your feedback here or type N/a")
         submit_button = st.form_submit_button("Submit Feedback")
 
         if submit_button:
-            # --- Save to GitHub CSV ---
-            g = Github(st.secrets["GITHUB_TOKEN"])
-            repo = g.get_user("Rxbrooks15").get_repo("origami_regression")
-            file_path = "user_feedback.csv"
+            owner = "Rxbrooks15"
+            repo = "origami_regression"
+            token = st.secrets["GITHUB_ORIGO_TOKEN"]
+            feedback_file = "user_feedback.csv"
 
-            try:
-                file = repo.get_contents(file_path)
-                content = file.decoded_content.decode()
-                df = pd.read_csv(io.StringIO(content))
-            except:
-                df = pd.DataFrame(columns=[
-                    "timestamp", "image_name", "edge_count",
-                    "confidence", "predicted_difficulty",
-                    "user_class", "rating_5scale", "feedback"
-                ])
+            def save_image_to_github(image, uploaded_file, token, owner, repo):
+                buffered = io.BytesIO()
+                image.save(buffered, format="PNG")
+                img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+                img_path = f"feedback_images/{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uploaded_file.name}"
+                url = f"https://api.github.com/repos/{owner}/{repo}/contents/{img_path}"
+                headers = {"Authorization": f"token {token}"}
+                data = {
+                    "message": "Upload user feedback image",
+                    "content": img_str
+                }
+                r = requests.put(url, headers=headers, data=json.dumps(data))
+                if r.status_code in [200, 201]:
+                    return f"https://raw.githubusercontent.com/{owner}/{repo}/main/{img_path}"
+                return None
 
-            new_feedback = pd.DataFrame([{
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "image_name": uploaded_file.name,
-                "edge_count": int(edge_count),
-                "confidence": round(float(confidence), 2),
-                "predicted_difficulty": difficulty_map[pred_class],
-                "user_class": user_class,
-                "rating_5scale": rating,
-                "feedback": feedback_text
-            }])
+            image_url = save_image_to_github(image, uploaded_file, token, owner, repo)
 
-            df = pd.concat([df, new_feedback], ignore_index=True)
-            csv_data = df.to_csv(index=False)
+            if image_url:
+                csv_url = f"https://api.github.com/repos/{owner}/{repo}/contents/{feedback_file}"
+                headers = {"Authorization": f"token {token}"}
+                r = requests.get(csv_url, headers=headers)
+                if r.status_code == 200:
+                    file_data = r.json()
+                    sha = file_data["sha"]
+                    content = base64.b64decode(file_data["content"]).decode("utf-8")
+                    df = pd.read_csv(io.StringIO(content))
+                else:
+                    sha = None
+                    df = pd.DataFrame(columns=[
+                        "timestamp", "image_name", "image_url", "edge_count", 
+                        "binary_confidence", "difficulty_confidence",
+                        "binary_label", "predicted_difficulty", 
+                        "user_class", "rating_5scale", "feedback"
+                    ])
 
-            if 'file' in locals():
-                repo.update_file(file_path, "Update feedback", csv_data, file.sha)
-            else:
-                repo.create_file(file_path, "Create feedback file", csv_data)
+                new_feedback = pd.DataFrame([{
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "image_name": uploaded_file.name,
+                    "image_url": image_url,
+                    "edge_count": int(edge_count),
+                    "binary_confidence": round(bin_confidence, 2),
+                    "difficulty_confidence": round(diff_confidence, 2),
+                    "binary_label": origami_label,
+                    "predicted_difficulty": predicted_label,
+                    "user_class": user_class,
+                    "rating_5scale": rating,
+                    "feedback": feedback_text
+                }])
+                df = pd.concat([df, new_feedback], ignore_index=True)
 
-            st.success("✅ Thank you! Your feedback has been saved.")
+                csv_data = df.to_csv(index=False)
+                payload = {
+                    "message": "Update feedback with new origami upload",
+                    "content": base64.b64encode(csv_data.encode()).decode()
+                }
+                if sha:
+                    payload["sha"] = sha
+
+                put_r = requests.put(csv_url, headers=headers, data=json.dumps(payload))
+                if put_r.status_code in [200, 201]:
+                    st.success("✅ Feedback and uploaded image saved to GitHub!")
+                else:
+                    st.error(f"⚠️ Error saving feedback CSV: {put_r.json()}")
