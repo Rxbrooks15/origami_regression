@@ -30,6 +30,7 @@ def load_yesno_model():
     ])
     model.load_weights("origami_yesno_final.h5")
     return model
+binary_model = load_yesno_model()   # ✅ call the function so the model is ready
 difficulty_model = load_model("origami_image_classification.keras")  # Difficulty classifier
 
 # --- Difficulty Map ---
