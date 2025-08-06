@@ -24,12 +24,15 @@ def preprocess_image(image, IMG_SIZE=(128,128)):
 def get_gradcam(model, img_batch, pred_class):
     last_conv_layer_name = [layer.name for layer in model.layers if 'conv' in layer.name][-1]
     grad_model = tf.keras.models.Model(
-        [model.inputs], 
+        [model.inputs],
         [model.get_layer(last_conv_layer_name).output, model.output]
     )
     with tf.GradientTape() as tape:
         conv_outputs, predictions = grad_model(img_batch)
-        loss = predictions[:, pred_class]
+        if len(predictions.shape) == 2:  # (1, num_classes)
+            loss = predictions[0][pred_class]
+        else:
+            loss = predictions[pred_class]
     grads = tape.gradient(loss, conv_outputs)
     pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
     conv_outputs = conv_outputs[0].numpy()
@@ -37,6 +40,7 @@ def get_gradcam(model, img_batch, pred_class):
     heatmap = np.maximum(heatmap, 0)
     heatmap /= np.max(heatmap) + 1e-10
     return cv2.resize(heatmap, (128,128))
+
 
 
 # --- Load trained models ---
