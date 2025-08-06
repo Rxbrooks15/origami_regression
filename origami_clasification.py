@@ -15,7 +15,21 @@ import io
 
 # --- Load trained model ---
 # --- Load Models ---
-binary_model = load_model("origami_yesno_final.keras", compile=False)
+# Recreate architecture
+base_model = VGG16(weights="imagenet", include_top=False, input_shape=(224,224,3))
+for layer in base_model.layers:
+    layer.trainable = False
+
+binary_model = Sequential([
+    base_model,
+    Flatten(),
+    Dense(256, activation="relu"),
+    Dropout(0.5),
+    Dense(1, activation="sigmoid")
+])
+
+# Load weights
+binary_model.load_weights("origami_yesno_final.keras")
 binary_model.build(input_shape=(None, 224, 224, 3))
 
 difficulty_model = load_model("origami_image_classification.keras")  # Difficulty classifier
