@@ -116,12 +116,12 @@ fig_gami = px.scatter(
         "time_minutes": False  # optional: hide if already in x-axis
     },
     labels={
-        "time_minutes": "🕒 Folding Time",
         "GAMI": "💲 GAMI Score",
-        "Difficulty_Numeric": "Difficulty",
-        "Name": "Origami Name",
-        "Keyword_Score": "🔑 Keyword Score",
+        "Name": "🔖Origami Name",
+        "time_minutes": "🕒 Folding Time",
+        "Difficulty_Numeric": "😓Difficulty",
         "Edge_Count": "🧩 Edge Count",
+        "Keyword_Score": "🔑 Keyword Score",
         "Description": "📜 Description"
     },
     title=f"💲 GAMI vs 🕒 Folding Time | {model_choice}"
@@ -143,6 +143,6 @@ else:
 
 fig_gami = add_highlight(fig_gami, df_clean, "GAMI")
 st.plotly_chart(fig_gami, use_container_width=True)
-st.markdown("Model experiences overfitting issues with decision trees, try the logistic regression for a smoother model")
+st.markdown("Model experiences overfitting issues with decision trees, try the logarithm regression for a smoother model")
 st.markdown("Check the plot for names of models, you might be intersted in, and use the search bar with the origami's model name")
 
