@@ -1,8 +1,9 @@
-timestamp,image_name,edge_count,confidence,predicted_difficulty,user_class,rating_5scale,feedback
-2025-08-03 22:29:11,DSC00616-export-3000x3000.jpg,367,0.88,Easy,Easy,Easy,Ori(Go): origami on the go!!!
-2025-08-03 22:32:11,DSC00621-export-3000x3000.jpg,345,0.78,Easy,Easy,Moderate,
-2025-08-03 22:44:44,IMG_20220804_190615_044.jpg,1664,0.48,Complex,Complex,Hard,test
-2025-08-03 22:51:39,13ORIGAMI4-superJumbo-v2.jpg,1386,0.54,Complex,Complex,Complex,test
-2025-08-03 22:53:58,5821939f405e1_58218778994c0_1570406273.jpg,1494,0.47,Complex,Complex,Hard,Origo to the moon
-2025-08-03 23:00:30,origami-hopping-bunny-rabbit-tutorial-00-2-400x400.jpg,857,0.65,Easy,Easy,Easy,I like your work 
-2025-08-03 23:06:33,DSC00568-export-3000x3000.jpg,564,0.79,Easy,Easy,Moderate,test
+timestamp,image_name,edge_count,confidence,predicted_difficulty,user_class,rating_5scale,feedback,image_url
+2025-08-03 22:29:11,DSC00616-export-3000x3000.jpg,367,0.88,Easy,Easy,Easy,Ori(Go): origami on the go!!!,
+2025-08-03 22:32:11,DSC00621-export-3000x3000.jpg,345,0.78,Easy,Easy,Moderate,,
+2025-08-03 22:44:44,IMG_20220804_190615_044.jpg,1664,0.48,Complex,Complex,Hard,test,
+2025-08-03 22:51:39,13ORIGAMI4-superJumbo-v2.jpg,1386,0.54,Complex,Complex,Complex,test,
+2025-08-03 22:53:58,5821939f405e1_58218778994c0_1570406273.jpg,1494,0.47,Complex,Complex,Hard,Origo to the moon,
+2025-08-03 23:00:30,origami-hopping-bunny-rabbit-tutorial-00-2-400x400.jpg,857,0.65,Easy,Easy,Easy,I like your work ,
+2025-08-03 23:06:33,DSC00568-export-3000x3000.jpg,564,0.79,Easy,Easy,Moderate,test,
+2025-08-06 05:34:11,DSC00568-export-3000x3000.jpg,564,0.79,Easy,Easy,Moderate,,https://raw.githubusercontent.com/Rxbrooks15/origami_regression/main/new_origami/20250806_053410_DSC00568-export-3000x3000.jpg
