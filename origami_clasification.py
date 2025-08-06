@@ -13,82 +13,96 @@ import json
 import io
 
 
-# --- Load trained model ---
+import streamlit as st
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+from PIL import Image
 
-difficulty_model = load_model("origami_image_classification.keras")  # Difficulty classifier
+# --- Load trained difficulty model ---
+@st.cache_resource
+def load_difficulty_model():
+    return load_model("origami_image_classification.keras")
+
+model = load_difficulty_model()
 
 # --- Difficulty Map ---
 difficulty_map = {0: "Easy", 1: "Intermediate", 2: "Complex"}
 
-st.title("📸 Origami Classifier: Binary + Difficulty (CNN + Grad-CAM)")
+# --- Preprocess Function ---
+def preprocess_image(image, IMG_SIZE=(128,128)):
+    img = np.array(image.convert("RGB"))
+    img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    img_bgr = cv2.resize(img_bgr, IMG_SIZE)
+    img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
+    return img_rgb, img_bgr
+
+# --- Grad-CAM Function ---
+def get_gradcam(model, img_batch, pred_class):
+    last_conv_layer_name = [layer.name for layer in model.layers if 'conv' in layer.name][-1]
+    grad_model = tf.keras.models.Model(
+        [model.inputs],
+        [model.get_layer(last_conv_layer_name).output, model.output]
+    )
+    with tf.GradientTape() as tape:
+        conv_outputs, predictions = grad_model(img_batch)
+        loss = predictions[0][pred_class]
+    grads = tape.gradient(loss, conv_outputs)
+    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+    conv_outputs = conv_outputs[0].numpy()
+    heatmap = np.sum(conv_outputs * pooled_grads.numpy(), axis=-1)
+    heatmap = np.maximum(heatmap, 0)
+    heatmap /= np.max(heatmap) + 1e-10
+    return cv2.resize(heatmap, (128,128))
+
+# --- Streamlit UI ---
+st.title("📸 Origami Difficulty Classifier: (CNN + Edge Detection + Grad-CAM)")
 
 uploaded_file = st.file_uploader("Upload an Origami Image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
-    # Read uploaded image
+    # Read and preprocess
     image = Image.open(uploaded_file)
+    img_rgb, img_bgr = preprocess_image(image)
+    edges = cv2.Canny(cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY), 75, 150)
+    edge_count = np.sum(edges > 0)
+    edges_norm = edges.astype(np.float32) / 255.0
+    edges_norm = np.expand_dims(edges_norm, axis=-1)
+    combined_input = np.concatenate([img_rgb, edges_norm], axis=-1)
+    img_batch = np.expand_dims(combined_input, axis=0)
 
-    # --- Step 1: Run Origami/Not Origami ---
-    img_binary = image.resize((224,224)).convert("RGB")
-    img_bin_array = np.expand_dims(np.array(img_binary), axis=0) / 255.0
+    # Predict
+    preds = model.predict(img_batch)
+    pred_class = np.argmax(preds[0])
+    confidence = np.max(preds[0])
+    predicted_label = difficulty_map[pred_class]
 
-    bin_pred = binary_model.predict(img_bin_array)
-    is_origami = bin_pred[0][0] > 0.5
-    bin_confidence = float(bin_pred[0][0])
-    origami_label = "Origami" if is_origami else "Not Origami"
+    # Grad-CAM
+    heatmap = get_gradcam(model, img_batch, pred_class)
+    heatmap_colored = cv2.applyColorMap(np.uint8(255 * heatmap), cv2.COLORMAP_JET)
+    overlay = cv2.addWeighted((img_rgb*255).astype(np.uint8), 0.6, heatmap_colored, 0.4, 0)
 
-    # --- Step 2: If Origami, run Difficulty Model ---
-    if is_origami:
-        img_rgb, img_bgr = preprocess_image(image)
-        edges = cv2.Canny(cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY), 75, 150)
-        edge_count = np.sum(edges > 0)
-        edges_norm = edges.astype(np.float32) / 255.0
-        edges_norm = np.expand_dims(edges_norm, axis=-1)
-        combined_input = np.concatenate([img_rgb, edges_norm], axis=-1)
-        img_batch = np.expand_dims(combined_input, axis=0)
-
-        preds = difficulty_model.predict(img_batch)
-        pred_class = np.argmax(preds[0])
-        diff_confidence = np.max(preds[0])
-        predicted_label = difficulty_map[pred_class]
-
-        # Grad-CAM
-        heatmap = get_gradcam(difficulty_model, img_batch, pred_class)
-        heatmap_colored = cv2.applyColorMap(np.uint8(255 * heatmap), cv2.COLORMAP_JET)
-        overlay = cv2.addWeighted((img_rgb*255).astype(np.uint8), 0.6, heatmap_colored, 0.4, 0)
-    else:
-        predicted_label, diff_confidence, edge_count, overlay, edges = "N/A", 0, 0, None, None
-
-    # --- Show Results in 4 Panels ---
+    # --- Show Results ---
     fig, axes = plt.subplots(2, 2, figsize=(12,8))
-    axes[0,0].imshow(np.array(image))
+    axes[0,0].imshow(img_rgb)
     axes[0,0].set_title("Original Image")
     axes[0,0].axis("off")
 
-    # Metrics panel
-    metrics_text = (
-        f"Origami Prediction: {origami_label}\n"
-        f"Origami Confidence: {bin_confidence:.2f}\n"
-        f"Difficulty: {predicted_label}\n"
-        f"Difficulty Confidence: {diff_confidence:.2f}\n"
-        f"Edge Count: {edge_count}"
-    )
-    axes[0,1].text(0.5, 0.5, metrics_text,
-                  fontsize=14, ha="center", va="center")
-    axes[0,1].set_title("Prediction Metrics")
+    axes[0,1].imshow(edges, cmap="gray")
+    axes[0,1].set_title(f"Edge Map (Count: {edge_count})")
     axes[0,1].axis("off")
 
-    if is_origami:
-        axes[1,0].imshow(overlay)
-        axes[1,0].set_title(f"Grad-CAM Heatmap ({predicted_label})")
-        axes[1,0].axis("off")
+    axes[1,0].imshow(overlay)
+    axes[1,0].set_title(f"Grad-CAM Heatmap\nPred: {predicted_label} ({confidence:.2f})")
+    axes[1,0].axis("off")
 
-        axes[1,1].imshow(edges, cmap="gray")
-        axes[1,1].set_title(f"Edge Map (Count: {edge_count})")
-        axes[1,1].axis("off")
-    else:
-        axes[1,0].axis("off")
-        axes[1,1].axis("off")
+    axes[1,1].text(0.5, 0.5,
+                  f"Predicted: {predicted_label}\nConfidence: {confidence:.2f}\nEdges: {edge_count}",
+                  fontsize=14, ha="center", va="center")
+    axes[1,1].set_title("Prediction Metrics")
+    axes[1,1].axis("off")
 
     st.pyplot(fig)
 
