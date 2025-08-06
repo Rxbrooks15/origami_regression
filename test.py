@@ -116,9 +116,10 @@ fig_gami = px.scatter(
         "time_minutes": False  # optional: hide if already in x-axis
     },
     labels={
-        "GAMI": "💲 GAMI Score",
         "Name": "🔖Origami Name",
+        "GAMI": "💲 GAMI Score"
         "time_minutes": "🕒 Folding Time",
+        
         "Difficulty_Numeric": "😓Difficulty",
         "Edge_Count": "🧩 Edge Count",
         "Keyword_Score": "🔑 Keyword Score",
