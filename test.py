@@ -109,9 +109,9 @@ fig_gami = px.scatter(
     color_discrete_map={str(k): v for k, v in difficulty_colors.items()},
     custom_data=['Name', 'Keyword_Score', 'Edge_Count', 'Difficulty_Numeric', 'GAMI', 'Description'],
     hover_data={
-        "Name": True,
-        "GAMI": True,
         "time_minutes": True,
+        "GAMI": True,
+        "Name": True,
         "Difficulty_Numeric": True,
         "spacer": True,  # <-- Spacer here
         "Edge_Count": True,
@@ -123,7 +123,7 @@ fig_gami = px.scatter(
         "GAMI": "💲 GAMI Score",
         "time_minutes": "🕒 Folding Time",
         "Difficulty_Numeric": "😓Difficulty",
-        "spacer": " ",  # This line creates the visual gap
+        "spacer": "____________",  # This line creates the visual gap
         "Edge_Count": "🧩 Edge Count",
         "Keyword_Score": "🔑 Keyword Score",
         "Description": "📜 Description"
