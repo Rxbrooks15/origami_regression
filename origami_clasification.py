@@ -216,7 +216,7 @@ st.markdown("""
 ---
 **Acknowledgments**
 
-This project leverages convolutional neural networks, deep learning, and edge detection to predict origami difficulty (easy, intermediate, and complex). This research project would not have been possible without:
+This passion project leverages convolutional neural networks, deep learning, and edge detection to predict origami difficulty (easy, intermediate, and complex). This project would not have been possible without:
 
 - *OrigamiSet1.0: Two New Datasets for Origami Classification and Difficulty Estimation*  
   D. Ma, G. Friedland, M.M. Krell (2018). In *Proceedings of Origami Science, Mathematics, and Education (7OSME)*, Oxford, UK.  
