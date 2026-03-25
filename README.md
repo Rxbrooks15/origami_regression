@@ -7,8 +7,13 @@ CNN implimentation:
 ![pool](https://github.com/user-attachments/assets/2dd1501b-80c8-4710-8de0-6858640f2dd1)
 ![heat](https://github.com/user-attachments/assets/1868e626-8544-4e0f-984f-0cf893ad3a8f)
 
+Training vs Validation
+![TvsV](https://github.com/user-attachments/assets/2552d2e7-47fe-4f48-bec8-03b175331a3e)
+![TvsVloss](https://github.com/user-attachments/assets/bc2f7bee-7a5f-471e-a04e-829823114bb5)
+
+
+
 <img width="1656" height="909" alt="Screenshot (407)" src="https://github.com/user-attachments/assets/75763ae6-245e-4ca2-abe6-a07510f054f2" />
-ROC curve
 ![ROC curve](https://github.com/user-attachments/assets/74ee1d32-9590-477c-8276-a2f21f01363d)
 ![1753835720710](https://github.com/user-attachments/assets/8e782640-9b11-4f04-b757-1b5f1cb2d3fb)
 ![complex](https://github.com/user-attachments/assets/7971bf71-3391-4bca-9eb8-d6e61c898759)
