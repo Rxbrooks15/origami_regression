@@ -1,4 +1,6 @@
 # origami_regression
+
+Utilized an ensemble of machine learning approaches to predict origami complexity, difficulty, symmetry, and edge counts, combining both traditional statistical models and advanced deep learning techniques. Implemented Linear Regression for baseline interpretability, alongside gradient boosting methods such as CatBoost and XGBoost to capture nonlinear relationships and feature interactions. Additionally, leveraged Convolutional Neural Networks (CNNs) to extract spatial and structural features from origami patterns, enabling improved prediction accuracy on image-based inputs. Optimized model performance through hyperparameter tuning, cross-validation, and feature engineering, ensuring robust generalization across diverse origami designs.
 CNN implimentation:
 <img width="1920" height="893" alt="Screenshot (406)" src="https://github.com/user-attachments/assets/7965ef78-5d5c-4c76-b8b1-6715d8f46d93" />
 ![pool](https://github.com/user-attachments/assets/2dd1501b-80c8-4710-8de0-6858640f2dd1)
